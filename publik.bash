@@ -30,7 +30,7 @@ gru-state() {
         then
                 echo "OK: Hobo agent OK for all services"
         else
-                echo "ERROR: All hobo agent are not ready ($t/12)"
+                echo "ERROR: All hobo agents are not ready ($t/12)"
         fi
 }
 
