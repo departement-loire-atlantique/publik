@@ -22,6 +22,18 @@ gru-build() {
 	cd $1 && docker build -t $1
 }
 
+# GRU STATE : Print GRU components state
+gru-state() {
+        # Hobo agent
+	t=`docker exec rabbitmq rabbitmqctl list_connections | grep running | wc -l`
+        if [ $t -eq 12 ]
+        then
+                echo "OK: Hobo agent OK for all services"
+        else
+                echo "ERROR: All hobo agent are not ready ($t/12)"
+        fi
+}
+
 # DOCKER CLEAN : Remove exited container and images without tag
 docker-clean() {
         existedContainers=`docker ps -a | grep Exited | wc -l`;
@@ -30,7 +42,7 @@ docker-clean() {
         fi
 	notagImages=`docker images | grep '<none>' | wc -l`;
         if [ $notagImages -gt 0 ]; then
-                docker images | grep '<none>' | awk '{print $$3}' | xargs docker rmi;
+                docker images | grep '<none>' | awk '{print $3}' | xargs docker rmi;
         fi
 }
 
