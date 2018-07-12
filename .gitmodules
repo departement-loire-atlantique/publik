@@ -1,0 +1,6 @@
+[submodule "combo"]
+	path = combo
+	url = https://github.com/departement-loire-atlantique/publik-docker-combo
+[submodule "fargo"]
+	path = fargo
+	url = https://github.com/departement-loire-atlantique/publik-docker-fargo
