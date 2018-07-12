@@ -4,3 +4,15 @@
 [submodule "fargo"]
 	path = fargo
 	url = https://github.com/departement-loire-atlantique/publik-docker-fargo
+[submodule "authentic"]
+	path = authentic
+	url = https://github.com/departement-loire-atlantique/publik-docker-auth
+[submodule "base"]
+	path = base
+	url = https://github.com/departement-loire-atlantique/publik-docker-base
+[submodule "passerelle"]
+	path = passerelle
+	url = https://github.com/departement-loire-atlantique/publik-docker-pasrele
+[submodule "wcs"]
+	path = wcs
+	url = https://github.com/departement-loire-atlantique/publik-docker-wcs
