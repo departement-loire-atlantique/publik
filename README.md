@@ -49,9 +49,11 @@ sudo mv publik /home/publik/
 sudo chown publik:publik /home/publik/publik -R
 ```
 
-Ce script installe les composants nécessaires et crée un utilisateur "publik". Il peut être utilisé pour préparer le système à la première utilisation de Publik ou pour mettre à jour le système.
+Ce script installe les composants nécessaires, crée les certificats et un utilisateur "publik". Il peut être utilisé pour préparer le système à la première utilisation de Publik ou pour mettre à jour le système.
 
 Il ajoute des éléments au bashrc de l'utilisateur publik afin de pouvoir bénéficier de commandes rapides (alias) de lancement de la GRU public (gru-up, gru-connect, gru-reset, ...). Voir le fichier publik.bash pour plus de détails.
+
+> Note aux utilisateurs du script sur le LAN du Département de Loire Atlantique : "sync-os.sh --insecure" au lieu de "sync-os.sh" pour passer le proxy
 
 4 - Démarrer publik
 -------------------
@@ -69,6 +71,11 @@ export ENV=test
 Choisir le nom du domaine ou sous domaine
 ```
 export DOMAIN=testgru.loire-atlantique.fr
+```
+
+Choisir l'email associé à cet environnement (alerte, ...)
+```
+export EMAIL=xxx@loire-atlantique.fr
 ```
 
 Puis lancer l'environnement docker :
@@ -90,7 +97,7 @@ Publik et ses services associés sont alors disponibles aux URLs suivantes :
 | PgAdmin 4 (db web interface)  | pgadminENV.DOMAIN         |
 | RabbitMQ (web interface)      | rabbitmqENV.DOMAIN        |
 
-Afin de simplifier les lancements ultérieur, la configuration de la variable d'environnement ENV et DOMAIN peuvent être ajouté manuellement au .bashrc de l'utilisateur publik
+Afin de simplifier les lancements ultérieurs, la configuration des variables d'environnement MAIL, ENV et DOMAIN peuvent être ajoutée manuellement au .bashrc de l'utilisateur publik
 
 5 - Commentaires
 ----------------
@@ -104,3 +111,21 @@ Ce dépôt représente un travail "en cours", les points suivants ne sont pas im
 - Respect des précaunisations de DJANGO (https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/) en matière d'installation de production propre
 - Installation depuis le code source et non les dépôts DEBIAN
 - Lancement des serveurs python en mode développement
+
+6 - Bibliographie
+-----------------
+
+En novembre 2017, les documentations accessibles en ligne étaient incomplètes, parfois incohérentes avec le code ou contradictoires entre elles. Par conséquent, l’installation des modules a été laborieuse. Ce dépôt docker résume une approche qui a fonctionné mais n'engage pas la société Entrouvert.
+
+Documentations intéressantes à connaître :
+- Guide pour les développeurs Publik : https://dev.entrouvert.org/projects/prod-eo/wiki
+- Intégration continue des modules Publik : https://jenkins.entrouvert.org
+- Documentation d’installation :
+  - http://doc.entrouvert.org/publik-infra//installation.html
+  - https://dev.entrouvert.org/projects/publik/wiki/InstallationJessie
+  - http://doc.entrouvert.org/wcs/dev/
+  - http://doc.entrouvert.org/auquotidien/dev/
+  - https://dev.entrouvert.org/projects/prod-eo/wiki/Gestion_des_acc%C3%A8s
+  - https://doc-publik.entrouvert.com/guide-de-l-administrateur-systeme/installation/haute-disponibilite/#pre-requis (Ajouté en février 2018)
+- GitHub d’un syndicat mixte qui publie sous GitHub ses développements : https://github.com/IMIO/docker-teleservices
+
