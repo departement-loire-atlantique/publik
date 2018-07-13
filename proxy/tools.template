@@ -1,0 +1,41 @@
+client_max_body_size 10M;
+
+server {
+        listen 80;
+        listen [::]:80;
+
+        server_name pgadmin${ENV}.${DOMAIN};
+
+        # On interdit les dotfiles
+        location ~ /\. { deny all; }
+
+        location / {
+            proxy_pass         http://pgadmin:5050;
+            proxy_set_header   Host $http_host;
+            proxy_set_header   X-Forwarded-SSL off;
+            proxy_set_header   X-Forwarded-Protocol http;
+            proxy_set_header   X-Forwarded-Proto https;
+            proxy_set_header   X-Real-IP       $remote_addr;
+            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+}
+
+server {
+        listen 80;
+        listen [::]:80;
+
+        server_name rabbitmq${ENV}.${DOMAIN};
+
+        # On interdit les dotfiles
+        location ~ /\. { deny all; }
+
+        location / {
+            proxy_pass         http://rabbitmq:15672;
+            proxy_set_header   Host $http_host;
+            proxy_set_header   X-Forwarded-SSL off;
+            proxy_set_header   X-Forwarded-Protocol http;
+            proxy_set_header   X-Forwarded-Proto https;
+            proxy_set_header   X-Real-IP       $remote_addr;
+            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+}

@@ -1,0 +1,16 @@
+server {
+        listen 80;
+        listen [::]:80;
+        server_name ${APP_URL}${ENV}.${DOMAIN};
+        root /home/http;
+
+        # Necessary for Let's Encrypt Domain Name ownership validation
+        location /.well-known/acme-challenge/ {
+          try_files $uri /dev/null =404;
+        }
+
+        location / {
+          return 301 https://$host$request_uri;
+        }
+}
+
