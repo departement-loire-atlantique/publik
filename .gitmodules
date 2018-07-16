@@ -16,3 +16,6 @@
 [submodule "wcs"]
 	path = wcs
 	url = https://github.com/departement-loire-atlantique/publik-docker-wcs
+[submodule "hobo"]
+	path = hobo
+	url = https://github.com/departement-loire-atlantique/publik-docker-hobo
