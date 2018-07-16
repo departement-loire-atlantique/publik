@@ -24,28 +24,34 @@ gru-connect() {
 }
 
 # GRU STATE : Print GRU components state
-function getHttpCode {
-        t=`wget --spider -S "http://$1" 2>&1 | grep "HTTP/" | awk '{print $$2}'`
-        echo "$2 ($1) has status $t"
+function testHttpCode {
+        t=`wget --spider -S "$1" 2>&1 | grep "HTTP/" | awk '{print $ 2}'`
+        if [ "$t" = "$3" ]; then
+		echo -e "\e[42mOK\t$2 ($1) has status $t\e[0m"
+	else
+		echo -e "\e[41mERROR\t$2 ($1) do not return a $3 code\e[0m"
+	fi
 }
 gru-state() {
         # Hobo agent
 	t=`docker exec rabbitmq rabbitmqctl list_connections | grep running | wc -l`
         if [ $t -eq 12 ]
         then
-                echo "${green}Hobo agent OK for all services"
+                echo -e "\e[42mOK\tHobo agent OK for all services\e[0m"
         else
-                echo "ERROR: All hobo agents are not ready ($t/12)"
+                echo -e "\e[41mERROR\tAll hobo agents are not ready ($t/12)\e[0m"
         fi
 
- 	# Test service HTTP status code
-	getHttpCode demarches${ENV}.${DOMAIN} combo
-	getHttpCode admin-demarches${ENV}.${DOMAIN} combo_agent
-	getHttpCode passerelle${ENV}.${DOMAIN} passerelle
-	getHttpCode demarche${ENV}.${DOMAIN} demarches-wcs
-	getHttpCode compte${ENV}.${DOMAIN} authentic
-	getHttpCode documents${ENV}.${DOMAIN} fargo
-	getHttpCode hobo${ENV}.${DOMAIN} hobo
+ 	# Test service HTTP status code 200
+	testHttpCode https://demarches${ENV}.${DOMAIN} combo 200
+	testHttpCode https://admin-demarches${ENV}.${DOMAIN} combo_agent 200
+	testHttpCode https://passerelle${ENV}.${DOMAIN} passerelle 200
+	testHttpCode https://demarche${ENV}.${DOMAIN} demarches-wcs 200
+	testHttpCode https://compte${ENV}.${DOMAIN} authentic 200
+	testHttpCode https://documents${ENV}.${DOMAIN} fargo 200
+	testHttpCode https://hobo${ENV}.${DOMAIN} hobo 200
+	testHttpCode http://pgadmin${ENV}.${DOMAIN}/browser/ pgadmin 200
+	testHttpCode http://rabbitmq${ENV}.${DOMAIN} rabbitmanager 200
 }
 
 # DOCKER CLEAN : Remove exited container and images without tag
