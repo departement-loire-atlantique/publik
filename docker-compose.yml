@@ -1,0 +1,150 @@
+#######################################
+# Docker stack for Publik
+# by Julien BAYLE
+#######################################
+
+version: "2"
+
+services:
+  proxy:
+    container_name: proxy
+    build:
+      context: proxy/.
+    tty: true
+    ports:
+     - 80:80
+     - 443:443
+    volumes:
+     - ./data/ssl:/etc/nginx/ssl
+     - ./data/letsencrypt:/etc/letsencrypt
+    links:
+     - fargo:fargo
+     - combo:combo
+     - rabbitmq:rabbitmq
+     - authentic:authentic
+     - wcs:wcs
+     - passerelle:passerelle
+     - hobo:hobo
+     - pgadmin:pgadmin
+    environment:
+     - ENV
+     - DOMAIN
+     - EMAIL
+
+  combo:
+    container_name: combo
+    image: julienbayle/publik-docker-combo:latest
+    tty: true
+    volumes:
+      - combodata:/var/lib/combo/tenants
+    links:
+      - db:db
+      - rabbitmq:rabbitmq
+    environment:
+     - ENV
+     - DOMAIN
+     - EMAIL
+
+  fargo:
+    container_name: fargo
+    image: julienbayle/publik-docker-fargo:latest
+    tty: true
+    volumes:
+      - fargodata:/var/lib/fargo/tenants
+    links:
+      - db:db
+      - rabbitmq:rabbitmq
+    environment:
+     - ENV
+     - DOMAIN
+     - EMAIL
+
+  authentic:
+    container_name: authentic
+    image: julienbayle/publik-docker-authentic:latest
+    tty: true
+    volumes:
+      - authentic2data:/var/lib/authentic2-multitenant/tenants
+    links:
+      - db:db
+      - rabbitmq:rabbitmq
+    environment:
+     - ENV
+     - DOMAIN
+     - EMAIL
+
+  wcs:
+    container_name: wcs
+    image: julienbayle/publik-docker-wcs:latest
+    tty: true
+    volumes:
+      - wcsdata:/var/lib/wcs
+    links:
+      - db:db
+      - rabbitmq:rabbitmq
+    environment:
+     - ENV
+     - DOMAIN
+     - EMAIL
+
+  passerelle:
+    container_name: passerelle
+    image: julienbayle/publik-docker-passerelle:latest
+    tty: true
+    volumes:
+      - passerelledata:/var/lib/passerelle/tenants
+    links:
+      - db:db
+      - rabbitmq:rabbitmq
+    environment:
+     - ENV
+     - DOMAIN
+     - EMAIL
+
+  hobo:
+    container_name: hobo
+    image: julienbayle/publik-docker-hobo:latest
+    tty: true
+    volumes:
+      - hobodata:/var/lib/hobo/tenants
+    links:
+      - db:db
+      - rabbitmq:rabbitmq
+    environment:
+     - ENV
+     - DOMAIN
+     - EMAIL
+
+  db:
+    container_name: db
+    build:
+      context: postgresql/.
+    environment:
+      POSTGRES_PASSWORD: test
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+      - ./postgresql/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d
+
+  pgadmin:
+    container_name: pgadmin
+    image: chorss/docker-pgadmin4
+    links:
+      - db:db
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    mem_limit: 256m
+    hostname: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=hobo
+      - RABBITMQ_DEFAULT_PASS=hobopass
+
+volumes:
+  dbdata:
+  hobodata:
+  wcsdata:
+  authentic2data:
+  combodata:
+  fargodata:
+  passerelledata:
