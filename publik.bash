@@ -25,11 +25,11 @@ gru-connect() {
 
 # GRU STATE : Print GRU components state
 function testHttpCode {
-        t=`wget --spider -S "$1" 2>&1 | grep "HTTP/" | awk '{print $ 2}'`
+        t=`wget --spider -S "$1" 2>&1 | grep "HTTP/" | tail -1 | awk '{print $ 2}'`
         if [ "$t" = "$3" ]; then
 		echo -e "\e[42mOK\t$2 ($1) has status $t\e[0m"
 	else
-		echo -e "\e[41mERROR\t$2 ($1) do not return a $3 code\e[0m"
+		echo -e "\e[41mERROR\t$2 ($1) has status $t\e[0m"
 	fi
 }
 gru-state() {
