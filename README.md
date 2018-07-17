@@ -53,7 +53,7 @@ Ce script installe les composants nécessaires, crée les certificats et un util
 
 Il ajoute des éléments au bashrc de l'utilisateur publik afin de pouvoir bénéficier de commandes rapides (alias) de lancement de la GRU public (gru-up, gru-connect, gru-reset, ...). Voir le fichier publik.bash pour plus de détails.
 
-> Note aux utilisateurs du script sur le LAN du Département de Loire Atlantique : "sync-os.sh --insecure" au lieu de "sync-os.sh" pour passer le proxy
+> Note aux utilisateurs derrière un PROXY : Penser à installer les certificats dans le magasin de l'OS (/usr/local/share/ca-certificates) et déclarer le proxy dans la configuration docker (https://docs.docker.com/v1.13/engine/admin/systemd/#http-proxy)
 
 4 - Démarrer publik
 -------------------
@@ -73,9 +73,15 @@ Choisir le nom du domaine ou sous domaine
 export DOMAIN=testgru.loire-atlantique.fr
 ```
 
-Choisir l'email associé à cet environnement (alerte, ...)
+Choisir l'email associé à cet environnement (login du compte administrateur par défaut, envoie des alertes, ...)
 ```
 export EMAIL=xxx@loire-atlantique.fr
+```
+
+Préparer l'environnement :
+```
+gru-build
+gru-update
 ```
 
 Puis lancer l'environnement docker :
@@ -83,7 +89,11 @@ Puis lancer l'environnement docker :
 gru-up
 ```
 
-Publik et ses services associés sont alors disponibles aux URLs suivantes :
+Le premier démarrage dure environ 10 à 15 minutes. Le système s'arrête automatiquement en cas d'erreur. Tant que le processus fonctionne, c'est que les opérations se déroullent bien.
+
+Les démarrages ultérieur sont plus rapide, de l'ordre de 1 à 2 minutes.
+
+Une fois l'installation terminée, les services de Publik sont disponibles aux URLs suivantes (Mot de passe administration par défaut 'pleasechange') :
 
 | Service                       | URL                       |
 | ----------------------------- | ------------------------- |
@@ -97,7 +107,9 @@ Publik et ses services associés sont alors disponibles aux URLs suivantes :
 | PgAdmin 4 (db web interface)  | pgadminENV.DOMAIN         |
 | RabbitMQ (web interface)      | rabbitmqENV.DOMAIN        |
 
-Afin de simplifier les lancements ultérieurs, la configuration des variables d'environnement MAIL, ENV et DOMAIN peuvent être ajoutée manuellement au .bashrc de l'utilisateur publik
+Afin de simplifier les lancements ultérieurs, la configuration des variables d'environnement MAIL, ENV et DOMAIN peuvent être ajoutée manuellement au .bashrc de l'utilisateur publik ou encore à un fichier d'environnement Docker.
+
+Les certificats étant long à générer, il sont stockés dans le dossier data qui n'est pas supprimé lors d'un appel à *gru-reset*. Au delà, letsencrypt limite ne nombre de génération de certificat par semaine (https://letsencrypt.org/docs/rate-limits/) ce qui pousse également à les conserver.
 
 5 - Commentaires
 ----------------
