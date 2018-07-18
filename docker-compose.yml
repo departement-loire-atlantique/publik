@@ -17,6 +17,7 @@ services:
     volumes:
      - ./data/ssl:/etc/nginx/ssl
      - ./data/letsencrypt:/etc/letsencrypt
+     - /etc/hosts:/etc/hosts
     links:
      - fargo:fargo
      - combo:combo
@@ -38,6 +39,7 @@ services:
     tty: true
     volumes:
       - combodata:/var/lib/combo/tenants
+      - /etc/hosts:/etc/hosts
     links:
       - db:db
       - rabbitmq:rabbitmq
@@ -53,6 +55,7 @@ services:
     tty: true
     volumes:
       - fargodata:/var/lib/fargo/tenants
+      - /etc/hosts:/etc/hosts
     links:
       - db:db
       - rabbitmq:rabbitmq
@@ -67,6 +70,7 @@ services:
     image: julienbayle/publik-docker-authentic:latest
     tty: true
     volumes:
+      - /etc/hosts:/etc/hosts
       - authentic2data:/var/lib/authentic2-multitenant/tenants
     links:
       - db:db
@@ -83,6 +87,7 @@ services:
     tty: true
     volumes:
       - wcsdata:/var/lib/wcs
+      - /etc/hosts:/etc/hosts
     links:
       - db:db
       - rabbitmq:rabbitmq
@@ -98,6 +103,7 @@ services:
     tty: true
     volumes:
       - passerelledata:/var/lib/passerelle/tenants
+      - /etc/hosts:/etc/hosts
     links:
       - db:db
       - rabbitmq:rabbitmq
@@ -113,6 +119,7 @@ services:
     tty: true
     volumes:
       - hobodata:/var/lib/hobo/tenants
+      - /etc/hosts:/etc/hosts
     links:
       - db:db
       - rabbitmq:rabbitmq
