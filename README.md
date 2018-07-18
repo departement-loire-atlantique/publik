@@ -89,7 +89,19 @@ Puis lancer l'environnement docker :
 gru-up
 ```
 
-Le premier démarrage dure environ 10 à 15 minutes. Le système s'arrête automatiquement en cas d'erreur. Tant que le processus fonctionne, c'est que les opérations se déroullent bien.
+Le premier démarrage dure environ 10 minutes. Le système s'arrête automatiquement en cas d'erreur. Tant que le processus fonctionne, c'est que les opérations se déroullent bien.
+
+Configurer l'environnement Publik (Lance le mécanisme de cook) :
+```
+gru-init
+```
+
+Le script *gru-init* configure les URLs des instances, le SSO avec authentic, crée le compte administrateur par défaut. Une fois terminé, la GRU doit être prête. Ce script est à exécuter uniquement au premier lancement de la GRU ou alors après un *gru-reset* qui remet l'environnement à zéro.
+
+Vérifier l'état de la GRU:
+```
+gru-state
+```
 
 Les démarrages ultérieur sont plus rapide, de l'ordre de 1 à 2 minutes.
 

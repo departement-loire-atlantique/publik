@@ -23,6 +23,9 @@ gru-connect() {
 	docker exec -it $1 /bin/bash 
 }
 
+# GRU COOK : Start cook mecanism to initiate instance
+alias gru-init='docker exec hobo /tmp/cook.sh'
+
 # GRU STATE : Print GRU components state
 function testHttpCode {
         t=`wget --spider -S "$1" 2>&1 | grep "HTTP/" | tail -1 | awk '{print $ 2}'`
