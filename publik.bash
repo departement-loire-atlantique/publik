@@ -55,6 +55,7 @@ gru-state() {
 	testHttpCode https://hobo${ENV}.${DOMAIN} hobo 200
 	testHttpCode http://pgadmin${ENV}.${DOMAIN}/browser/ pgadmin 200
 	testHttpCode http://rabbitmq${ENV}.${DOMAIN} rabbitmanager 200
+	testHttpCode http://webmail${ENV}.${DOMAIN} rabbitmanager 200
 }
 
 # DOCKER CLEAN : Remove exited container and images without tag
