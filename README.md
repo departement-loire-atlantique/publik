@@ -65,17 +65,17 @@ cd publik
 
 Choisir le nom de votre environnement (ou laisser vide)
 ```
-export ENV=test
+echo "ENV=test" >> .env
 ```
 
 Choisir le nom du domaine ou sous domaine
 ```
-export DOMAIN=testgru.loire-atlantique.fr
+echo "DOMAIN=testgru.loire-atlantique.fr" >> .env
 ```
 
 Choisir l'email associé à cet environnement (login du compte administrateur par défaut, envoie des alertes, ...)
 ```
-export EMAIL=xxx@loire-atlantique.fr
+echo "EMAIL=xxx@loire-atlantique.fr" >> .env
 ```
 
 Préparer l'environnement :
@@ -86,12 +86,13 @@ gru-update
 
 Puis lancer l'environnement docker :
 ```
+cd publik
 gru-up
 ```
 
 Le premier démarrage dure environ 10 minutes. Le système s'arrête automatiquement en cas d'erreur. Tant que le processus fonctionne, c'est que les opérations se déroullent bien.
 
-Configurer l'environnement Publik (Lance le mécanisme de cook) :
+Ouvrir un nouveau terminal (utilisateur "publik") pour finaliser la configureration de l'environnement Publik (Lance le mécanisme de cook) :
 ```
 gru-init
 ```
@@ -119,22 +120,26 @@ Une fois l'installation terminée, les services de Publik sont disponibles aux U
 | PgAdmin 4 (db web interface)  | pgadminENV.DOMAIN         |
 | RabbitMQ (web interface)      | rabbitmqENV.DOMAIN        |
 
-Afin de simplifier les lancements ultérieurs, la configuration des variables d'environnement MAIL, ENV et DOMAIN peuvent être ajoutée manuellement au .bashrc de l'utilisateur publik ou encore à un fichier d'environnement Docker.
 
 Les certificats étant long à générer, il sont stockés dans le dossier data qui n'est pas supprimé lors d'un appel à *gru-reset*. Au delà, letsencrypt limite ne nombre de génération de certificat par semaine (https://letsencrypt.org/docs/rate-limits/) ce qui pousse également à les conserver.
 
 5 - Commentaires
 ----------------
 
-Ce dépôt représente un travail "en cours", les points suivants ne sont pas implémentés :
-- Possibilité de désactivé le mode DEBUG (Tous les modules sont actuellement en mode DEBUG)
+Ce dépôt représente un travail "en cours" et orienté vers des instances de recette ou de développements.
+
+Pour une utilisation en production, voici ce qu'il resterait à faire :
+- Possibilité de désactivé le mode DEBUG via une variable d'environnement (Tous les modules sont actuellement en mode DEBUG)
 - Ajout d'un logger centralisé (SENTRY par exemple)
 - Possibilité de générer lors de l'installation tous les mots de passes et secrets
-- Configuration de l'envoi d'emails
-- Pages de maintenance personnalisées en cas de service indisponible (40x, 50x)
+- Configuration de l'envoi d'emails via une variable d'environnement (Actuellement capturés par le mailcatcher)
+- Ajout de pages de maintenance personnalisées en cas de service indisponible (40x, 50x)
 - Respect des précaunisations de DJANGO (https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/) en matière d'installation de production propre
+
+ROADMAP :
 - Installation depuis le code source et non les dépôts DEBIAN
-- Lancement des serveurs python en mode développement
+- Possibilité de lancer les serveurs python en mode développement
+- Possibilité de lancer un debugger python
 
 6 - Bibliographie
 -----------------

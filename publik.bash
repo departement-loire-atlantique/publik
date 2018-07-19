@@ -35,8 +35,12 @@ function testHttpCode {
 		echo -e "\e[41mERROR\t$2 ($1) has status $t\e[0m"
 	fi
 }
+loadenv() {
+	export $(grep -v '^#' .env | xargs)
+}
 gru-state() {
-        # Hobo agent
+        loadenv
+	# Hobo agent
 	t=`docker exec rabbitmq rabbitmqctl list_connections | grep running | wc -l`
         if [ $t -eq 12 ]
         then
@@ -45,6 +49,7 @@ gru-state() {
                 echo -e "\e[41mERROR\tAll hobo agents are not ready ($t/12)\e[0m"
         fi
 
+	
  	# Test service HTTP status code 200
 	testHttpCode https://demarches${ENV}.${DOMAIN} combo 200
 	testHttpCode https://admin-demarches${ENV}.${DOMAIN} combo_agent 200
