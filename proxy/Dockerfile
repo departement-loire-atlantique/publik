@@ -11,6 +11,11 @@ RUN apt-get update \
 
 ADD *.template /etc/nginx/conf.d/ 
 
+# TIMEZONE
+RUN rm /etc/localtime \
+    && ln -s /usr/share/zoneinfo/Europe/Paris /etc/localtime \
+    && dpkg-reconfigure -f noninteractive tzdata
+
 COPY docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
 

@@ -3,7 +3,10 @@ FROM postgres
 MAINTAINER Julien BAYLE <julien.bayle@loire-atlantique.fr>
 
 # TIMEZONE
-RUN echo "Europe/Paris" > /etc/timezone && \
+# TIMEZONE
+RUN rm /etc/localtime \
+    && ln -s /usr/share/zoneinfo/Europe/Paris /etc/localtime \
+    && echo "Europe/Paris" > /etc/timezone && \
     apt-get update \
     && apt-get install -y locales \
     && rm -rf /var/lib/apt/lists/* \
