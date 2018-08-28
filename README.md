@@ -1,40 +1,24 @@
-Ce projet a pour vocation de configurer rapidement un environnement pour tester la solution
-Publik de la société entrouvert.
+Ce projet a pour vocation de simplifier l'installation de la solution Publik de la société Entr'ouvert.
 
-La solution repose sur des containers docker.
+Il repose sur des containers docker dont certains sont pré-compilés sur Docker Hub.
 
-Publik ne fonctionne qu'avec Debian Jessie, le point de départ est donc de créer une machine avec cette distribution de Linux. A titre d'exemple, la procédure est illustrée avec l'offre Cloud de l'hébergeur OVH.
-
-1 - Creation du serveur
+1 - Pré-requis
 --------------------------------------
 
-Se connecter au manager OVH (Créer un compte si nouveau client)
+Publik ne fonctionne qu'avec Debian Jessie, le point de départ est donc de créer une machine avec cette distribution de Linux. Pour rapidement tester la solution, il est possible de l'installer sur un serveur Cloud d'OVH par exemple.
 
-Aller dans la rubrique "Cloud"
+Caractéristiques minimales de la machine :
+* Distribution : Debian 8
+* 4Go de RAM 
+* 10 Go de disque (20 Go recommandé)
 
-Créer un projet cloud (Etape à réaliser uniquement la première fois)
-* Bouton Commander => Projet Cloud
-
-Ajouter un serveur à un projet cloud
-* Ouvrir le projet (via le menu Gauche) puis le sous menu "Infrastructure"
-* Menu Actions => Ajouter un serveur
-** Localisation : France
-** Distribution : Debian 8
-** Instance : Choisir tout type d'instance avec un minimum de 4Go 
-   de RAM et 20Go de disque (l'instance S1-4 est suffisante). 
-   Le démarrage de tous les services de public consomme jusqu'à 
-   4Go de RAM lors de l'installation.
-* Ajouter la clé du poste pouvant se connecter au serveur
-* Une fois le serveur prêt, l'accès à la machine est proposé. 
-  Exemple : ssh debian@54.38.136.168
-
-2 - Déclarer des enregistrements DNS pour cette installation
+2 - Déclarations DNS
 ------------------------------------------------------------
 
 Configurer un sous domaine vers le serveur nouvellement créé.
 Exemple : *.testgru.loire-atlantique.fr => 54.38.136.168
 
-3 - Installation du noeud avec le script automatique
+3 - Installation avec le script automatique
 ----------------------------------------------------
 
 ```
@@ -119,11 +103,33 @@ Une fois l'installation terminée, les services de Publik sont disponibles aux U
 | Hobo (deployment admin)       | hoboENV.DOMAIN            |
 | PgAdmin 4 (db web interface)  | pgadminENV.DOMAIN         |
 | RabbitMQ (web interface)      | rabbitmqENV.DOMAIN        |
+| Mail catcher (smtp trapper)   | webmailENV.DOMAIN         |
 
 
 Les certificats étant long à générer, il sont stockés dans le dossier data qui n'est pas supprimé lors d'un appel à *gru-reset*. Au delà, letsencrypt limite ne nombre de génération de certificat par semaine (https://letsencrypt.org/docs/rate-limits/) ce qui pousse également à les conserver.
 
-5 - Commentaires
+5 - Installation en local
+----------------
+
+Pour une installation en local, il est possible d'ajouter les 
+entrées suivantes au fichier /etc/host plutôt que dans le DNS.
+```
+54.38.136.168       admin-demarches.testgru.loire-atlantique.fr
+54.38.136.168       demarches.testgru.loire-atlantique.fr
+54.38.136.168       compte.testgru.loire-atlantique.fr
+54.38.136.168       hobo.testgru.loire-atlantique.fr
+54.38.136.168       passerelle.testgru.loire-atlantique.fr
+54.38.136.168       demarche.testgru.loire-atlantique.fr
+54.38.136.168       documents.testgru.loire-atlantique.fr
+54.38.136.168       pgadmin.testgru.loire-atlantique.fr
+54.38.136.168       rabbitmq.testgru.loire-atlantique.fr
+54.38.136.168       webmail.testgru.loire-atlantique.fr
+```
+Avant le démarrage de la GRU en local avec *gru-up*, il récupérer le 
+contenu du dossier data/ du projet d'une instance opérationnelle.
+(Le dossier data contient les certificats signés)
+
+6 - Commentaires
 ----------------
 
 Ce dépôt représente un travail "en cours" et orienté vers des instances de recette ou de développements.
@@ -141,7 +147,7 @@ ROADMAP :
 - Possibilité de lancer les serveurs python en mode développement
 - Possibilité de lancer un debugger python
 
-6 - Bibliographie
+7 - Bibliographie
 -----------------
 
 En novembre 2017, les documentations accessibles en ligne étaient incomplètes, parfois incohérentes avec le code ou contradictoires entre elles. Par conséquent, l’installation des modules a été laborieuse. Ce dépôt docker résume une approche qui a fonctionné mais n'engage pas la société Entrouvert.
