@@ -2,6 +2,11 @@
 
 set -e
 
+if [ ! -f sync-os.sh ]; then
+        echo "Please run this script in the publik folder"
+	exit 1
+fi
+
 echo "Upgrade system"
 #####################
 
@@ -91,4 +96,6 @@ fi
 if [ ! -f data/ssl/dhparam4.pem 4096 ]; then
         openssl dhparam -out data/ssl/dhparam4.pem 4096
 fi
+
+chown publik:publik data -R
 
