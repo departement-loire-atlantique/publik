@@ -42,6 +42,8 @@ Il ajoute des éléments au bashrc de l'utilisateur publik afin de pouvoir bén�
 4 - Démarrer publik
 -------------------
 
+> Attention : Afin que les modifications introduites par le script sync-os.sh soient bien prises en compte pour l'utilisateur publik, il est indispensable de bien se déconnecter et se reconnecter avant de continuer (mise à jour du bashrc et ajout d'un groupe à l'utilisateur publik pour avoir accès à docker).
+
 Se connecter au serveur avec l'utilisateur "publik" et ouvrir le dossier publik créer par le script d'installation (sync-os.sh)
 ```
 cd publik
