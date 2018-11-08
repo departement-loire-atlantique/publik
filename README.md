@@ -18,6 +18,17 @@ Caractéristiques minimales de la machine :
 Configurer un sous domaine vers le serveur nouvellement créé.
 Exemple : *.testgru.loire-atlantique.fr => 54.38.136.168
 
+En fin d'installation, l'ensemble des applications publik seront accessibles depuis ce sous domaine.
+
+Des certificats Let's encrypt (certificats HTTPS valables et signés) seront automatiquement générés durant le processus d'installation. C'est pourquoi il est important que le serveur soit accessible depuis internet et que les enregistrement DNS ait été préalablement configurées.
+
+Vérifier votre configuration en réalisant un ping sur une adresse.
+
+Exemple :
+```
+ping demarche.testgru.loire-atlantique.fr
+```
+
 3 - Installation avec le script automatique
 ----------------------------------------------------
 
@@ -70,51 +81,99 @@ gru-build
 gru-update
 ```
 
+*gru-build* réalise une construction des conteneurs docker locaux.
+
+*gru-update* téléchargement localement depuis dockerhub les conteneurs pré-construits.
+
 Puis lancer l'environnement docker :
 ```
-cd publik
 gru-up
 ```
 
-Le premier démarrage dure environ 10 minutes. Le système s'arrête automatiquement en cas d'erreur. Tant que le processus fonctionne, c'est que les opérations se déroullent bien.
+Le premier démarrage dure environ 10 minutes. Le système s'arrête automatiquement en cas d'erreur sur n'importe quel service. Tant que le processus fonctionne, c'est que les opérations se déroullent bien.
 
-Ouvrir un nouveau terminal (utilisateur "publik") pour finaliser la configureration de l'environnement Publik (Lance le mécanisme de cook) :
+Ouvrir un nouveau terminal (utilisateur "publik") pour finaliser la configureration de l'environnement Publik (Lance le mécanisme de cook, ce script bloque tant que le démarrage n'est pas prêt, donc aucun risque de le lancer trop tôt) :
 ```
 gru-init
 ```
 
-Le script *gru-init* configure les URLs des instances, le SSO avec authentic, crée le compte administrateur par défaut. Une fois terminé, la GRU doit être prête. Ce script est à exécuter uniquement au premier lancement de la GRU ou alors après un *gru-reset* qui remet l'environnement à zéro.
+Le script *gru-init* configure les URLs des instances, le SSO avec authentic, crée le compte administrateur par défaut. Une fois terminé, la GRU doit être prête. Ce script est à exécuter uniquement au premier lancement de la GRU ou alors après un *gru-reset* qui remet l'environnement à zéro. Son exécution peut durer également jusqu'à 5 à 10 minutes.
 
-Vérifier l'état de la GRU:
+Vérifier l'état de la GRU (A ce stade, tout doit être OK) :
 ```
 gru-state
 ```
 
-Les démarrages ultérieur sont plus rapide, de l'ordre de 1 à 2 minutes.
+Les démarrages ultérieurs sont plus rapides, de l'ordre de 1 à 2 minutes. Il suffit alors d'invoquer uniquement la commande *gru-up* en étant dans le dossier publik.
 
 Une fois l'installation terminée, les services de Publik sont disponibles aux URLs suivantes (Mot de passe administration par défaut 'pleasechange') :
 
 | Service                       | URL                       |
 | ----------------------------- | ------------------------- |
-| Combo (citizen)               | demarchesENV.DOMAIN       |
-| Combo (employees              | admin-demarchesENV.DOMAIN |
+| Combo (usagers)               | demarchesENV.DOMAIN       |
+| Combo (agents).               | admin-demarchesENV.DOMAIN |
 | Fargo (documents)             | documentsENV.DOMAIN       |      
-| Authentic (Identity provider) | compteENV.DOMAIN          |
-| WCS (forms and workflows)     | demarcheENV.DOMAIN        |
+| Authentic (identité et RBAC)  | compteENV.DOMAIN          |
+| WCS (formulaires et WF)       | demarcheENV.DOMAIN        |
 | Passerelle (middleware)       | passerelleENV.DOMAIN      |
-| Hobo (deployment admin)       | hoboENV.DOMAIN            |
+| Hobo (deploiement).           | hoboENV.DOMAIN            |
 | PgAdmin 4 (db web interface)  | pgadminENV.DOMAIN         |
 | RabbitMQ (web interface)      | rabbitmqENV.DOMAIN        |
 | Mail catcher (smtp trapper)   | webmailENV.DOMAIN         |
 
-
-Les certificats étant long à générer, il sont stockés dans le dossier data qui n'est pas supprimé lors d'un appel à *gru-reset*. Au delà, letsencrypt limite ne nombre de génération de certificat par semaine (https://letsencrypt.org/docs/rate-limits/) ce qui pousse également à les conserver.
+Les certificats étant long à générer, il sont stockés dans le dossier data qui n'est pas supprimé lors d'un appel à *gru-reset*. Au delà, le service let's encrypt limite ne nombre de génération de certificat par semaine (https://letsencrypt.org/docs/rate-limits/) ce qui pousse également à les conserver.
 
 5 - Installation en local
 ----------------
 
-Pour une installation en local, il est possible d'ajouter les 
-entrées suivantes au fichier /etc/host plutôt que dans le DNS.
+> Attention : l'installation en local n'est possible que si votre machine est sous Debian Jessie. Ou alors sur une VM Debian Jessie fonctionnant sur votre machine. Au Département de Loire Atlantique, nous utilisons soit des VM ou alors des postes en dual boot avec Debian Jessie.
+
+### Démarrer l'installation
+
+L'installation est la même que pour un serveur (cf. au dessus).
+
+On commence par faire les étapes "3 - Installation avec le script automatique".
+
+### Récupération de certificats valides
+
+Sur le poste local, impossible de générer un cerficat Let's Encrypt valide. Pour générer des certificats SSL valides, il est nécessaire de disposer d'une machine accessible depuis Internet et associée à un DNS.
+
+#### Solution 1 - Récupération des certificats depuis une installation serveur
+
+Si la GRU a déjà été installée sur un serveur, il est possible de récupérer les certificats pour les utiliser en local. Bien entendu, on préfera prendre les certificats d'un serveur de recette plutôt que de celui de production.
+
+Copier depuis ce serveur le dossier publik/data en local au même emplacement sur votre machine.
+
+#### Solution 2 - Lancement d'un serveur temporaire pour générer les certificats
+
+Pour réaliser cette solution, il vous faut juste une machine accessible depuis internet et l'accès à la configuration DNS d'un domaine.
+
+Créer un serveur chez OVH (VPS ou CLOUD), puis associer son IP à un domaine. 
+
+Lancer l'installation (cf. dessus), jusqu'à étape *gru-build* incluse.
+
+Lancer uniquement le proxy (Ce qui va entrainer la génération des certificats SSL) :
+```
+docker-compose -f docker-compose-local-certificates.yml up
+```
+
+Une fois les certificats générés, arrêter le container avec CRTL-C
+
+Copier depuis ce serveur le dossier publik/data en local au même emplacement sur votre machine.
+
+```
+rsync -av user@server:/home/publik/publik/data .
+```
+
+### Finaliser l'installation en local
+
+En supposant que vous ayez récupérer les certificats (dossier data) depuis une instance configuré sur *.testgru.loire-atlantique.fr et que l'IP de votre poste est 54.38.136.168.
+
+> Attention, si vous utiliser une VM, il faut alors mettre l'IP de la VM.
+
+Ajouter les entrées suivantes au fichier /etc/host de votre poste local
+(Remplacer par l'IP de votre poste local ou de votre VM et le domaine 
+dont est extrait le certificat) :
 ```
 54.38.136.168       admin-demarches.testgru.loire-atlantique.fr
 54.38.136.168       demarches.testgru.loire-atlantique.fr
@@ -127,9 +186,10 @@ entrées suivantes au fichier /etc/host plutôt que dans le DNS.
 54.38.136.168       rabbitmq.testgru.loire-atlantique.fr
 54.38.136.168       webmail.testgru.loire-atlantique.fr
 ```
-Avant le démarrage de la GRU en local avec *gru-up*, il récupérer le 
-contenu du dossier data/ du projet d'une instance opérationnelle.
-(Le dossier data contient les certificats signés)
+> Il est important de mettre l'IP de son poste et non 127.0.0.1 car en pratique, la configuration /etc/hosts est répliquée vers chaque container. Celà permet quand un container fait un appel à xxx.testgru.loire-atlantique.fr que celui ci passe via le container proxy qui gère le HTTPS pour tous les services.
+
+Puis terminer la procédure d'installation avec les étapes décrites au "4 - Démarrer publik" (cf. ci-dessus).
+
 
 6 - Commentaires
 ----------------
@@ -145,14 +205,14 @@ Pour une utilisation en production, voici ce qu'il resterait à faire :
 - Respect des précaunisations de DJANGO (https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/) en matière d'installation de production propre
 
 ROADMAP :
-- Installation depuis le code source et non les dépôts DEBIAN
 - Possibilité de lancer les serveurs python en mode développement
 - Possibilité de lancer un debugger python
+- Ajout d'un mécanisme permettant de générer des patchs ou d'appliquer des paths
 
 7 - Bibliographie
 -----------------
 
-En novembre 2017, les documentations accessibles en ligne étaient incomplètes, parfois incohérentes avec le code ou contradictoires entre elles. Par conséquent, l’installation des modules a été laborieuse. Ce dépôt docker résume une approche qui a fonctionné mais n'engage pas la société Entrouvert.
+En novembre 2017, les documentations accessibles en ligne étaient incomplètes, parfois incohérentes avec le code ou contradictoires entre elles. Par conséquent, l’installation des modules a été laborieuse. Ce dépôt docker résume une approche qui a fonctionné mais n'engage pas la société Entr'ouvert.
 
 Documentations intéressantes à connaître :
 - Guide pour les développeurs Publik : https://dev.entrouvert.org/projects/prod-eo/wiki
