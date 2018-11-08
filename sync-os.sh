@@ -85,10 +85,10 @@ echo "Generate HTTPS base certificates"
 mkdir -p data/ssl
 
 # Generate certificates if needed
-if [ ! -f /etc/nginx/ssl/ticket.key ]; then
+if [ ! -f data/ssl/ticket.key ]; then
         openssl rand 48 -out data/ssl/ticket.key
 fi
-if [ ! -f /etc/nginx/ssl/dhparam4.pem ]; then
+if [ ! -f data/ssl/dhparam4.pem 4096 ]; then
         openssl dhparam -out data/ssl/dhparam4.pem 4096
 fi
 
