@@ -93,7 +93,7 @@ mkdir -p data/ssl
 if [ ! -f data/ssl/ticket.key ]; then
         openssl rand 48 -out data/ssl/ticket.key
 fi
-if [ ! -f data/ssl/dhparam4.pem 4096 ]; then
+if [ ! -f data/ssl/dhparam4.pem ]; then
         openssl dhparam -out data/ssl/dhparam4.pem 4096
 fi
 
