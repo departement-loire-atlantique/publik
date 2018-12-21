@@ -108,20 +108,26 @@ Les démarrages ultérieurs sont plus rapides, de l'ordre de 1 à 2 minutes. Il 
 
 Une fois l'installation terminée, les services de Publik sont disponibles aux URLs suivantes (Mot de passe administration par défaut 'pleasechange') :
 
-| Service                       | URL                       |
-| ----------------------------- | ------------------------- |
-| Combo (usagers)               | demarchesENV.DOMAIN       |
-| Combo (agents).               | admin-demarchesENV.DOMAIN |
-| Fargo (documents)             | documentsENV.DOMAIN       |      
-| Authentic (identité et RBAC)  | compteENV.DOMAIN          |
-| WCS (formulaires et WF)       | demarcheENV.DOMAIN        |
-| Passerelle (middleware)       | passerelleENV.DOMAIN      |
-| Hobo (deploiement).           | hoboENV.DOMAIN            |
-| PgAdmin 4 (db web interface)  | pgadminENV.DOMAIN         |
-| RabbitMQ (web interface)      | rabbitmqENV.DOMAIN        |
-| Mail catcher (smtp trapper)   | webmailENV.DOMAIN         |
+| Service                       | URL                               |
+| ----------------------------- | --------------------------------- |
+| Combo (usagers)               | https://demarchesENV.DOMAIN       |
+| Combo (agents).               | https://admin-demarchesENV.DOMAIN |
+| Fargo (documents)             | https://documentsENV.DOMAIN       |      
+| Authentic (identité et RBAC)  | https://compteENV.DOMAIN          |
+| WCS (formulaires et WF)       | https://demarcheENV.DOMAIN        |
+| Passerelle (middleware)       | https://passerelleENV.DOMAIN      |
+| Hobo (deploiement).           | https://hoboENV.DOMAIN            |
+| PgAdmin 4 (db web interface)  | http://pgadminENV.DOMAIN          |
+| RabbitMQ (web interface)      | http://rabbitmqENV.DOMAIN         |
+| Mail catcher (smtp trapper)   | http://webmailENV.DOMAIN          |
 
 Les certificats étant long à générer, il sont stockés dans le dossier data qui n'est pas supprimé lors d'un appel à *gru-reset*. Au delà, le service let's encrypt limite ne nombre de génération de certificat par semaine (https://letsencrypt.org/docs/rate-limits/) ce qui pousse également à les conserver.
+
+Si besoin, un alias permet de se connecter directement en bash sur une instance Docker en cours d'exécution. 
+Pour celà utiliser la commande suivante (exemple pour hobo) :
+```
+gru-connect hobo
+```
 
 5 - Installation en local
 ----------------
