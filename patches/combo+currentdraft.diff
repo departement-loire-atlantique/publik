@@ -1,0 +1,10 @@
+Index: dist-packages/combo/apps/wcs/templates/combo/wcs/current_drafts.html
+===================================================================
+--- dist-packages.orig/combo/apps/wcs/templates/combo/wcs/current_drafts.html
++++ dist-packages/combo/apps/wcs/templates/combo/wcs/current_drafts.html
+@@ -17,5 +17,4 @@
+   {% endif %}
+ </div>
+ {% endfor %}
+-</div>
+ {% endblock %}
