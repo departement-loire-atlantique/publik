@@ -1,0 +1,13 @@
+Index: dist-packages/authentic2_auth_oidc/views.py
+===================================================================
+--- dist-packages.orig/authentic2_auth_oidc/views.py
++++ dist-packages/authentic2_auth_oidc/views.py
+@@ -167,7 +167,7 @@ class LoginCallback(View):
+             })
+             return self.continue_to_next_url()
+         if ('access_token' not in result or 'token_type' not in result or
+-                result['token_type'] != 'Bearer' or 'id_token' not in result):
++                result['token_type'].lower() != 'bearer' or 'id_token' not in result):
+             logger.warning(u'auth_oidc: invalid token endpoint response from %s: %r' % (
+                 provider.token_endpoint, result))
+             messages.warning(request, _('Provider %(name)s is down, report %(request_id)s to '

@@ -26,6 +26,11 @@ gru-connect() {
 # GRU COOK : Start cook mecanism to initiate instance
 alias gru-init='docker exec hobo /tmp/cook.sh'
 
+# GRU UPDATE : Update packages, patches and themes
+gru-update() {
+	docker exec $1 /root/update.sh
+}
+
 # GRU STATE : Print GRU components state
 function testHttpCode {
         t=`wget --spider -S "$1" 2>&1 | grep "HTTP/" | tail -1 | awk '{print $ 2}'`
