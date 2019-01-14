@@ -196,8 +196,17 @@ dont est extrait le certificat) :
 
 Puis terminer la procédure d'installation avec les étapes décrites au "4 - Démarrer publik" (cf. ci-dessus).
 
+6 - Mise à jour
+---------------
 
-6 - Commentaires
+Un script update.sh est disponible et permet de mettre à jour une installation Publik.
+
+Ce script possède 3 fonctionnalités :
+ - Mise à jour des paquets (update.sh --update-packages)
+ - Application des patchs personnalisés du Département de Loire Atlantique (update.sh --patch)
+ - Déploiement du thème personnalisé du Département de Loire Atlantique (update.sh --update-theme)
+
+7 - Commentaires
 ----------------
 
 Ce dépôt représente un travail "en cours" et orienté vers des instances de recette ou de développements.
@@ -215,7 +224,7 @@ ROADMAP :
 - Possibilité de lancer un debugger python
 - Ajout d'un mécanisme permettant de générer des patchs ou d'appliquer des paths
 
-7 - Bibliographie
+8 - Bibliographie
 -----------------
 
 En novembre 2017, les documentations accessibles en ligne étaient incomplètes, parfois incohérentes avec le code ou contradictoires entre elles. Par conséquent, l’installation des modules a été laborieuse. Ce dépôt docker résume une approche qui a fonctionné mais n'engage pas la société Entr'ouvert.
