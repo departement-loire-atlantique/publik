@@ -206,6 +206,13 @@ Ce script possède 3 fonctionnalités :
  - Application des patchs personnalisés du Département de Loire Atlantique (update.sh --patch)
  - Déploiement du thème personnalisé du Département de Loire Atlantique (update.sh --update-theme)
 
+Le renouvellement des certificats se fait en se connectant sur l'instance proxy et en lançant certbot (A faire régulièrement) :
+
+```
+gru-connect proxy
+certbot renew
+```
+
 7 - Commentaires
 ----------------
 
