@@ -2,7 +2,7 @@ Index: dist-packages/wcs/forms/root.py
 ===================================================================
 --- dist-packages.orig/wcs/forms/root.py
 +++ dist-packages/wcs/forms/root.py
-@@ -314,6 +314,9 @@ class FormPage(Directory, FormTemplateMi
+@@ -315,6 +315,9 @@ class FormPage(Directory, FormTemplateMixin):
              form_data['__cancelurl'] = cancelurl
              session.add_magictoken(magictoken, form_data)
  
@@ -12,7 +12,7 @@ Index: dist-packages/wcs/forms/root.py
          if self.edit_mode and (page is None or page == self.pages[-1]):
              form.add_submit('submit', _('Save Changes'))
          elif not self.has_confirmation_page() and (page is None or page == self.pages[-1]):
-@@ -321,9 +324,6 @@ class FormPage(Directory, FormTemplateMi
+@@ -322,9 +325,6 @@ class FormPage(Directory, FormTemplateMixin):
          else:
              form.add_submit('submit', _('Next'))
  
@@ -22,7 +22,7 @@ Index: dist-packages/wcs/forms/root.py
          if page_change:
              # on page change, we fake a GET request so the form is not altered
              # with errors from the previous submit; if the page was already
-@@ -745,10 +745,10 @@ class FormPage(Directory, FormTemplateMi
+@@ -753,10 +753,10 @@ class FormPage(Directory, FormTemplateMixin):
                  form = self.create_form(page=page,
                          displayed_fields=submitted_fields,
                          transient_formdata=transient_formdata)
@@ -34,13 +34,16 @@ Index: dist-packages/wcs/forms/root.py
              form.add_submit('submit')
              if page_no > 0 and form.get_submit() == 'previous':
                  return self.previous_page(page_no, magictoken)
-@@ -1219,9 +1219,9 @@ class FormPage(Directory, FormTemplateMi
+@@ -1211,12 +1211,12 @@ class FormPage(Directory, FormTemplateMixin):
                  form.widgets.append(HtmlWidget(captcha_text))
              form.add_captcha(hint='')
              form.captcha.has_error = lambda request: False
 -        form.add_submit('submit', _('Submit'))
          form.add_submit('previous', _('Previous'))
-         form.add_submit('cancel', _('Cancel'), css_class = 'cancel')
+         cancel_label = _('Cancel')
+         if self.has_draft_support() and not (data and data.get('is_recalled_draft')):
+             cancel_label = _('Discard')
+         form.add_submit('cancel', cancel_label, css_class='cancel')
 +        form.add_submit('submit', _('Submit'))
          session = get_session()
          if self.has_draft_support():
