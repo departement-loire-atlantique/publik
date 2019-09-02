@@ -91,7 +91,7 @@ mkdir -p data/ssl
 
 # Generate certificates if needed
 if [ ! -f data/ssl/ticket.key ]; then
-        openssl rand 48 -out data/ssl/ticket.key
+        openssl rand -out data/ssl/ticket.key 48
 fi
 if [ ! -f data/ssl/dhparam4.pem ]; then
         openssl dhparam -out data/ssl/dhparam4.pem 4096
