@@ -1,9 +1,10 @@
 #!/bin/sh
 
+# Stop installation if something goes wrong (errpr code different from zero)
 set -e
 
 if [ ! -f sync-os.sh ]; then
-        echo "Please run this script in the publik folder"
+        echo "Please run this script in the root of the publik installation folder"
 	exit 1
 fi
 
@@ -41,7 +42,7 @@ echo "Install docker compose"
 
 # Source : https://docs.docker.com/compose/install/#install-compose
 
-curl -L $1 https://github.com/docker/compose/releases/download/1.18.0/docker-compose-`uname -s`-`uname -m` \
+curl -L $1 https://github.com/docker/compose/releases/download/1.25.0/docker-compose-`uname -s`-`uname -m` \
     -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
@@ -55,10 +56,9 @@ else
     usermod publik -s /bin/bash
     usermod publik -d /home/publik
 
-    echo "Choose publik password"
+    echo "Choose publik password :"
     passwd publik
 fi
-
 
 # Allow publik to use docker
 usermod -a -G docker publik
@@ -98,4 +98,3 @@ if [ ! -f data/ssl/dhparam4.pem ]; then
 fi
 
 chown publik:publik data -R
-
