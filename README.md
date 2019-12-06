@@ -175,6 +175,7 @@ Si vous êtes sous Windows, installez GIT avec Git bash et Docker for Windows pu
 git clone --recurse-submodules https://github.com/departement-loire-atlantique/publik
 cd publik
 echo "source `pwd`/publik.bash" > ~/.profile
+source ~/.profile
 ```
 
 ### Récupération de certificats valides
@@ -187,11 +188,17 @@ et associée à un DNS.
 
 Si la GRU a déjà été installée sur un serveur, il est possible de récupérer les certificats pour les utiliser en local. Bien entendu, on préfera prendre les certificats d'un serveur de recette plutôt que de celui de production.
 
+Se connecter en root sur le serveur, puis :
+
+```
+sudo chown publik:publik /home/publik/publik/data -R
+```
+
 Copier depuis ce serveur le dossier publik/data et le fichier .env en local au même emplacement sur votre machine.
 
 ```
-rsync -av publik@IP_MACHINE:/home/publik/publik/data .
-rsync -av publik@IP_MACHINE:/home/publik/publik/.env .
+rsync -rLv publik@IP_MACHINE:/home/publik/publik/data .
+rsync -v publik@IP_MACHINE:/home/publik/publik/.env .
 ```
 
 #### Solution 2 - Lancement d'un serveur temporaire pour générer les certificats
@@ -210,12 +217,12 @@ docker-compose -f docker-compose-local-certificates.yml up
 
 ### Finaliser l'installation en local
 
-Nous faisons dans ce chapitre l'hypothèsee que vous avez récupéré les certificats (dossier data) 
+Nous faisons dans ce chapitre l'hypothèse que vous avez récupéré les certificats (dossier data) 
 depuis une instance configurée sur *ENV.DOMAIN et que l'IP de votre poste est IP_MACHINE.
 
 > Attention, si vous utiliser une VM, il faut alors mettre l'IP de la VM et non celle du poste
 
-Ajouter les entrées suivantes au fichier /etc/host de votre poste local :
+Ajouter les entrées suivantes au fichier /etc/hosts de votre poste local (C:\windows\System32\drivers\etc\hosts sur Windows):
 ```
 IP_MACHINE       admin-demarchesENV.DOMAIN
 IP_MACHINE       demarchesENV.DOMAIN
@@ -230,14 +237,18 @@ IP_MACHINE       webmailENV.DOMAIN
 ```
 > Il est important de mettre l'IP de son poste et non 127.0.0.1 car en pratique, la configuration du fichier hosts est répliquée vers chaque conteneur. Celà permet quand un conteneur fait un appel à xxxENV.DOMAIN que celui ci passe via le conteneur proxy qui gère le HTTPS pour tous les services.
 
+
+> Il est important de mettre l'IP de son poste et non 127.0.0.1 car en pratique, la configuration du fichier hosts est répliquée vers chaque conteneur. Celà permet quand un conteneur fait un appel à xxxENV.DOMAIN que celui ci passe via le conteneur proxy qui gère le HTTPS pour tous les services.
+
 Puis terminer la procédure d'installation avec les étapes décrites au "4 - Démarrer publik" (cf. ci-dessus) 
-avec Git bash sous Windows et bash sous linux. Ce qui revient à faire les commandes suivantes :
+avec Git bash sous Windows et bash sous linux. Ce qui revient, en simplifiant (*gru-up* réalise automatiquement 
+un *gru-build* et un *gru-pull* ), à faire la commande suivante :
 ```
-gru-build
-gru-pull
 gru-up
 ```
+
 Puis ouvrir un nouveau bash :
+
 ```
 gru-init
 ```
