@@ -3,14 +3,20 @@
 # GRU UP : Start all GRU Publik containers
 alias gru-up='docker-compose up --no-build --abort-on-container-exit'
 
-# GRU DOWN : Turn off GRU 
+# GRU DOWN : Delete all GRU containers 
 alias gru-down='docker-compose down'
+
+# GRU START : Start GRU containers 
+alias gru-stop='docker-compose start'
+
+# GRU STOP : Stop GRU containers 
+alias gru-stop='docker-compose stop'
 
 # GRU DEAMON : Start all GRU Publik containers as a deamon
 alias gru-deamon='docker-compose down && docker-compose up --no-build -d'
 
-# GRU UPDATE : Update container images from Docker Hub
-alias gru-update='docker-compose pull'
+# GRU PULL : Pull container images from Docker Hub
+alias gru-pull='docker-compose pull'
 
 # GRU BUILD : Update proxy and postgresql images 
 alias gru-build='docker-compose build'
