@@ -1,0 +1,26 @@
+{
+    "branding": {
+        "theme": "publik"
+    },
+    "debug": {
+        "error_email": "${EMAIL}"
+    },
+    "language": {
+        "language": "fr"
+    },
+    "misc": {
+        "charset": "utf-8",
+        "homepage-redirect-url": "https://demarches${ENV}.${DOMAIN}"
+    },
+    "postgresql": {
+        "createdb-connection-params": {
+            "database": "postgres",
+            "host": "db",
+            "user": "wcs",
+	    "password": "wcspass"
+        },
+        "database-template-name": "wcs_%s",
+        "host": "db",
+        "user": "wcs"
+    }
+}

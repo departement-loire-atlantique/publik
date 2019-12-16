@@ -1,0 +1,76 @@
+#!/bin/bash
+
+COMBO_OK="Combo fonctionne"
+AUTHENTIC_OK="Connexion"
+
+function retry() {
+    local -r -i max_attempts="$1"; shift
+    local -r cmd="$@"
+    local -i attempt_num=1
+
+    until $cmd
+    do
+        if (( attempt_num == max_attempts ))
+        then
+            echo "Attempt $attempt_num failed and there are no more attempts left!"
+            exit 1
+        else
+            echo "Attempt $attempt_num failed! Trying again in 10 seconds..."
+            let attempt_num++
+	    sleep 10
+        fi
+    done
+}
+
+function testHttpCode {
+	t=`wget --spider https://$1 2>&1 | grep $3 | wc -l`
+	if [ $t -eq 0 ]
+	then
+       		echo "ERROR: $2 is not ready for configuration"
+		return 1
+	fi
+	echo "OK: $2 is ready"
+}
+
+function testHttpContains {
+        t=`wget -O - https://$1 2>&1 | grep $3 | wc -l`
+        if [ $t -eq 0 ]
+        then
+                echo "ERROR: $2 is not ready for configuration"
+                return 1
+        fi
+        echo "OK: $2 is ready"
+}
+
+# Before cook, wait for all services to be ready
+
+retry 300 testHttpCode demarches${ENV}.${DOMAIN} combo 404
+retry 300 testHttpCode admin-demarches${ENV}.${DOMAIN} combo_agent 404
+retry 300 testHttpCode passerelle${ENV}.${DOMAIN} passerelle 404
+retry 300 testHttpCode demarche${ENV}.${DOMAIN} demarches-wcs 404
+retry 300 testHttpCode compte${ENV}.${DOMAIN} authentic 404
+retry 300 testHttpCode documents${ENV}.${DOMAIN} fargo 404
+retry 300 testHttpCode hobo${ENV}.${DOMAIN} hobo 404
+
+# ZIP template for WCS
+zip /tmp/publik.zip /tmp/config.json /tmp/site-options.cfg
+
+# Execute cook in hobo (Many time as recommended by Entr'ouvert)
+runuser -l hobo -c 'cd /tmp && hobo-manage cook /tmp/recipe.json -v 2'
+runuser -l hobo -c 'cd /tmp && hobo-manage cook /tmp/recipe.json -v 2'
+runuser -l hobo -c 'cd /tmp && hobo-manage cook /tmp/recipe.json -v 2'
+runuser -l hobo -c 'cd /tmp && hobo-manage cook /tmp/recipe.json -v 2'
+runuser -l hobo -c 'cd /tmp && hobo-manage cook /tmp/recipe.json -v 2'
+
+# After cook, test all services
+set -e
+testHttpContains demarches${ENV}.${DOMAIN} combo $COMBO_OK
+testHttpCode admin-demarches${ENV}.${DOMAIN} combo_agent 200
+testHttpContains passerelle${ENV}.${DOMAIN} passerelle $AUTHENTIC_OK
+testHttpContains demarches${ENV}.${DOMAIN} demarches-wcs $AUTHENTIC_OK
+testHttpContains compte${ENV}.${DOMAIN} authentic $COMBO_OK
+testHttpContains documents${ENV}.${DOMAIN} fargo $AUTHENTIC_OK
+testHttpContains hobo${ENV}.${DOMAIN} hobo $AUTHENTIC_OK
+
+echo "Configuration OK (Hobo cook)"
+touch /tmp/success

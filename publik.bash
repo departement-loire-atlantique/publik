@@ -24,7 +24,7 @@ alias gru-build='docker-compose build'
 # GRU RESET : Remove all container date (reset container status and data)
 alias gru-reset='docker-compose rm && docker volume prune'
 
-# GRU CONNECT : Connect to a running container (gruconnect combo for example)
+# GRU CONNECT : Connect to a running container (gru-connect combo for example)
 gru-connect() { 
 	docker exec -it $1 /bin/bash 
 }

@@ -48,7 +48,7 @@ Voir le fichier publik.bash pour plus de détails.
 ssh USER_ROOT@IP_MACHINE
 sudo apt-get update
 sudo apt-get install -y git
-git clone --recurse-submodules https://github.com/departement-loire-atlantique/publik
+git clone https://github.com/departement-loire-atlantique/publik
 cd publik
 sudo ./sync-os.sh
 cd ..
@@ -122,6 +122,7 @@ gru-state
 ```
 
 Exemple de retour :
+```
 OK      Hobo agent OK for all services
 OK      combo (https://demarches.test.com) has status 200
 OK      combo_agent (https://admin-demarches.test.com) has status 200
@@ -133,6 +134,7 @@ OK      hobo (https://hobo.test.com) has status 200
 OK      pgadmin (http://pgadmin.test.com/browser/) has status 200
 OK      rabbitmanager (http://rabbitmq.test.com) has status 200
 OK      rabbitmanager (http://webmail.test.com) has status 200
+```
 
 Les démarrages ultérieurs sont plus rapides, de l'ordre de 1 à 2 minutes. Il suffit alors d'invoquer uniquement la commande *gru-up* en étant dans le dossier publik.
 
@@ -172,7 +174,7 @@ Si vous êtes sous linux réalisez les étapes du paragraphe "3 - Installation d
 
 Si vous êtes sous Windows, installez GIT avec Git bash et Docker for Windows puis faite, sous Git bash :
 ```
-git clone --recurse-submodules https://github.com/departement-loire-atlantique/publik
+git clone https://github.com/departement-loire-atlantique/publik
 cd publik
 echo "source `pwd`/publik.bash" > ~/.profile
 source ~/.profile
@@ -261,15 +263,29 @@ gru-state
 
 C'est prêt, il n'y a plus qu'à configurer l'instance à votre guise.
 
-6 - Mise à jour
----------------
+6 - Mise à jour et modules complémentaires
+------------------------------------------
 
-Un script update.sh est disponible et permet de mettre à jour une installation Publik.
+## 6.1 - Mise à jour d'un module Publik
+
+Un script update.sh dans le dossier 'base' est disponible et permet de mettre à jour un conteneur Publik.
+Il est disponible dans le dossier */root/* de chaque conteneur.
 
 Ce script possède 3 fonctionnalités :
- - Mise à jour des paquets (update.sh --update-packages)
+ - Mise à jour des paquets (update.sh --update-packages), à faire sur une instance Publik qui tourne.
  - Application des patchs personnalisés du Département de Loire Atlantique (update.sh --patch)
  - Déploiement du thème personnalisé du Département de Loire Atlantique (update.sh --update-theme)
+ - Déploiement des applications Django (extensions Publik) du Département de Loire-Atlantique (update.sh --update-apps)
+
+Pour lancer ces 4 opérations d'un seul coup : update.sh --all
+
+Exemple pour le module *combo* :
+```
+docker exec -it combo /bin/bash
+/root/update.sh --all
+```
+
+## 6.2 - Mise à jour des certificats
 
 Le renouvellement des certificats se fait en se connectant sur l'instance proxy et en lançant certbot (A faire régulièrement) :
 
@@ -277,6 +293,8 @@ Le renouvellement des certificats se fait en se connectant sur l'instance proxy 
 gru-connect proxy
 certbot renew
 ```
+
+> Attention, cette commande ne peut être utilisée que sur un serveur disposant d'une IP publique.
 
 7 - Commentaires
 ----------------

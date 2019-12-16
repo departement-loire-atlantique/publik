@@ -1,0 +1,44 @@
+server {
+    listen 8080;
+    server_name demarches${ENV}.${DOMAIN};
+    access_log /var/log/nginx/access.log combined;
+    error_log /var/log/nginx/error.log;
+
+    location ~ ^/static/(.+)$ {
+        root /;
+        try_files /var/lib/wcs/$host/static/$1
+                  /var/lib/wcs/$host/theme/static/$1
+                  /var/lib/wcs/collectstatic/$1
+                  /var/lib/wcs-au-quotidien/collectstatic/$1
+                  =404;
+        add_header Access-Control-Allow-Origin *;
+    }
+
+    location /qo { alias  /usr/share/wcs/qommon/; }
+    location /apache-errors { alias  /usr/share/auquotidien/apache-errors/; }
+    location /themes {
+        root /;
+        try_files /var/lib/wcs/$host$uri
+                 /var/lib/wcs-au-quotidien/$host$uri
+                 /usr/share/wcs/$uri
+                 =404;
+    }
+
+    location /robots.txt {
+        alias /usr/local/share/auquo-robots.txt;
+    }
+
+    location /rpc_relay.html {
+        alias /usr/share/auquotidien/rpc_relay.html;
+    }   
+
+    location / {
+        proxy_pass         http://unix:/run/wcs/wcs.sock;
+        proxy_set_header   Host $http_host;
+        proxy_set_header   X-Forwarded-SSL on;
+        proxy_set_header   X-Forwarded-Protocol ssl;
+        proxy_set_header   X-Forwarded-Proto https;
+        proxy_set_header   X-Real-IP       $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
