@@ -1,4 +1,4 @@
-FROM julienbayle/publik-docker-base
+FROM julienbayle/publik:latest-base
 
 MAINTAINER Julien BAYLE <julien.bayle@loire-atlantique.fr>
 
@@ -23,8 +23,8 @@ COPY nginx.template /etc/nginx/conf.d/combo.template
 # USEFULL TO BE ABLE TO RUN THE MANAGER 
 RUN usermod combo -s /bin/bash
 
-COPY docker-entrypoint.sh /usr/local/bin/
-ENTRYPOINT ["docker-entrypoint.sh"]
+COPY start.sh stop.sh /usr/local/bin/
+ENTRYPOINT ["start.sh"]
 
 EXPOSE 8080 
 CMD ["/bin/bash"]

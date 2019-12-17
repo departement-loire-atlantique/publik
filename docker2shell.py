@@ -6,10 +6,11 @@ import shutil
 import glob
 
 # This script converts from the docker version to a shell install version
-# Usefull for installation without docker
+# Useful for installation without docker
+
 
 # Manual installation
-# - Init tout database with postgresql/docker-entrypoint-initdb.d/init-database.sh
+# - Init a database using ../postgresql/docker-entrypoint-initdb.d/init-database.sh
 # - Add db, smtp and rabbitmq to /etc/hosts
 # - Excute ./docker2shell.py
 # - Open schellinstall folder
@@ -64,7 +65,7 @@ replace_dict = {
     "MAINTAINER" : "# MAINTAINER",
     "VOLUME" : "# VOLUME",
     "EXPOSE" : "# EXPOSE",
-    "ENTRYPOINT" : "# ENTRYPOINT",
+    "ENTRYPOINT\s\[\"(?P<script>[A-Za-z\-\.]*)\"\]" : "./\g<script>",
     "CMD" : "# CMD",
     "RUN " : "",
     "COPY" : "cp",
@@ -73,7 +74,12 @@ replace_dict = {
     }
 
 do_not_copy = ["Dockerfile", "LICENSE", "README.md", \
-    ".git", "nginx.template", "docker-entrypoint.sh"]
+    ".git", "nginx.template", "start.sh", "stop.sh"]
+
+startgru = ""
+stopgru = ""
+configuregru = ""
+envextractor = re.compile("(envsubst.*)")
 
 for app in apps:
     app_path = os.path.join(project_path, app)
@@ -88,12 +94,27 @@ for app in apps:
             replace_dict.update({"nginx.template" : nginx_new_name})
             shutil.copyfile(nginx_path, os.path.join(bare_path, nginx_new_name))
         
-        # Convert docker-entrypoint into startup script
-        entrypoint_path = os.path.join(app_path, "docker-entrypoint.sh")
+        # Convert docker entrypoint into startup script
+        entrypoint_path = os.path.join(app_path, "start.sh")
         if os.path.isfile(entrypoint_path):
             startappscript = "start-"+app+".sh"
-            replace_dict.update({"docker-entrypoint.sh" : startappscript})
-            shutil.copyfile(entrypoint_path, os.path.join(bare_path, startappscript))
+            replace_dict.update({"start.sh" : startappscript})
+            # delete the 'exec' command in the script
+            with open(entrypoint_path) as f:
+                newContent = f.read().replace('exec "$@"', '')
+                newContent = envextractor.sub('# moved to configure.sh \\1', newContent)
+                configuregru += "\n".join([ a + "\n" for a in envextractor.findall(newContent)])
+            with open(os.path.join(bare_path, startappscript), "w+") as f:
+                f.write(newContent)
+            startgru += "./" + startappscript + "\n" 
+        
+        # Convert docker stop script
+        entrypoint_path = os.path.join(app_path, "stop.sh")
+        if os.path.isfile(entrypoint_path):
+            stopappscript = "stop-"+app+".sh"
+            replace_dict.update({"stop.sh" : stopappscript})
+            shutil.copyfile(entrypoint_path, os.path.join(bare_path, stopappscript))
+            stopgru += "./" + stopappscript + "\n" 
 
         # Convert dockerfile
         file_replace(replace_dict, \
@@ -108,3 +129,12 @@ for app in apps:
                 print("Error, file %s already exists", file)
             shutil.copy(file_path, bare_path)
         print("{} docker image converted".format(app))
+
+with open(os.path.join(bare_path, "start-all.sh"), "w") as f:
+    f.write(startgru)
+
+with open(os.path.join(bare_path, "stop-all.sh"), "w") as f:
+    f.write(stopgru)
+
+with open(os.path.join(bare_path, "configure.sh"), "w") as f:
+    f.write(configuregru)

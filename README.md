@@ -174,6 +174,7 @@ Si vous êtes sous linux réalisez les étapes du paragraphe "3 - Installation d
 
 Si vous êtes sous Windows, installez GIT avec Git bash et Docker for Windows puis faite, sous Git bash :
 ```
+git config --global core.autocrlf input
 git clone https://github.com/departement-loire-atlantique/publik
 cd publik
 echo "source `pwd`/publik.bash" > ~/.profile
@@ -237,10 +238,10 @@ IP_MACHINE       pgadminENV.DOMAIN
 IP_MACHINE       rabbitmqENV.DOMAIN
 IP_MACHINE       webmailENV.DOMAIN
 ```
-> Il est important de mettre l'IP de son poste et non 127.0.0.1 car en pratique, la configuration du fichier hosts est répliquée vers chaque conteneur. Celà permet quand un conteneur fait un appel à xxxENV.DOMAIN que celui ci passe via le conteneur proxy qui gère le HTTPS pour tous les services.
 
+Puis copier le fichier /etc/hosts dans le dossier data/hosts
 
-> Il est important de mettre l'IP de son poste et non 127.0.0.1 car en pratique, la configuration du fichier hosts est répliquée vers chaque conteneur. Celà permet quand un conteneur fait un appel à xxxENV.DOMAIN que celui ci passe via le conteneur proxy qui gère le HTTPS pour tous les services.
+> Il est important de mettre l'IP de son poste et non 127.0.0.1 car en pratique les conteneurs pour parler à l'hôte via la couche TCP/IP doivent connaitre l'IP de la machine hôte (Depuis un conteneur, 127.0.0.1 revient à se parler à lui-même et non à l'hôte)
 
 Puis terminer la procédure d'installation avec les étapes décrites au "4 - Démarrer publik" (cf. ci-dessus) 
 avec Git bash sous Windows et bash sous linux. Ce qui revient, en simplifiant (*gru-up* réalise automatiquement 
@@ -263,26 +264,28 @@ gru-state
 
 C'est prêt, il n'y a plus qu'à configurer l'instance à votre guise.
 
-6 - Mise à jour et modules complémentaires
-------------------------------------------
+6 - Mise à jour et installation de compléments
+----------------------------------------------
 
-## 6.1 - Mise à jour d'un module Publik
+## 6.1 - Mise à jour ou installataion de complément dans un conteneur d'un module Publik
 
-Un script update.sh dans le dossier 'base' est disponible et permet de mettre à jour un conteneur Publik.
-Il est disponible dans le dossier */root/* de chaque conteneur.
+Un script update.sh (présent dans le dossier 'base' du dépôt Git) est disponible dans chaque image (dossier */root/*) et simplifie l'installation de complément ou à la mise à jour d'un conteneur Publik.
 
-Ce script possède 3 fonctionnalités :
- - Mise à jour des paquets (update.sh --update-packages), à faire sur une instance Publik qui tourne.
- - Application des patchs personnalisés du Département de Loire Atlantique (update.sh --patch)
- - Déploiement du thème personnalisé du Département de Loire Atlantique (update.sh --update-theme)
- - Déploiement des applications Django (extensions Publik) du Département de Loire-Atlantique (update.sh --update-apps)
+Pour lancer ce script, la GRU doit être up.
 
-Pour lancer ces 4 opérations d'un seul coup : update.sh --all
+Ce script possède 4 fonctionnalités :
+ - Mise à jour des paquets éditeur (Exemple : ```docker-compose exec authentic /root/update.sh --update-packages```). Peut être utile pour mettre à jour un conteneur d'un module Publik sans avoir à le reconstruire à partir d'une image mise à jour (Exemple : Le conteneur contient un module installé manuellement et en cours de test).
+ - Application des patchs personnalisés du Département de Loire Atlantique (Exemple : ```docker-compose exec authentic /root/update.sh --patch```)
+ - Déploiement du thème personnalisé du Département de Loire Atlantique (Exemple : ```docker-compose exec authentic /root/update.sh --update-theme```)
+ - Déploiement des applications Django (extensions Publik) du Département de Loire-Atlantique (Exemple : ```docker-compose exec authentic /root/update.sh --update-apps```)
 
-Exemple pour le module *combo* :
+Pour lancer ces 4 opérations d'un seul coup, utiliser :  update.sh --all
+
+Exemple pour le module *combo* : ```docker-compose exec combo /root/update.sh --all```
+
+Pour lancer une opération sur tous les modules, utiliser gru-update --operation. Exemple :
 ```
-docker exec -it combo /bin/bash
-/root/update.sh --all
+gru-update --all
 ```
 
 ## 6.2 - Mise à jour des certificats
@@ -296,13 +299,72 @@ certbot renew
 
 > Attention, cette commande ne peut être utilisée que sur un serveur disposant d'une IP publique.
 
-7 - Commentaires
+## 6.3 - Mise à jour des images 
+
+Afin de mettre à jour les images de référence avec la dernière version de l'éditeur, procéder comme suit :
+
+```
+docker-compose build --no-cache
+```
+
+> Pour information, cette commande s'exécute en 10 à 15 minutes.
+
+ou pour mettre à jour un seul module :
+```
+docker-compose build --no-cache fargo
+```
+
+Puis, pour mettre à jour les images dans docker hub, procéder comme suit :
+
+```
+docker push julienbayle/publik:latest-authentic
+docker push julienbayle/publik:latest-base
+docker push julienbayle/publik:latest-combo
+docker push julienbayle/publik:latest-fargo
+docker push julienbayle/publik:latest-hobo
+docker push julienbayle/publik:latest-passerelle
+docker push julienbayle/publik:latest-pgsql
+docker push julienbayle/publik:latest-proxy
+docker push julienbayle/publik:latest-wcs
+```
+
+ou 
+
+```
+gru-push-all latest
+```
+
+
+Ensuite pour mettre à jour l'instance Publik locale, procéder comme suit :
+
+```
+gru-down
+gru-up
+```
+
+Si l'on souhaite pouvoir conserver une version particulière des images, avant de les mettre à jour (exemple : dernière version en production), il est possible de tagguer une version pour la conserver :
+
+```
+gru-tag-all latest prod
+gru-push-all prod
+```
+
+7 - Installation sans docker
+----------------------------
+
+Sans que ce soit ni recommandé, ni une fonction importante de ce dépôt, un script permet de convertir les paquets docker en un script unique d'installation "sans docker". En pratique, ce script en python convertit les *Dockerfile* en script *bash*.
+
+Utilisation : ``` docker2shell.py ```
+
+Le résultat de l'éxécution est un dossier nommé "shellinstall" contenant tous les fichiers de configuration + 1 script *install.sh* permettant d'installer tous les modules Publik en mode barebone. Le détail de l'installation sur un serveur local à partir de ces fichiers est disponible sur demande auprès de l'équipe du Département de Loire-Atlantique.
+
+8 - Commentaires
 ----------------
 
-Ce dépôt représente un travail "en cours" et orienté vers des instances de recette ou de développements.
+Ce dépôt représente un travail "en cours" et orienté vers des instances de recette ou de développement.
 
 Pour une utilisation en production, voici ce qu'il resterait à faire :
-- Possibilité de désactivé le mode DEBUG via une variable d'environnement (Tous les modules sont actuellement en mode DEBUG)
+- Désactivation du mode DEBUG via une variable d'environnement (Tous les modules sont actuellement en mode DEBUG)
 - Ajout d'un logger centralisé (SENTRY par exemple)
 - Possibilité de générer lors de l'installation tous les mots de passes et secrets
 - Configuration de l'envoi d'emails via une variable d'environnement (Actuellement capturés par le mailcatcher)
@@ -312,9 +374,8 @@ Pour une utilisation en production, voici ce qu'il resterait à faire :
 ROADMAP :
 - Possibilité de lancer les serveurs python en mode développement
 - Possibilité de lancer un debugger python
-- Ajout d'un mécanisme permettant de générer des patchs ou d'appliquer des paths
 
-8 - Bibliographie
+9 - Bibliographie
 -----------------
 
 En novembre 2017, les documentations accessibles en ligne étaient incomplètes, parfois incohérentes avec le code ou contradictoires entre elles. Par conséquent, l’installation des modules a été laborieuse. Ce dépôt docker résume une approche qui a fonctionné mais n'engage pas la société Entr'ouvert.
@@ -330,3 +391,8 @@ Documentations intéressantes à connaître :
   - https://dev.entrouvert.org/projects/prod-eo/wiki/Gestion_des_acc%C3%A8s
   - https://doc-publik.entrouvert.com/guide-de-l-administrateur-systeme/installation/haute-disponibilite/#pre-requis (Ajouté en février 2018)
 - GitHub d’un syndicat mixte qui publie sous GitHub ses développements : https://github.com/IMIO/docker-teleservices
+
+9 - FAQs
+----------------
+
+[Foire Aux Questions](FAQ.md)

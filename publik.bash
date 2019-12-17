@@ -13,7 +13,7 @@ alias gru-stop='docker-compose start'
 alias gru-stop='docker-compose stop'
 
 # GRU DEAMON : Start all GRU Publik containers as a deamon
-alias gru-deamon='docker-compose down && docker-compose up --no-build -d'
+alias gru-deamon='docker-compose stop && docker-compose up --no-build -d'
 
 # GRU PULL : Pull container images from Docker Hub
 alias gru-pull='docker-compose pull'
@@ -34,7 +34,40 @@ alias gru-init='docker exec hobo /tmp/cook.sh'
 
 # GRU UPDATE : Update packages, patches and themes
 gru-update() {
-	docker exec $1 /root/update.sh
+	docker-compose exec authentic /root/update.sh $1
+	docker-compose exec combo /root/update.sh $1
+	docker-compose exec fargo /root/update.sh $1
+	docker-compose exec hobo /root/update.sh $1
+	docker-compose exec passerelle /root/update.sh $1
+	docker-compose exec wcs /root/update.sh $1
+}
+
+# PUSH ALL PUBLIK IMAGES
+
+gru-push-all() {
+	docker push julienbayle/publik:$1-authentic
+	docker push julienbayle/publik:$1-base
+	docker push julienbayle/publik:$1-base
+	docker push julienbayle/publik:$1-combo
+	docker push julienbayle/publik:$1-fargo
+	docker push julienbayle/publik:$1-hobo
+	docker push julienbayle/publik:$1-passerelle
+	docker push julienbayle/publik:$1-pgsql
+	docker push julienbayle/publik:$1-proxy
+	docker push julienbayle/publik:$1-wcs
+}
+
+# TAG ALL PUBLIK IMAGES
+gru-tag-all() {
+	docker tag julienbayle/publik:$1-authentic julienbayle/publik:$2-authentic
+	docker tag julienbayle/publik:$1-base julienbayle/publik:$2-base
+	docker tag julienbayle/publik:$1-combo julienbayle/publik:$2-combo
+	docker tag julienbayle/publik:$1-fargo julienbayle/publik:$2-fargo
+	docker tag julienbayle/publik:$1-hobo julienbayle/publik:$2-hobo
+	docker tag julienbayle/publik:$1-passerelle julienbayle/publik:$2-passerelle
+	docker tag julienbayle/publik:$1-pgsql julienbayle/publik:$2-pgsql
+	docker tag julienbayle/publik:$1-proxy julienbayle/publik:$2-proxy
+	docker tag julienbayle/publik:$1-wcs julienbayle/publik:$2-wcs
 }
 
 # GRU STATE : Print GRU components state

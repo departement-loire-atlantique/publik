@@ -10,6 +10,7 @@ services:
     container_name: proxy
     build:
       context: proxy/.
+    image: julienbayle/publik:latest-proxy
     tty: true
     ports:
      - 80:80
@@ -17,7 +18,7 @@ services:
     volumes:
      - ./data/ssl:/etc/nginx/ssl
      - ./data/letsencrypt:/etc/letsencrypt
-     - /etc/hosts:/etc/hosts
+     - ./data/hosts:/etc/hosts
     links:
      - fargo:fargo
      - combo:combo
@@ -32,14 +33,26 @@ services:
      - ENV
      - DOMAIN
      - EMAIL
+  
+  # Hack : Used to compile base image on "docker-compose build" call
+  # Use a /bin/bash to avoid container from exiting on gru-up
+  base:
+    container_name: base
+    build:
+      context: ./base
+    image: julienbayle/publik:latest-base
+    command: /bin/bash
+    tty: true
 
   combo:
     container_name: combo
-    image: julienbayle/publik-docker-combo:latest
+    build:
+      context: ./combo
+    image: julienbayle/publik:latest-combo
     tty: true
     volumes:
       - combodata:/var/lib/combo/tenants
-      - /etc/hosts:/etc/hosts
+      - ./data/hosts:/etc/hosts
     links:
       - db:db
       - rabbitmq:rabbitmq
@@ -54,11 +67,13 @@ services:
 
   fargo:
     container_name: fargo
-    image: julienbayle/publik-docker-fargo:latest
+    build:
+      context: ./fargo
+    image: julienbayle/publik:latest-fargo
     tty: true
     volumes:
       - fargodata:/var/lib/fargo/tenants
-      - /etc/hosts:/etc/hosts
+      - ./data/hosts:/etc/hosts
     links:
       - db:db
       - rabbitmq:rabbitmq
@@ -73,10 +88,12 @@ services:
 
   authentic:
     container_name: authentic
-    image: julienbayle/publik-docker-authentic:latest
+    build:
+      context: ./authentic
+    image: julienbayle/publik:latest-authentic
     tty: true
     volumes:
-      - /etc/hosts:/etc/hosts
+      - ./data/hosts:/etc/hosts
       - authentic2data:/var/lib/authentic2-multitenant/tenants
     links:
       - db:db
@@ -92,11 +109,13 @@ services:
 
   wcs:
     container_name: wcs
-    image: julienbayle/publik-docker-wcs:latest
+    build:
+      context: ./wcs
+    image: julienbayle/publik:latest-wcs
     tty: true
     volumes:
       - wcsdata:/var/lib/wcs
-      - /etc/hosts:/etc/hosts
+      - ./data/hosts:/etc/hosts
     links:
       - db:db
       - rabbitmq:rabbitmq
@@ -111,11 +130,13 @@ services:
 
   passerelle:
     container_name: passerelle
-    image: julienbayle/publik-docker-passerelle:latest
+    build:
+      context: ./passerelle
+    image: julienbayle/publik:latest-passerelle
     tty: true
     volumes:
       - passerelledata:/var/lib/passerelle/tenants
-      - /etc/hosts:/etc/hosts
+      - ./data/hosts:/etc/hosts
     links:
       - db:db
       - rabbitmq:rabbitmq
@@ -130,11 +151,13 @@ services:
 
   hobo:
     container_name: hobo
-    image: julienbayle/publik-docker-hobo:latest
+    build:
+      context: ./hobo
+    image: julienbayle/publik:latest-hobo
     tty: true
     volumes:
       - hobodata:/var/lib/hobo/tenants
-      - /etc/hosts:/etc/hosts
+      - ./data/hosts:/etc/hosts
     links:
       - db:db
       - rabbitmq:rabbitmq
@@ -151,6 +174,7 @@ services:
     container_name: db
     build:
       context: postgresql/.
+    image: julienbayle/publik:latest-pgsql
     environment:
       POSTGRES_PASSWORD: test
     volumes:

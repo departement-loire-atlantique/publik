@@ -1,4 +1,4 @@
-FROM julienbayle/publik-docker-base
+FROM julienbayle/publik:latest-base
 
 MAINTAINER Julien BAYLE <julien.bayle@loire-atlantique.fr>
 
