@@ -239,7 +239,7 @@ IP_MACHINE       rabbitmqENV.DOMAIN
 IP_MACHINE       webmailENV.DOMAIN
 ```
 
-Puis copier le fichier /etc/hosts dans le dossier data/hosts
+Puis copier le fichier */etc/hosts* dans le dossier *data*.
 
 > Il est important de mettre l'IP de son poste et non 127.0.0.1 car en pratique les conteneurs pour parler à l'hôte via la couche TCP/IP doivent connaitre l'IP de la machine hôte (Depuis un conteneur, 127.0.0.1 revient à se parler à lui-même et non à l'hôte)
 
