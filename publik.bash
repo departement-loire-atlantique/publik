@@ -7,7 +7,7 @@ alias gru-up='docker-compose up --no-build --abort-on-container-exit'
 alias gru-down='docker-compose down'
 
 # GRU START : Start GRU containers 
-alias gru-stop='docker-compose start'
+alias gru-start='docker-compose start'
 
 # GRU STOP : Stop GRU containers 
 alias gru-stop='docker-compose stop'
