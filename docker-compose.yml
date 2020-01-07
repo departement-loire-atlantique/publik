@@ -153,6 +153,11 @@ services:
      - ENV
      - DOMAIN
      - EMAIL
+     - DB_PASSERELLE_PASS
+     - DB_HOST
+     - DB_PORT
+     - ALLOWED_HOSTS
+     - DEBUG
 
   hobo:
     container_name: hobo

@@ -2,8 +2,6 @@ import os
 
 DEBUG = bool(os.environ.get('DEBUG', False))
 
-# ALLOWED_HOSTS must be correct in production!
-# See https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 if os.environ.get('ALLOWED_HOSTS'):
     ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(';')
 
