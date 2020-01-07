@@ -23,7 +23,8 @@ Exemple :
 
 A la fin de l'installation, l'ensemble des modules de Publik seront accessibles depuis ces domaines.
 
-Des certificats Let's encrypt (Fournisseur de certificats HTTPS gratuits) seront automatiquement générés durant le processus d'installation. C'est pourquoi il est important que le serveur soit accessible depuis internet et que les enregistrement DNS ait été préalablement configurées avant de commencer.
+Des certificats Let's encrypt (Fournisseur de certificats HTTPS gratuits) seront automatiquement générés durant le processus d'installation.
+C'est pourquoi il est important que le serveur soit accessible depuis internet et que les enregistrement DNS ait été préalablement configurées avant de commencer.
 
 Vous pouvez vérifier votre configuration DNS en réalisant un ping sur une adresse.
 
@@ -77,7 +78,7 @@ cd publik
 
 Procéder à la configuration des propriétés de votre instance :
  * DOMAIN : domaine DNS de l'environnement
- * ENV : suffixe appliqué aux noms des modules publik pour votre environnement (optionnel, peut être laissé vide). 
+ * ENV : suffixe appliqué aux noms des modules publik pour votre environnement (optionnel, peut être laissé vide mais doit être déclaré). 
  En pratique, ces suffixes permettent d'installer plusieurs versions de la GRU sous le même domaine.
  Exemple d'URL pour le portail des démarches : https://demarcheENV.DOMAIN  
  * EMAIL : courriel compte administrateur principal
