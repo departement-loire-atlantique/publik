@@ -1,16 +1,16 @@
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+import os
 
-# ALLOWED_HOSTS must be correct in production!
-# See https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['*']
+DEBUG = bool(os.environ.get('DEBUG', False))
+
+if os.environ.get('ALLOWED_HOSTS'):
+    ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(';')
 
 # Databases
 #DATABASES['default']['NAME'] = 'wcs'
 #DATABASES['default']['USER'] = 'wcs'
-#DATABASES['default']['PASSWORD'] = 'wcspass'
-#DATABASES['default']['HOST'] = 'db'
-#DATABASES['default']['PORT'] = '5432'
+DATABASES['default']['PASSWORD'] = os.environ['DB_WCS_PASS']
+DATABASES['default']['HOST'] = os.environ['DB_HOST']
+DATABASES['default']['PORT'] = os.environ['DB_PORT']
 
 # Zone
 LANGUAGE_CODE = 'fr-fr'
@@ -59,7 +59,7 @@ LOGGING = {
 EMAIL_HOST = 'smtp'
 # EMAIL_HOST_USER = ''
 # EMAIL_HOST_PASSWORD = ''
-EMAIL_PORT = 1025
+EMAIL_PORT = os.environ['MAILCATCHER_SMTP_PORT']
 
 # HTTPS Security
 CSRF_COOKIE_SECURE = True

@@ -116,7 +116,7 @@ services:
      - ENV
      - DOMAIN
      - EMAIL
-     - DB_HOBO_PASS
+     - DB_AUTHENTIC_PASS
      - DB_HOST
      - DB_PORT
      - ALLOWED_HOSTS
@@ -148,6 +148,13 @@ services:
      - ENV
      - DOMAIN
      - EMAIL
+     - DB_WCS_PASS
+     - DB_HOST
+     - DB_PORT
+     - ALLOWED_HOSTS
+     - DEBUG
+     - RABBITMQ_PORT
+     - MAILCATCHER_SMTP_PORT
 
   passerelle:
     container_name: passerelle
