@@ -43,6 +43,10 @@ services:
     image: julienbayle/publik:latest-base
     command: /bin/bash
     tty: true
+    environment:
+     - RABBITMQ_USER
+     - RABBITMQ_PASS
+     - RABBITMQ_PORT
 
   combo:
     container_name: combo
