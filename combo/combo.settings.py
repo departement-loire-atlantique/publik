@@ -1,16 +1,18 @@
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+import os
+
+DEBUG = bool(os.environ.get('DEBUG', False))
 
 # ALLOWED_HOSTS must be correct in production!
 # See https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['*']
+if os.environ.get('ALLOWED_HOSTS'):
+    ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(';')
 
 # Databases
 DATABASES['default']['NAME'] = 'combo'
 DATABASES['default']['USER'] = 'combo'
-DATABASES['default']['PASSWORD'] = 'combopass'
-DATABASES['default']['HOST'] = 'db'
-DATABASES['default']['PORT'] = '5432'
+DATABASES['default']['PASSWORD'] = os.environ['DB_COMBO_PASS']
+DATABASES['default']['HOST'] = os.environ['DB_HOST']
+DATABASES['default']['PORT'] = os.environ['DB_PORT']
 
 # Zone
 LANGUAGE_CODE = 'fr-fr'

@@ -64,6 +64,11 @@ services:
      - ENV
      - DOMAIN
      - EMAIL
+     - DB_COMBO_PASS
+     - DB_HOST
+     - DB_PORT
+     - ALLOWED_HOSTS
+     - DEBUG
 
   fargo:
     container_name: fargo
