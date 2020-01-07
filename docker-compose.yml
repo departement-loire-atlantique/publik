@@ -90,6 +90,11 @@ services:
      - ENV
      - DOMAIN
      - EMAIL
+     - DB_FARGO_PASS
+     - DB_HOST
+     - DB_PORT
+     - ALLOWED_HOSTS
+     - DEBUG
 
   authentic:
     container_name: authentic

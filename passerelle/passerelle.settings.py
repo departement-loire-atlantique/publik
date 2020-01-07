@@ -1,3 +1,5 @@
+import os
+
 DEBUG = bool(os.environ.get('DEBUG', False))
 
 if os.environ.get('ALLOWED_HOSTS'):
