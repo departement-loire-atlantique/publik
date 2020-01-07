@@ -25,6 +25,7 @@ function generateconf() {
 function generatecertificate() {
 	if [ ! -d /etc/letsencrypt/live/$1${ENV}.${DOMAIN} ]; then
 		service nginx start
+    # https://certbot.eff.org/docs/using.html#certbot-command-line-options
 		certbot certonly --webroot -n --agree-tos \
 			-w /home/http \
 			-d $1${ENV}.${DOMAIN} \
