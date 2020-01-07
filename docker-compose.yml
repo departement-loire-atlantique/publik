@@ -173,10 +173,16 @@ services:
   db:
     container_name: db
     build:
-      context: postgresql/.
+      context: ./postgresql
     image: julienbayle/publik:latest-pgsql
     environment:
-      POSTGRES_PASSWORD: test
+      - POSTGRES_PASSWORD
+      - DB_HOBO_PASS
+      - DB_PASSERELLE_PASS
+      - DB_COMBO_PASS
+      - DB_FARGO_PASS
+      - DB_WCS_PASS
+      - DB_AUTHENTIC_PASS
     volumes:
       - dbdata:/var/lib/postgresql/data
       - ./postgresql/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d
