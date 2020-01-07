@@ -1,18 +1,22 @@
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+import os
 
-# ALLOWED_HOSTS must be correct in production!
-# See https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['*']
+DEBUG = bool(os.environ.get('DEBUG', False))
+
+if os.environ.get('ALLOWED_HOSTS'):
+    ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(';')
 
 # Databases
 DATABASES['default']['NAME'] = 'authentic'
 DATABASES['default']['USER'] = 'authentic'
-DATABASES['default']['PASSWORD'] = 'authenticpass'
-DATABASES['default']['HOST'] = 'db'
-DATABASES['default']['PORT'] = '5432'
+DATABASES['default']['PASSWORD'] = os.environ['DB_AUTHENTIC_PASS']
+DATABASES['default']['HOST'] = os.environ['DB_HOST']
+DATABASES['default']['PORT'] = os.environ['DB_PORT']
 
-BROKER_URL = 'amqp://hobo:hobopass@rabbitmq:5672//'
+BROKER_URL = 'amqp://{user}:{password}@rabbitmq:{port}//'.format(
+    user=os.environ['RABBITMQ_USER'],
+    password=os.environ['RABBITMQ_PASS'],
+    port=os.environ['RABBITMQ_PORT'],
+)
 
 # Zone
 LANGUAGE_CODE = 'fr-fr'
@@ -20,22 +24,21 @@ TIME_ZONE = 'Europe/Paris'
 
 # Email configuration
 ADMINS = (
-  ('Support technique Publik', 'no-reply@loire-atlantique.fr'),
+  (os.environ['ERROR_MAIL_AUTHOR'], os.environ['ERROR_MAIL_ADDR']),
 )
 EMAIL_SUBJECT_PREFIX = '[authentic] '
-SERVER_EMAIL = 'no-reply@loire-atlantique.fr'
-DEFAULT_FROM_EMAIL = 'no-reply@loire-atlantique.fr'
+SERVER_EMAIL = os.environ['ERROR_MAIL_ADDR']
+DEFAULT_FROM_EMAIL = os.environ['ERROR_MAIL_ADDR']
 
 # SMTP configuration
 EMAIL_HOST = 'smtp'
 #EMAIL_HOST_USER = ''
 #EMAIL_HOST_PASSWORD = ''
-EMAIL_PORT = 1025
+EMAIL_PORT = os.environ['MAILCATCHER_SMTP_PORT']
 
 # HTTPS Security
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
-
 
 # Idp
 # SAML 2.0 IDP

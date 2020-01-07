@@ -116,6 +116,17 @@ services:
      - ENV
      - DOMAIN
      - EMAIL
+     - DB_HOBO_PASS
+     - DB_HOST
+     - DB_PORT
+     - ALLOWED_HOSTS
+     - DEBUG
+     - RABBITMQ_USER
+     - RABBITMQ_PASS
+     - RABBITMQ_PORT
+     - ERROR_MAIL_AUTHOR
+     - ERROR_MAIL_ADDR
+     - MAILCATCHER_SMTP_PORT
 
   wcs:
     container_name: wcs
@@ -232,6 +243,9 @@ services:
   mailcatcher:
     container_name: mailcatcher
     image: ascendhit/mailcatcher
+    ports:
+      - "${MAILCATCHER_SMTP_PORT}:1025"
+      - "${MAILCATCHER_HTTP_PORT}:1080"
      
 volumes:
   dbdata:
