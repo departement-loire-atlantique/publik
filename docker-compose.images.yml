@@ -1,0 +1,29 @@
+version: "2"
+
+services:
+  proxy:
+    image: julienbayle/publik:latest-proxy
+
+  base:
+    image: julienbayle/publik:latest-base
+
+  combo:
+    image: julienbayle/publik:latest-combo
+
+  fargo:
+    image: julienbayle/publik:latest-fargo
+
+  authentic:
+    image: julienbayle/publik:latest-authentic
+
+  wcs:
+    image: julienbayle/publik:latest-wcs
+
+  passerelle:
+    image: julienbayle/publik:latest-passerelle
+
+  hobo:
+    image: julienbayle/publik:latest-hobo
+
+  db:
+    image: julienbayle/publik:latest-pgsql

@@ -1,0 +1,30 @@
+version: "2"
+
+services:
+  proxy:
+    environment:
+      DEBUG=""
+
+  combo:
+    environment:
+      DEBUG=""
+
+  fargo:
+    environment:
+      DEBUG=""
+
+  authentic:
+    environment:
+      DEBUG=""
+
+  wcs:
+    environment:
+      DEBUG=""
+
+  passerelle:
+    environment:
+      DEBUG=""
+
+  hobo:
+    environment:
+      DEBUG=""
