@@ -8,7 +8,7 @@ mkdir -p /home/http
 chmod 777 /home/http
 
 # Add tools to NGINX (pgadmin, ...)
-envsubst '${ENV} ${DOMAIN}' < /etc/nginx/conf.d/tools.template \
+envsubst '${ENV} ${DOMAIN} ${PGADMIN_PORT} ${RABBITMQ_MANAGEMENT_PORT} ${MAILCATCHER_HTTP_PORT}' < /etc/nginx/conf.d/tools.template \
 	> /etc/nginx/conf.d/tools.conf
 
 # Create NGINX configuration for Publik containers

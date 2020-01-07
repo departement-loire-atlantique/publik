@@ -33,6 +33,9 @@ services:
      - ENV
      - DOMAIN
      - EMAIL
+     - PGADMIN_PORT
+     - RABBITMQ_MANAGEMENT_PORT
+     - MAILCATCHER_HTTP_PORT
   
   # Hack : Used to compile base image on "docker-compose build" call
   # Use a /bin/bash to avoid container from exiting on gru-up
@@ -239,6 +242,8 @@ services:
     image: chorss/docker-pgadmin4
     links:
       - db:db
+    ports:
+      - "${PGADMIN_PORT}:5050"
 
   rabbitmq:
     container_name: rabbitmq
