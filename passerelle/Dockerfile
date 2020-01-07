@@ -9,7 +9,7 @@ RUN apt-get update \
 
 # CONFIGURE MODULES
 RUN mkdir -p /etc/passerelle/settings.d/ 
-COPY passerelle.settings.py /etc/passerelle/settings.d/loire-atlantique.py
+COPY passerelle.settings.py /etc/passerelle/settings.d/${INSTITUTION_NAME}.py
 
 # NGINX CONF FOR PUBLIC
 COPY nginx.template /etc/nginx/conf.d/passerelle.template
