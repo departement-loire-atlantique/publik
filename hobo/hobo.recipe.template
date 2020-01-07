@@ -11,18 +11,18 @@
    "steps":[
       {
          "create-hobo":{
-            "url":"https://${hobo}/"
+            "url":"https://${hobo}:${HTTPS_PORT}/"
          }
       },
       {
          "create-superuser":{
             "email":"${EMAIL}",
-            "password":"pleasechange"
+            "password":"${SUPERUSER_PASS}"
          }
       },
       {
          "create-authentic":{
-            "url":"https://${authentic}/",
+            "url":"https://${authentic}:${HTTPS_PORT}/",
             "title":"Connexion"
          }
       },
@@ -33,14 +33,14 @@
       },
       {
          "create-combo":{
-            "url":"https://${combo}/",
+            "url":"https://${combo}:${HTTPS_PORT}/",
             "title":"Compte citoyen",
             "template_name":"portal-user"
          }
       },
       {
          "create-combo":{
-            "url":"https://${combo_agent}/",
+            "url":"https://${combo_agent}:${HTTPS_PORT}/",
             "slug":"portal-agent",
             "title":"Portail agent",
             "template_name":"portal-agent"
@@ -48,20 +48,20 @@
       },
       {
          "create-wcs":{
-            "url":"https://${wcs}/",
+            "url":"https://${wcs}:${HTTPS_PORT}/",
             "title":"Démarches",
             "template_name": "publik.zip"
 	}
       },
       {
          "create-fargo":{
-            "url":"https://${fargo}/",
+            "url":"https://${fargo}:${HTTPS_PORT}/",
             "title":"Porte-documents"
          }
       },
       {
          "create-passerelle":{
-            "url":"https://${passerelle}/",
+            "url":"https://${passerelle}:${HTTPS_PORT}/",
             "title":"Passerelle"
          }
       },

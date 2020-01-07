@@ -1,18 +1,22 @@
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+import os
 
-# ALLOWED_HOSTS must be correct in production!
-# See https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['*']
+DEBUG = bool(os.environ.get('DEBUG', False))
+
+if os.environ.get('ALLOWED_HOSTS'):
+    ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(';')
 
 # Databases
 DATABASES['default']['NAME'] = 'hobo'
 DATABASES['default']['USER'] = 'hobo'
-DATABASES['default']['PASSWORD'] = 'hobopass'
-DATABASES['default']['HOST'] = 'db'
-DATABASES['default']['PORT'] = '5432'
+DATABASES['default']['PASSWORD'] = os.environ['DB_HOBO_PASS']
+DATABASES['default']['HOST'] = os.environ['DB_HOST']
+DATABASES['default']['PORT'] = os.environ['DB_PORT']
 
-BROKER_URL = 'amqp://hobo:hobopass@rabbitmq:5672//'
+BROKER_URL = 'amqp://{user}:{password}@rabbitmq:{port}//'.format(
+    user=os.environ['RABBITMQ_USER'],
+    password=os.environ['RABBITMQ_PASS'],
+    port=os.environ['RABBITMQ_PORT'],
+)
 
 LANGUAGE_CODE = 'fr-fr'
 TIME_ZONE = 'Europe/Paris'

@@ -184,12 +184,22 @@ services:
      - ENV
      - DOMAIN
      - EMAIL
+     - DB_HOBO_PASS
+     - DB_HOST
+     - DB_PORT
+     - ALLOWED_HOSTS
+     - DEBUG
+     - RABBITMQ_USER
+     - RABBITMQ_PASS
+     - RABBITMQ_PORT
 
   db:
     container_name: db
     build:
       context: ./postgresql
     image: julienbayle/publik:latest-pgsql
+    ports:
+      - "${DB_PORT}:5432"
     environment:
       - POSTGRES_PASSWORD
       - DB_HOBO_PASS
@@ -213,9 +223,11 @@ services:
     image: rabbitmq:3-management
     mem_limit: 256m
     hostname: rabbitmq
+    ports:
+      - "${RABBITMQ_PORT}:5672"
     environment:
-      - RABBITMQ_DEFAULT_USER=hobo
-      - RABBITMQ_DEFAULT_PASS=hobopass
+      - RABBITMQ_DEFAULT_USER="${RABBITMQ_USER}"
+      - RABBITMQ_DEFAULT_PASS="${RABBITMQ_PASS}"
 
   mailcatcher:
     container_name: mailcatcher
