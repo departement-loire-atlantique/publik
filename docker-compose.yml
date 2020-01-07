@@ -9,7 +9,7 @@ services:
   proxy:
     container_name: proxy
     build:
-      context: proxy/.
+      context: ./proxy
     image: julienbayle/publik:latest-proxy
     tty: true
     ports:
