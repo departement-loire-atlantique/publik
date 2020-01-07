@@ -28,13 +28,10 @@ services:
      - hobo:hobo
      - pgadmin:pgadmin
      - mailcatcher:webmail
-    environment:
-     - ENV
-     - DOMAIN
-     - EMAIL
-     - PGADMIN_PORT
-     - RABBITMQ_MANAGEMENT_PORT
-     - MAILCATCHER_HTTP_PORT
+    env_file:
+      - .env
+      - config.env
+      - secret.env
   
   # Hack : Used to compile base image on "docker-compose build" call
   # Use a /bin/bash to avoid container from exiting on gru-up
@@ -44,10 +41,10 @@ services:
       context: ./base
     command: /bin/bash
     tty: true
-    environment:
-     - RABBITMQ_USER
-     - RABBITMQ_PASS
-     - RABBITMQ_PORT
+    env_file:
+      - .env
+      - config.env
+      - secret.env
 
   combo:
     container_name: combo
@@ -64,17 +61,10 @@ services:
     depends_on: 
       - db
       - rabbitmq
-    environment:
-     - ENV
-     - DOMAIN
-     - EMAIL
-     - DB_COMBO_PASS
-     - DB_HOST
-     - DB_PORT
-     - ALLOWED_HOSTS
-     - DEBUG
-     - RABBITMQ_HOST
-     - INSTITUTION_NAME
+    env_file:
+      - .env
+      - config.env
+      - secret.env
 
   fargo:
     container_name: fargo
@@ -91,16 +81,10 @@ services:
     depends_on: 
       - db
       - rabbitmq
-    environment:
-     - ENV
-     - DOMAIN
-     - EMAIL
-     - DB_FARGO_PASS
-     - DB_HOST
-     - DB_PORT
-     - ALLOWED_HOSTS
-     - DEBUG
-     - RABBITMQ_HOST
+    env_file:
+      - .env
+      - config.env
+      - secret.env
 
   authentic:
     container_name: authentic
@@ -117,22 +101,10 @@ services:
     depends_on: 
       - db
       - rabbitmq
-    environment:
-     - ENV
-     - DOMAIN
-     - EMAIL
-     - DB_AUTHENTIC_PASS
-     - DB_HOST
-     - DB_PORT
-     - ALLOWED_HOSTS
-     - DEBUG
-     - RABBITMQ_USER
-     - RABBITMQ_PASS
-     - RABBITMQ_HOST
-     - RABBITMQ_PORT
-     - ERROR_MAIL_AUTHOR
-     - ERROR_MAIL_ADDR
-     - MAILCATCHER_SMTP_PORT
+    env_file:
+      - .env
+      - config.env
+      - secret.env
 
   wcs:
     container_name: wcs
@@ -149,19 +121,10 @@ services:
     depends_on: 
       - db
       - rabbitmq
-    environment:
-     - ENV
-     - DOMAIN
-     - EMAIL
-     - DB_WCS_PASS
-     - DB_HOST
-     - DB_PORT
-     - ALLOWED_HOSTS
-     - DEBUG
-     - RABBITMQ_HOST
-     - RABBITMQ_PORT
-     - MAILCATCHER_SMTP_PORT
-     - INSTITUTION_NAME
+    env_file:
+      - .env
+      - config.env
+      - secret.env
 
   passerelle:
     container_name: passerelle
@@ -178,17 +141,10 @@ services:
     depends_on: 
       - db
       - rabbitmq
-    environment:
-     - ENV
-     - DOMAIN
-     - EMAIL
-     - DB_PASSERELLE_PASS
-     - DB_HOST
-     - DB_PORT
-     - ALLOWED_HOSTS
-     - DEBUG
-     - RABBITMQ_HOST
-     - INSTITUTION_NAME
+    env_file:
+      - .env
+      - config.env
+      - secret.env
 
   hobo:
     container_name: hobo
@@ -205,20 +161,10 @@ services:
     depends_on: 
       - db
       - rabbitmq
-    environment:
-     - ENV
-     - DOMAIN
-     - EMAIL
-     - DB_HOBO_PASS
-     - DB_HOST
-     - DB_PORT
-     - ALLOWED_HOSTS
-     - DEBUG
-     - RABBITMQ_HOST
-     - RABBITMQ_USER
-     - RABBITMQ_PASS
-     - RABBITMQ_PORT
-     - INSTITUTION_NAME
+    env_file:
+      - .env
+      - config.env
+      - secret.env
 
   db:
     container_name: db
@@ -226,14 +172,8 @@ services:
       context: ./postgresql
     ports:
       - "${DB_PORT}:5432"
-    environment:
-      - POSTGRES_PASSWORD
-      - DB_HOBO_PASS
-      - DB_PASSERELLE_PASS
-      - DB_COMBO_PASS
-      - DB_FARGO_PASS
-      - DB_WCS_PASS
-      - DB_AUTHENTIC_PASS
+    env_file:
+      - secret.env
     volumes:
       - dbdata:/var/lib/postgresql/data
       - ./postgresql/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d
@@ -253,9 +193,10 @@ services:
     hostname: rabbitmq
     ports:
       - "${RABBITMQ_PORT}:5672"
+    env_file:
+      - secret.env
     environment:
       - RABBITMQ_DEFAULT_USER="${RABBITMQ_USER}"
-      - RABBITMQ_DEFAULT_PASS="${RABBITMQ_PASS}"
 
   mailcatcher:
     container_name: mailcatcher

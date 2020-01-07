@@ -1,3 +1,4 @@
 data/
-.env
+secret.env
+config.env
 shellinstall
