@@ -17,7 +17,7 @@
             "database": "postgres",
             "host": "${DB_HOST}",
             "user": "wcs",
-	          "password": "${DB_WCS_PASS}"
+            "password": "${DB_WCS_PASS}"
         },
         "database-template-name": "wcs_%s",
         "host": "db",

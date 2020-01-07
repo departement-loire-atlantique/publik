@@ -6,8 +6,8 @@ if os.environ.get('ALLOWED_HOSTS'):
     ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(';')
 
 # Databases
-#DATABASES['default']['NAME'] = 'wcs'
-#DATABASES['default']['USER'] = 'wcs'
+DATABASES['default']['NAME'] = 'wcs'
+DATABASES['default']['USER'] = 'wcs'
 DATABASES['default']['PASSWORD'] = os.environ['DB_WCS_PASS']
 DATABASES['default']['HOST'] = os.environ['DB_HOST']
 DATABASES['default']['PORT'] = os.environ['DB_PORT']
