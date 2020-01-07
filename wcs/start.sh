@@ -4,8 +4,8 @@
 set -eu
 
 # Wait for dependencies
-/root/wait-for-it.sh -t 60 db:${DB_PORT}
-/root/wait-for-it.sh -t 60 rabbitmq:${RABBITMQ_PORT}
+/root/wait-for-it.sh -t 60 ${DB_HOST}:${DB_PORT}
+/root/wait-for-it.sh -t 60 ${RABBITMQ_HOST}:${RABBITMQ_PORT}
 
 # Adapt configuration from ENV variables
 envsubst '${ENV} ${DOMAIN}' < /etc/nginx/conf.d/wcs.template > /etc/nginx/conf.d/wcs.conf

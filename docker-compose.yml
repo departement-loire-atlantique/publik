@@ -76,6 +76,7 @@ services:
      - DB_PORT
      - ALLOWED_HOSTS
      - DEBUG
+     - RABBITMQ_HOST
 
   fargo:
     container_name: fargo
@@ -102,6 +103,7 @@ services:
      - DB_PORT
      - ALLOWED_HOSTS
      - DEBUG
+     - RABBITMQ_HOST
 
   authentic:
     container_name: authentic
@@ -130,6 +132,7 @@ services:
      - DEBUG
      - RABBITMQ_USER
      - RABBITMQ_PASS
+     - RABBITMQ_HOST
      - RABBITMQ_PORT
      - ERROR_MAIL_AUTHOR
      - ERROR_MAIL_ADDR
@@ -160,6 +163,7 @@ services:
      - DB_PORT
      - ALLOWED_HOSTS
      - DEBUG
+     - RABBITMQ_HOST
      - RABBITMQ_PORT
      - MAILCATCHER_SMTP_PORT
 
@@ -188,6 +192,7 @@ services:
      - DB_PORT
      - ALLOWED_HOSTS
      - DEBUG
+     - RABBITMQ_HOST
 
   hobo:
     container_name: hobo
@@ -214,6 +219,7 @@ services:
      - DB_PORT
      - ALLOWED_HOSTS
      - DEBUG
+     - RABBITMQ_HOST
      - RABBITMQ_USER
      - RABBITMQ_PASS
      - RABBITMQ_PORT

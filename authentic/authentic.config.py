@@ -12,9 +12,10 @@ DATABASES['default']['PASSWORD'] = os.environ['DB_AUTHENTIC_PASS']
 DATABASES['default']['HOST'] = os.environ['DB_HOST']
 DATABASES['default']['PORT'] = os.environ['DB_PORT']
 
-BROKER_URL = 'amqp://{user}:{password}@rabbitmq:{port}//'.format(
+BROKER_URL = 'amqp://{user}:{password}@{host}:{port}//'.format(
     user=os.environ['RABBITMQ_USER'],
     password=os.environ['RABBITMQ_PASS'],
+    host=os.environ['RABBITMQ_HOST'],
     port=os.environ['RABBITMQ_PORT'],
 )
 
