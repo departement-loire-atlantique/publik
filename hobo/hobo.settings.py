@@ -1,22 +1,26 @@
-import os
+# This file is called from `service`, which removes custom env vars:
+# https://unix.stackexchange.com/questions/44370/how-to-make-unix-service-see-environment-variables
+# So we hardcode the values when the container starts
 
-DEBUG = bool(os.environ.get('DEBUG', False))
+DEBUG = bool('$DEBUG')
 
-if os.environ.get('ALLOWED_HOSTS'):
-    ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(';')
+ALLOWED_HOSTS = '$ALLOWED_HOSTS'
+if ALLOWED_HOSTS:
+    ALLOWED_HOSTS = ALLOWED_HOSTS.split(';')
+else:
+    ALLOWED_HOSTS = []
 
 # Databases
 DATABASES['default']['NAME'] = 'hobo'
 DATABASES['default']['USER'] = 'hobo'
-DATABASES['default']['PASSWORD'] = os.environ['DB_HOBO_PASS']
+DATABASES['default']['PASSWORD'] = '$DB_HOBO_PASS'
 DATABASES['default']['HOST'] = 'db'
-DATABASES['default']['PORT'] = os.environ['DB_PORT']
+DATABASES['default']['PORT'] = '$DB_PORT'
 
-BROKER_URL = 'amqp://{user}:{password}@{host}:{port}//'.format(
-    user=os.environ['RABBITMQ_DEFAULT_USER'],
-    password=os.environ['RABBITMQ_DEFAULT_PASS'],
-    host='rabbitmq',
-    port=os.environ['RABBITMQ_PORT'],
+BROKER_URL = 'amqp://{user}:{password}@rabbitmq:{port}//'.format(
+    user='$RABBITMQ_DEFAULT_USER',
+    password='$RABBITMQ_DEFAULT_PASS',
+    port='$RABBITMQ_PORT',
 )
 
 LANGUAGE_CODE = 'fr-fr'

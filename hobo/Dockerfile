@@ -15,7 +15,10 @@ RUN apt-get update \
 COPY site-options.cfg /tmp/
 COPY *.template /tmp/
 RUN mkdir -p /etc/hobo/settings.d/
-COPY hobo.settings.py /etc/hobo/settings.d/${INSTITUTION_NAME}.py
+
+ARG SETTINGS_FILE=/etc/hobo/settings.d/${INSTITUTION_NAME}.py
+COPY hobo.settings.py $SETTINGS_FILE
+RUN envsubst '$DEBUG $ALLOWED_HOSTS $DB_COMBO_PASS $DB_PORT $RABBITMQ_DEFAULT_USER $RABBITMQ_DEFAULT_PASS $RABBITMQ_PORT' < $SETTINGS_FILE > $SETTINGS_FILE
 
 # NGINX CONF FOR PUBLIC
 COPY nginx.template /etc/nginx/conf.d/hobo.template

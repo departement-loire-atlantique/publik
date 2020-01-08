@@ -12,7 +12,9 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # CONFIGURE MODULES
-COPY fargo.settings.py /etc/fargo/settings.py
+ARG SETTINGS_FILE=/etc/fargo/settings.py
+COPY fargo.settings.py $SETTINGS_FILE
+RUN envsubst '$DEBUG $ALLOWED_HOSTS $DB_FARGO_PASS $DB_PORT' < $SETTINGS_FILE > $SETTINGS_FILE
 RUN cp /tmp/secret /etc/fargo
 RUN chmod 755 /etc/fargo/secret
 

@@ -1,16 +1,21 @@
-import os
+# This file is called from `service`, which removes custom env vars:
+# https://unix.stackexchange.com/questions/44370/how-to-make-unix-service-see-environment-variables
+# So we hardcode the values when the container starts
 
-DEBUG = bool(os.environ.get('DEBUG', False))
+DEBUG = bool('$DEBUG')
 
-if os.environ.get('ALLOWED_HOSTS'):
-    ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(';')
+ALLOWED_HOSTS = '$ALLOWED_HOSTS'
+if ALLOWED_HOSTS:
+    ALLOWED_HOSTS = ALLOWED_HOSTS.split(';')
+else:
+    ALLOWED_HOSTS = []
 
 # Databases
 DATABASES['default']['NAME'] = 'passerelle'
 DATABASES['default']['USER'] = 'passerelle'
-DATABASES['default']['PASSWORD'] = os.environ['DB_PASSERELLE_PASS']
+DATABASES['default']['PASSWORD'] = '$DB_PASSERELLE_PASS'
 DATABASES['default']['HOST'] = 'db'
-DATABASES['default']['PORT'] = os.environ['DB_PORT']
+DATABASES['default']['PORT'] = '$DB_PORT'
 
 # Zone
 LANGUAGE_CODE = 'fr-fr'
