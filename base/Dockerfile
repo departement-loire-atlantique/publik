@@ -38,7 +38,7 @@ RUN apt-get update \
 
 # INSTALL HOBO AGENT (NEED DJANGO 1.11 from BACKPORTS)
 RUN mkdir -p /etc/hobo-agent/settings.d 
-COPY hobo-agent.settings.py /etc/hobo-agent/settings.d/broker.py
+COPY hobo-agent.settings.template /etc/hobo-agent/settings.d/broker.template
 RUN apt-get update \
     && apt-get -t stretch-backports install -y python-django \
     && apt-get install -y --no-install-recommends supervisor hobo-agent \

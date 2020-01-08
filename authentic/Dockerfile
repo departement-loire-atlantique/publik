@@ -24,8 +24,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # CONFIGURE MODULES
-ARG SETTINGS_FILE=/etc/authentic2-multitenant/config.py
-COPY authentic.config.py $SETTINGS_FILE
+COPY authentic.config.template /etc/authentic2-multitenant/config.template
 RUN cp /tmp/secret /etc/authentic2-multitenant
 RUN chmod 755 /etc/authentic2-multitenant/secret
 

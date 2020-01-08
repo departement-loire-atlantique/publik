@@ -13,8 +13,7 @@ RUN apt-get update \
 
 # CONFIGURE MODULES
 RUN mkdir /var/lib/wcs/skeletons
-ENV SETTINGS_FILE=/etc/wcs/settings.d/custom.py
-COPY wcs.settings.py $SETTINGS_FILE
+COPY wcs.settings.template /etc/wcs/settings.d/custom.template
 
 # NGINX CONF FOR PUBLIC
 COPY nginx.template /etc/nginx/conf.d/wcs.template
