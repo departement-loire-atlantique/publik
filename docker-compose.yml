@@ -195,8 +195,7 @@ services:
       - "${RABBITMQ_PORT}:5672"
     env_file:
       - secret.env
-    environment:
-      - RABBITMQ_DEFAULT_USER="${RABBITMQ_USER}"
+      - config.env
 
   mailcatcher:
     container_name: mailcatcher
