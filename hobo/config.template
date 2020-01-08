@@ -15,7 +15,7 @@
     "postgresql": {
         "createdb-connection-params": {
             "database": "postgres",
-            "host": "${DB_HOST}",
+            "host": "db",
             "user": "wcs",
             "password": "${DB_WCS_PASS}"
         },

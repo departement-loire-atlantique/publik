@@ -9,13 +9,13 @@ if os.environ.get('ALLOWED_HOSTS'):
 DATABASES['default']['NAME'] = 'authentic'
 DATABASES['default']['USER'] = 'authentic'
 DATABASES['default']['PASSWORD'] = os.environ['DB_AUTHENTIC_PASS']
-DATABASES['default']['HOST'] = os.environ['DB_HOST']
+DATABASES['default']['HOST'] = 'db'
 DATABASES['default']['PORT'] = os.environ['DB_PORT']
 
 BROKER_URL = 'amqp://{user}:{password}@{host}:{port}//'.format(
     user=os.environ['RABBITMQ_DEFAULT_USER'],
     password=os.environ['RABBITMQ_DEFAULT_PASS'],
-    host=os.environ['RABBITMQ_HOST'],
+    host='rabbitmq',
     port=os.environ['RABBITMQ_PORT'],
 )
 

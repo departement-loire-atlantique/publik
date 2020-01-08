@@ -6,6 +6,6 @@ import os
 BROKER_URL = 'amqp://{user}:{password}@{host}:{port}//'.format(
     user=os.environ['RABBITMQ_DEFAULT_USER'],
     password=os.environ['RABBITMQ_DEFAULT_PASS'],
-    host=os.environ['RABBITMQ_HOST'],
+    host='rabbitmq',
     port=os.environ['RABBITMQ_PORT'],
 )

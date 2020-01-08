@@ -9,7 +9,7 @@ if os.environ.get('ALLOWED_HOSTS'):
 DATABASES['default']['NAME'] = 'combo'
 DATABASES['default']['USER'] = 'combo'
 DATABASES['default']['PASSWORD'] = os.environ['DB_COMBO_PASS']
-DATABASES['default']['HOST'] = os.environ['DB_HOST']
+DATABASES['default']['HOST'] = 'db'
 DATABASES['default']['PORT'] = os.environ['DB_PORT']
 
 # Zone

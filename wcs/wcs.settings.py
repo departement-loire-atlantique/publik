@@ -9,7 +9,7 @@ if os.environ.get('ALLOWED_HOSTS'):
 DATABASES['default']['NAME'] = 'wcs'
 DATABASES['default']['USER'] = 'wcs'
 DATABASES['default']['PASSWORD'] = os.environ['DB_WCS_PASS']
-DATABASES['default']['HOST'] = os.environ['DB_HOST']
+DATABASES['default']['HOST'] = 'db'
 DATABASES['default']['PORT'] = os.environ['DB_PORT']
 
 # Zone
