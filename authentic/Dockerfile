@@ -25,6 +25,7 @@ RUN apt-get update \
 
 # CONFIGURE MODULES
 COPY authentic.config.py /etc/authentic2-multitenant/config.py
+RUN envsubst '$DEBUG $ALLOWED_HOSTS $DB_AUTHENTIC_PASS $DB_PORT $RABBITMQ_DEFAULT_USER $RABBITMQ_DEFAULT_PASS $RABBITMQ_PORT $ERROR_MAIL_AUTHOR $ERROR_MAIL_ADDR $MAILCATCHER_SMTP_PORT' < /etc/authentic2-multitenant/config.py > /etc/authentic2-multitenant/config.py
 RUN cp /tmp/secret /etc/authentic2-multitenant
 RUN chmod 755 /etc/authentic2-multitenant/secret
 
