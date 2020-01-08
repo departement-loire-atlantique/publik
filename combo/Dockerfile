@@ -13,9 +13,8 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # COMBO CONFIG
-ARG SETTINGS_FILE=/etc/combo/settings.d/${INSTITUTION_NAME}.py
+ENV SETTINGS_FILE=/etc/combo/settings.d/custom.py
 COPY combo.settings.py $SETTINGS_FILE
-RUN envsubst '$DEBUG $ALLOWED_HOSTS $DB_COMBO_PASS $DB_PORT' < $SETTINGS_FILE > $SETTINGS_FILE
 RUN cp /tmp/secret /etc/combo \
     && chmod 755 /etc/combo/secret
 

@@ -16,9 +16,8 @@ COPY site-options.cfg /tmp/
 COPY *.template /tmp/
 RUN mkdir -p /etc/hobo/settings.d/
 
-ARG SETTINGS_FILE=/etc/hobo/settings.d/${INSTITUTION_NAME}.py
+ARG SETTINGS_FILE=/etc/hobo/settings.d/custom.py
 COPY hobo.settings.py $SETTINGS_FILE
-RUN envsubst '$DEBUG $ALLOWED_HOSTS $DB_COMBO_PASS $DB_PORT $RABBITMQ_DEFAULT_USER $RABBITMQ_DEFAULT_PASS $RABBITMQ_PORT' < $SETTINGS_FILE > $SETTINGS_FILE
 
 # NGINX CONF FOR PUBLIC
 COPY nginx.template /etc/nginx/conf.d/hobo.template

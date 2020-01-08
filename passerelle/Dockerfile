@@ -9,9 +9,8 @@ RUN apt-get update \
 
 # CONFIGURE MODULES
 RUN mkdir -p /etc/passerelle/settings.d/ 
-ARG SETTINGS_FILE=/etc/passerelle/settings.d/${INSTITUTION_NAME}.py
+ARG SETTINGS_FILE=/etc/passerelle/settings.d/custom.py
 COPY passerelle.settings.py $SETTINGS_FILE
-RUN envsubst '$DEBUG $ALLOWED_HOSTS $DB_PASSERELLE_PASS $DB_PORT' < $SETTINGS_FILE > $SETTINGS_FILE
 
 # NGINX CONF FOR PUBLIC
 COPY nginx.template /etc/nginx/conf.d/passerelle.template
