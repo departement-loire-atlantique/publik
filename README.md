@@ -204,6 +204,8 @@ rsync -rLv publik@IP_MACHINE:/home/publik/publik/data .
 rsync -v publik@IP_MACHINE:/home/publik/publik/.env .
 ```
 
+> Il est important d'utiliser `rsync` parce que `data/letsencrypt/live` contient des liens symboliques, qui ne seraient pas copiés par `scp` par exemple.
+
 #### Solution 2 - Lancement d'un serveur temporaire pour générer les certificats
 
 Pour réaliser cette solution, il vous faut juste une machine accessible depuis internet et l'accès à la configuration DNS d'un domaine.
