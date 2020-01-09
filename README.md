@@ -82,13 +82,12 @@ Procéder à la configuration des propriétés de votre instance :
  Exemple d'URL pour le portail des démarches : https://demarcheENV.DOMAIN  
  * EMAIL : courriel compte administrateur principal
 
-Les propriétés sont initialisées dans un fichier d'environnement nommé ".env" 
-(Pour information : Le fichier .env est utilisé par docker-compose pour charger les variables d'environnement)
-```
-echo "DOMAIN=testgru.mondomaine.fr" >> .env
-echo "ENV=test" >> .env
-echo "EMAIL=xxx@loire-atlantique.fr" >> .env
-```
+Les propriétés sont initialisées dans un fichier d'environnement nommé `config.env`.
+
+> Attention : une chaîne entourée d'apostrophes ou de guillemets les conservera. Par exemple, `"a@b.c"` et `'a@b.c'` sont des adresses invalides ; il faut écrire `a@b.c`.
+
+Il est possible de configurer les ports des services dans le fichier `.env` et les
+mots de passe dans `secret.env`.
 
 Une fois les propriétés définies, il faut maintenant récupérer les conteneurs docker localement :
 ```
