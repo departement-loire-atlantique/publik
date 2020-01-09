@@ -50,5 +50,5 @@ COPY global.nginx.conf /etc/nginx/conf.d/global.conf
 
 # Add Wait-For-it COMAND LINE (DOCKER DEPENDENCIES MANAGEMENT MADE SIMPLE)
 # Add Update script (DOCKER UPDATE) 
-COPY wait-for-it.sh update.sh /root/
+COPY pyenv.template wait-for-it.sh update.sh subst-env.sh /root/
 RUN chmod +x /root/*.sh

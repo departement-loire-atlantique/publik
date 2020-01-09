@@ -16,7 +16,7 @@ COPY site-options.cfg /tmp/
 COPY *.template /tmp/
 RUN mkdir -p /etc/hobo/settings.d/
 
-COPY hobo.settings.template /etc/hobo/settings.d/custom.template
+COPY hobo.settings.py /etc/hobo/settings.d/custom.py
 
 # NGINX CONF FOR PUBLIC
 COPY nginx.template /etc/nginx/conf.d/hobo.template

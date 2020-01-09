@@ -6,10 +6,9 @@ set -eu
 # Wait for dependencies
 /root/wait-for-it.sh -t 60 db:${DB_PORT}
 /root/wait-for-it.sh -t 60 rabbitmq:${RABBITMQ_PORT}
+/root/subst_env.sh
 
 # Adapt configuration from ENV variables
-envsubst '$RABBITMQ_DEFAULT_USER $RABBITMQ_DEFAULT_PASS $RABBITMQ_PORT' < /etc/hobo-agent/settings.d/broker.template > /etc/hobo-agent/settings.d/broker.py
-envsubst '$DEBUG $ALLOWED_HOSTS $DB_COMBO_PASS $DB_PORT' < /etc/combo/settings.d/custom.template > /etc/combo/settings.d/custom.py
 envsubst '${ENV} ${DOMAIN}' < /etc/nginx/conf.d/combo.template > /etc/nginx/conf.d/combo.conf
 
 # Start combo

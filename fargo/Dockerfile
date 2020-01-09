@@ -12,7 +12,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # CONFIGURE MODULES
-COPY fargo.settings.template /etc/fargo/settings.template
+COPY fargo.settings.py /etc/fargo/settings.py
 RUN cp /tmp/secret /etc/fargo
 RUN chmod 755 /etc/fargo/secret
 

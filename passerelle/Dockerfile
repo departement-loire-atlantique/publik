@@ -9,7 +9,7 @@ RUN apt-get update \
 
 # CONFIGURE MODULES
 RUN mkdir -p /etc/passerelle/settings.d/ 
-COPY passerelle.settings.template /etc/passerelle/settings.d/custom.template
+COPY passerelle.settings.py /etc/passerelle/settings.d/custom.py
 
 # NGINX CONF FOR PUBLIC
 COPY nginx.template /etc/nginx/conf.d/passerelle.template

@@ -1,26 +1,20 @@
-# This file is called from `service`, which removes custom env vars:
+# To pass env vars to Python scripts run by Publik in services which remove custom env vars:
 # https://unix.stackexchange.com/questions/44370/how-to-make-unix-service-see-environment-variables
-# So we hardcode the values when the container starts
-
-DEBUG = bool('$DEBUG')
-
-ALLOWED_HOSTS = '$ALLOWED_HOSTS'
-if ALLOWED_HOSTS:
-    ALLOWED_HOSTS = ALLOWED_HOSTS.split(';')
-else:
-    ALLOWED_HOSTS = []
+# So we hardcode the values in the file below when the container starts
+with open("/root/pyenv.py") as fd:
+  exec(fd.read())
 
 # Databases
 DATABASES['default']['NAME'] = 'hobo'
 DATABASES['default']['USER'] = 'hobo'
-DATABASES['default']['PASSWORD'] = '$DB_HOBO_PASS'
+DATABASES['default']['PASSWORD'] = DB_HOBO_PASS
 DATABASES['default']['HOST'] = 'db'
-DATABASES['default']['PORT'] = '$DB_PORT'
+DATABASES['default']['PORT'] = DB_PORT
 
 BROKER_URL = 'amqp://{user}:{password}@rabbitmq:{port}//'.format(
-    user='$RABBITMQ_DEFAULT_USER',
-    password='$RABBITMQ_DEFAULT_PASS',
-    port='$RABBITMQ_PORT',
+    user=RABBITMQ_DEFAULT_USER,
+    password=RABBITMQ_DEFAULT_PASS,
+    port=RABBITMQ_PORT,
 )
 
 LANGUAGE_CODE = 'fr-fr'
