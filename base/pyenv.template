@@ -2,6 +2,8 @@
 # https://unix.stackexchange.com/questions/44370/how-to-make-unix-service-see-environment-variables
 # So we hardcode the values when the container starts
 
+# TODO: escape quotes
+
 DEBUG = bool('$DEBUG')
 
 ALLOWED_HOSTS = '$ALLOWED_HOSTS'
