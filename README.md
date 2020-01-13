@@ -92,8 +92,8 @@ echo "EMAIL=xxx@loire-atlantique.fr" >> .env
 
 Une fois les propriétés définies, il faut maintenant récupérer les conteneurs docker localement :
 ```
-gru-build
 gru-pull
+gru-build
 ```
 
 *gru-build* réalise une construction des conteneurs docker pour postgresql et le proxy (nginx) à partir des 
