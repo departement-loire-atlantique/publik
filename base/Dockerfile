@@ -52,3 +52,6 @@ COPY global.nginx.conf /etc/nginx/conf.d/global.conf
 # Add Update script (DOCKER UPDATE) 
 COPY pyenv.template wait-for-it.sh update.sh subst-env.sh /root/
 RUN chmod +x /root/*.sh
+
+COPY entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/entrypoint.sh

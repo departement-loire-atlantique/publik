@@ -23,5 +23,3 @@ service hobo restart
 
 # Start HOBO Agent
 service supervisor start
-
-exec "$@"

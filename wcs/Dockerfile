@@ -22,7 +22,7 @@ COPY nginx.template /etc/nginx/conf.d/wcs.template
 RUN usermod wcs -s /bin/bash
 
 COPY start.sh stop.sh /usr/local/bin/
-ENTRYPOINT ["start.sh"]
+RUN chmod +x /usr/local/bin/start.sh /usr/local/bin/stop.sh
+ENTRYPOINT ["entrypoint.sh"]
 
 EXPOSE 8080 
-CMD ["/bin/bash"]

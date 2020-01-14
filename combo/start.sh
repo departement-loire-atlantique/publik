@@ -17,5 +17,3 @@ service combo start
 
 # Start HOBO Agent
 service supervisor start
-
-exec "$@"

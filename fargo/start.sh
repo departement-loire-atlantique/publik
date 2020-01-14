@@ -17,5 +17,3 @@ service fargo start
 
 # Start HOBO Agent
 service supervisor start
-
-exec "$@"

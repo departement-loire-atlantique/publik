@@ -19,5 +19,3 @@ service wcs start
 
 # Start HOBO Agent
 service supervisor start
-
-exec "$@"
