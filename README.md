@@ -50,7 +50,7 @@ sudo apt-get update
 sudo apt-get install -y git
 git clone https://github.com/departement-loire-atlantique/publik
 cd publik
-sudo ./sync-os.sh
+sudo ./install-on-debian.sh
 cd ..
 sudo mv publik /home/publik/
 sudo chown publik:publik /home/publik/publik -R

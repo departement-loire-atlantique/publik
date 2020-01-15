@@ -3,7 +3,7 @@
 # Stop installation if something goes wrong (errpr code different from zero)
 set -e
 
-if [ ! -f sync-os.sh ]; then
+if [ ! -f install-on-debian.sh ]; then
         echo "Please run this script in the root of the publik installation folder"
 	exit 1
 fi
@@ -71,18 +71,6 @@ echo "Add some convenients tools"
 # git
 
 apt-get install -y build-essential gettext vim git
-
-echo "Add publik.bash to bash env of publik user..."
-####################################################
-env=`cat /home/publik/.bashrc | grep publik.bash | wc -l`
-if [ $env -gt 0 ]; then
-	echo "Already present"	
-else
-	echo "" >> /home/publik/.bashrc
-	echo "source /home/publik/publik/publik.bash" >> /home/publik/.bashrc
-	echo "OK"	
-fi
-
 
 echo "Generate HTTPS base certificates"
 #######################################
