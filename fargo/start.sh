@@ -6,10 +6,7 @@ set -eu
 # Wait for dependencies
 /root/wait-for-it.sh -t 60 db:${DB_PORT}
 /root/wait-for-it.sh -t 60 rabbitmq:${RABBITMQ_PORT}
-/root/subst-env.sh
-
-# Adapt configuration from ENV variables
-envsubst '${ENV} ${DOMAIN}' < /etc/nginx/conf.d/fargo.template > /etc/nginx/conf.d/fargo.conf
+/root/subst-env.sh fargo
 
 # Start FARGO
 service nginx start

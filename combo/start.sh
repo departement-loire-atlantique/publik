@@ -6,10 +6,7 @@ set -eu
 # Wait for dependencies
 /root/wait-for-it.sh -t 60 db:${DB_PORT}
 /root/wait-for-it.sh -t 60 rabbitmq:${RABBITMQ_PORT}
-/root/subst-env.sh
-
-# Adapt configuration from ENV variables
-envsubst '${ENV} ${DOMAIN}' < /etc/nginx/conf.d/combo.template > /etc/nginx/conf.d/combo.conf
+/root/subst-env.sh combo
 
 # Start combo
 service nginx start
