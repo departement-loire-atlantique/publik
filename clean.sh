@@ -1,4 +1,4 @@
 #!/bin/bash
 
-docker-compose down -v --rmi 'all'
+docker-compose down -v --rmi 'all' --remove-orphans
 docker-compose rm -v
