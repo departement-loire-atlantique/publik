@@ -40,8 +40,6 @@ RUN apt-get update \
 RUN mkdir -p /etc/hobo-agent/settings.d 
 COPY hobo-agent.settings.template /etc/hobo-agent/settings.d/broker.template
 RUN apt-get update \
-    && apt-get install entrouvert-repository \
-    && apt-get update \
     && apt-get -t stretch-backports install -y python-django \
     && apt-get install -y --no-install-recommends supervisor hobo-agent \
     && rm -rf /var/lib/apt/lists/*
