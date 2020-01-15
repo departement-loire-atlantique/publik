@@ -1,4 +1,4 @@
-data/
-secret.env
-config.env
+data/*
 shellinstall
+
+!data/hosts
