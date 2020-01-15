@@ -10,15 +10,18 @@ chmod 777 /home/http
 err=false
 for VAR in DOMAIN PGADMIN_PORT RABBITMQ_MANAGEMENT_PORT MAILCATCHER_HTTP_PORT EMAIL
 do
-  if [ -z ${!VAR} ]
+  if [ -z "${!VAR}" ]
   then
-    echo "$VAR MUST be set and MUST NOT be empty"
+    echo "ERROR: $VAR MUST be set and MUST NOT be empty"
     err=true
   fi
 done
 
 if [ "$err" = true ]
 then
+  echo "***************************************************************"
+  echo "ERROR: some env vars are invalid. See the error messages above."
+  echo "***************************************************************"
   exit 1
 fi
 
