@@ -8,11 +8,12 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # APT SOURCES
-RUN echo "deb http://httpredir.debian.org/debian stretch main" >> /etc/apt/sources.list \
-    && echo "deb http://ftp.fr.debian.org/debian stretch-updates main" >> /etc/apt/sources.list \
-    && echo "deb http://ftp.fr.debian.org/debian stretch-backports main" >> /etc/apt/sources.list \
-    && echo "deb http://deb.entrouvert.org/ stretch main" >> /etc/apt/sources.list \
+RUN echo 'deb http://deb.debian.org/debian/ stretch-backports main' > /etc/apt/sources.list.d/backports.list \ 
+    && echo 'deb http://deb.entrouvert.org/ stretch main' > /etc/apt/sources.list.d/entrouvert.list
     && wget -q -O- https://deb.entrouvert.org/entrouvert.gpg | apt-key add -
+    && apt-get update \
+    && apt install entrouvert-repository \
+    && apt-get update
 
 # TIMEZONE
 RUN echo "Europe/Paris" > /etc/timezone && \
