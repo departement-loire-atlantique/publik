@@ -51,6 +51,8 @@ echo "Create publik user"
 
 if getent passwd publik > /dev/null 2>&1; then
     echo "User publik already exists"
+    mkdir -p /home/publik
+    usermod publik -d /home/publik
 else
     useradd publik -m
     usermod publik -s /bin/bash
