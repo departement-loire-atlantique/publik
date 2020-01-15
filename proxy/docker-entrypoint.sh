@@ -7,6 +7,21 @@ set -eu
 mkdir -p /home/http
 chmod 777 /home/http
 
+err=false
+for VAR in DOMAIN PGADMIN_PORT RABBITMQ_MANAGEMENT_PORT MAILCATCHER_HTTP_PORT EMAIL
+do
+  if [ -z ${!VAR} ]
+  then
+    echo "$VAR MUST be set and MUST NOT be empty"
+    err=true
+  fi
+done
+
+if [ "$err" = true ]
+then
+  exit 1
+fi
+
 # Add tools to NGINX (pgadmin, ...)
 envsubst '${ENV} ${DOMAIN} ${PGADMIN_PORT} ${RABBITMQ_MANAGEMENT_PORT} ${MAILCATCHER_HTTP_PORT}' < /etc/nginx/conf.d/tools.template \
 	> /etc/nginx/conf.d/tools.conf
