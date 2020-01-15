@@ -1,4 +1,4 @@
 #!/bin/bash
 
-docker-compose down -v --rmi 'local'
+docker-compose down -v --rmi 'all'
 docker-compose rm -v
