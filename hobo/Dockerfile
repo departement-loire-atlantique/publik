@@ -24,6 +24,7 @@ COPY nginx.template /etc/nginx/conf.d/hobo.template
 RUN usermod hobo -s /bin/bash
 
 COPY start.sh stop.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/start.sh
 ENTRYPOINT ["start.sh"]
 
 EXPOSE 8080 
