@@ -10,7 +10,7 @@
     },
     "misc": {
         "charset": "utf-8",
-        "homepage-redirect-url": "https://citoyens${ENV}.${DOMAIN}:${HTTPS_PORT}"
+        "homepage-redirect-url": "https://${COMBO_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT}"
     },
     "postgresql": {
         "createdb-connection-params": {

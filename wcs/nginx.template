@@ -1,6 +1,6 @@
 server {
     listen 8080;
-    server_name demarches${ENV}.${DOMAIN};
+    server_name ${WCS_SUBDOMAIN}${ENV}.${DOMAIN};
     access_log /var/log/nginx/access.log combined;
     error_log /var/log/nginx/error.log;
 

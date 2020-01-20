@@ -44,13 +44,13 @@ function testHttpContains {
 
 # Before cook, wait for all services to be ready
 
-retry 300 testHttpCode citoyens${ENV}.${DOMAIN}:${HTTPS_PORT} combo 404
-retry 300 testHttpCode agents${ENV}.${DOMAIN}:${HTTPS_PORT} combo_agent 404
-retry 300 testHttpCode passerelle${ENV}.${DOMAIN}:${HTTPS_PORT} passerelle 404
-retry 300 testHttpCode demarches${ENV}.${DOMAIN}:${HTTPS_PORT} wcs 404
-retry 300 testHttpCode auth${ENV}.${DOMAIN}:${HTTPS_PORT} authentic 404
-retry 300 testHttpCode documents${ENV}.${DOMAIN}:${HTTPS_PORT} fargo 404
-retry 300 testHttpCode hobo${ENV}.${DOMAIN}:${HTTPS_PORT} hobo 404
+retry 300 testHttpCode ${COMBO_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} combo 404
+retry 300 testHttpCode ${COMBO_ADMIN_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} combo_agent 404
+retry 300 testHttpCode ${PASSERELLE_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} passerelle 404
+retry 300 testHttpCode ${WCS_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} wcs 404
+retry 300 testHttpCode ${AUTHENTIC_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} authentic 404
+retry 300 testHttpCode ${FARGO_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} fargo 404
+retry 300 testHttpCode ${HOBO_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} hobo 404
 
 # ZIP template for WCS
 zip /tmp/publik.zip /tmp/config.json /tmp/site-options.cfg
@@ -64,13 +64,13 @@ runuser -l hobo -c 'cd /tmp && hobo-manage cook /tmp/recipe.json -v 2'
 
 # After cook, test all services
 set -e
-testHttpContains citoyens${ENV}.${DOMAIN}:${HTTPS_PORT} combo $COMBO_OK
-testHttpCode agents${ENV}.${DOMAIN}:${HTTPS_PORT} combo_agent 200
-testHttpContains passerelle${ENV}.${DOMAIN}:${HTTPS_PORT} passerelle $AUTHENTIC_OK
-testHttpContains demarches${ENV}.${DOMAIN}:${HTTPS_PORT} wcs $AUTHENTIC_OK
-testHttpContains auth${ENV}.${DOMAIN}:${HTTPS_PORT} authentic $COMBO_OK
-testHttpContains documents${ENV}.${DOMAIN}:${HTTPS_PORT} fargo $AUTHENTIC_OK
-testHttpContains hobo${ENV}.${DOMAIN}:${HTTPS_PORT} hobo $AUTHENTIC_OK
+testHttpContains ${COMBO_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} combo $COMBO_OK
+testHttpCode ${COMBO_ADMIN_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} combo_agent 200
+testHttpContains ${PASSERELLE_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} passerelle $AUTHENTIC_OK
+testHttpContains ${WCS_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} wcs $AUTHENTIC_OK
+testHttpContains ${AUTHENTIC_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} authentic $COMBO_OK
+testHttpContains ${FARGO_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} fargo $AUTHENTIC_OK
+testHttpContains ${HOBO_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} hobo $AUTHENTIC_OK
 
 echo "Configuration OK (Hobo cook)"
 touch /tmp/success
