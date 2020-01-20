@@ -52,28 +52,28 @@ function generatecertificate() {
 	fi
 }
 
-generateconf demarches combo http
-generateconf admin-demarches combo http
+generateconf citoyens combo http
+generateconf agents combo http
 generateconf documents fargo http
-generateconf compte authentic http
+generateconf auth authentic http
 generateconf hobo hobo http
-generateconf demarche wcs http
+generateconf demarches wcs http
 generateconf passerelle passerelle http
 
-generatecertificate demarches
-generatecertificate admin-demarches
+generatecertificate citoyens
+generatecertificate agents
 generatecertificate documents
-generatecertificate compte
+generatecertificate auth
 generatecertificate hobo
-generatecertificate demarche
+generatecertificate demarches
 generatecertificate passerelle
 
-generateconf demarches combo https
-generateconf admin-demarches combo https
+generateconf citoyens combo https
+generateconf agents combo https
 generateconf documents fargo https
-generateconf compte authentic https
+generateconf auth authentic https
 generateconf hobo hobo https
-generateconf demarche wcs https
+generateconf demarches wcs https
 generateconf passerelle passerelle https
 
 # Start NGINX (Log on screen)

@@ -1,11 +1,11 @@
 {
    "variables":{
       "hobo":"hobo${ENV}.${DOMAIN}",
-      "authentic":"compte${ENV}.${DOMAIN}",
-      "combo":"demarches${ENV}.${DOMAIN}",
-      "combo_agent":"admin-demarches${ENV}.${DOMAIN}",
+      "authentic":"auth${ENV}.${DOMAIN}",
+      "combo":"citoyens${ENV}.${DOMAIN}",
+      "combo_agent":"agents${ENV}.${DOMAIN}",
       "passerelle":"passerelle${ENV}.${DOMAIN}",
-      "wcs":"demarche${ENV}.${DOMAIN}",
+      "wcs":"demarches${ENV}.${DOMAIN}",
       "fargo":"documents${ENV}.${DOMAIN}"
    },
    "steps":[
