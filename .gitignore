@@ -1,4 +1,3 @@
 data/*
 shellinstall
-
-!data/hosts
+*.env
