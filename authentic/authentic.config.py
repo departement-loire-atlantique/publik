@@ -92,7 +92,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filters': ['require_debug_true'],
-            'filename': '/tmp/authentic.log',
+            'filename': '/var/log/authentic2-multitenant/django.log',
             'formatter': 'simple'
         },
     },
