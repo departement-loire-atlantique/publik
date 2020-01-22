@@ -42,11 +42,18 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
         },
+        'file': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.FileHandler',
+            'filename': '/var/log/wcs/django.log',
+            'formatter': 'simple'
+        },
     },
     'loggers': {
 	'':{
-            'handlers': ['console'],
-            'level': 'INFO',
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
             'disabled': False
         },
     },

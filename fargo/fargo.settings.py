@@ -41,11 +41,18 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
         },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filters': ['require_debug_true'],
+            'filename': '/var/log/fargo/django.log',
+            'formatter': 'simple'
+        },
     },
     'loggers': {
 	'':{
-            'handlers': ['console'],
-            'level': 'INFO',
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
             'disabled': False
         },
     },
