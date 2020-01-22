@@ -32,7 +32,7 @@ RUN chmod 755 /etc/authentic2-multitenant/secret
 COPY nginx.template /etc/nginx/conf.d/authentic.template
 
 COPY start.sh stop.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh /usr/local/bin/stop.sh
 ENTRYPOINT ["start.sh"]
 
 EXPOSE 8080 

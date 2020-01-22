@@ -65,7 +65,7 @@ replace_dict = {
     "MAINTAINER" : "# MAINTAINER",
     "VOLUME" : "# VOLUME",
     "EXPOSE" : "# EXPOSE",
-    "ENTRYPOINT\s\[\"(?P<script>[A-Za-z\-\.]*)\"\]" : "./\g<script>",
+    "ENTRYPOINT" : "# ENTRYPOINT",
     "CMD" : "# CMD",
     "RUN " : "",
     "COPY" : "cp",
@@ -76,6 +76,7 @@ replace_dict = {
 do_not_copy = ["Dockerfile", "LICENSE", "README.md", \
     ".git", "nginx.template", "start.sh", "stop.sh"]
 
+installgru = ""
 startgru = ""
 stopgru = ""
 configuregru = ""
@@ -106,7 +107,7 @@ for app in apps:
                 configuregru += "\n".join([ a + "\n" for a in envextractor.findall(newContent)])
             with open(os.path.join(bare_path, startappscript), "w+") as f:
                 f.write(newContent)
-            startgru += "./" + startappscript + "\n" 
+            startgru += "./" + startappscript + "\n"
         
         # Convert docker stop script
         entrypoint_path = os.path.join(app_path, "stop.sh")
@@ -117,9 +118,11 @@ for app in apps:
             stopgru += "./" + stopappscript + "\n" 
 
         # Convert dockerfile
+        installappscript = "install-"+app+".sh"
         file_replace(replace_dict, \
             os.path.join(app_path, "Dockerfile"), \
-            os.path.join(bare_path, "install.sh"), app)
+            os.path.join(bare_path, installappscript), app)
+        installgru += "./" + installappscript + "\n"
         
         # Copy other files
         files = [f for f in os.listdir(app) if f not in do_not_copy]
@@ -129,6 +132,12 @@ for app in apps:
                 print("Error, file %s already exists", file)
             shutil.copy(file_path, bare_path)
         print("{} docker image converted".format(app))
+
+# Copy start-all and stop-all in /usr/local/bin
+installgru += "\ncp start-all.sh stop-all.sh /usr/local/bin/ && chmod +x /usr/local/bin/start-all.sh /usr/local/bin/stop-all.sh\n"
+
+with open(os.path.join(bare_path, "install.sh"), "w") as f:
+    f.write(installgru)
 
 with open(os.path.join(bare_path, "start-all.sh"), "w") as f:
     f.write(startgru)

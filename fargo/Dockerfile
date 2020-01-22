@@ -23,7 +23,7 @@ COPY nginx.template /etc/nginx/conf.d/fargo.template
 RUN usermod fargo -s /bin/bash
 
 COPY start.sh stop.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh /usr/local/bin/stop.sh
 ENTRYPOINT ["start.sh"]
 
 EXPOSE 8080 
