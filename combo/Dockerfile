@@ -5,13 +5,11 @@ MAINTAINER Julien BAYLE <julien.bayle@loire-atlantique.fr>
 # INSTALL COMBO
 # python3-django and python3-cryptography backports needed for combo
 RUN apt-get update
-RUN apt-get -t stretch-backports install -y --no-install-recommends python3-django python3-cryptography
-RUN apt-get install -y --no-install-recommends postgresql-
-# See https://dev.entrouvert.org/issues/38997
-RUN apt-get install -y --no-install-recommends python3-xstatic-roboto-fontface=0.4.3.2-1
-RUN apt-get install -y --no-install-recommends combo
-RUN apt-get install -y --no-install-recommends publik-base-theme
-RUN rm -rf /var/lib/apt/lists/*
+    && apt-get -t stretch-backports install -y --no-install-recommends python3-django python3-cryptography \
+    && apt-get install -y --no-install-recommends postgresql- \
+    && apt-get install -y --no-install-recommends combo \
+    && apt-get install -y --no-install-recommends publik-base-theme \
+    && rm -rf /var/lib/apt/lists/*
 
 # COMBO CONFIG
 COPY combo.settings.py /etc/combo/settings.d/custom.py
