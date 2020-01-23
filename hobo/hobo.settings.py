@@ -25,14 +25,6 @@ TIME_ZONE = 'Europe/Paris'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse',
-        },
-        'require_debug_true': {
-            '()': 'django.utils.log.RequireDebugTrue',
-        },
-    },
     'formatters': {
         'simple': {
             'format': '[%(asctime)s] %(name)s %(levelname)s %(message)s',
@@ -41,15 +33,11 @@ LOGGING = {
     },
     'handlers': {
         'console': {
-            'level': 'DEBUG',
-            'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
         },
         'file': {
-            'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filters': ['require_debug_true'],
             'filename': '/var/log/hobo/django.log',
             'formatter': 'simple'
         },
@@ -57,7 +45,7 @@ LOGGING = {
     'loggers': {
 	'':{
             'handlers': ['console', 'file'],
-            'level': 'DEBUG',
+            'level': LOG_LEVEL,
             'disabled': False
         },
     },

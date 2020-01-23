@@ -5,6 +5,7 @@
 # TODO: escape quotes
 
 DEBUG = bool('$DEBUG')
+LOG_LEVEL = '$LOG_LEVEL'
 
 ALLOWED_HOSTS = '$ALLOWED_HOSTS'
 if ALLOWED_HOSTS:
