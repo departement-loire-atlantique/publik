@@ -24,9 +24,8 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # CONFIGURE MODULES
-COPY authentic.config.py /etc/authentic2-multitenant/config.py
-RUN cp /tmp/secret /etc/authentic2-multitenant
-RUN chmod 755 /etc/authentic2-multitenant/secret
+COPY authentic.settings.py /etc/authentic2-multitenant/settings.d/loire-atlantique.py
+RUN cp /tmp/secret /etc/authentic2-multitenant && chmod 755 /etc/authentic2-multitenant/secret
 
 # CONFIGURE NGINX
 COPY nginx.template /etc/nginx/conf.d/authentic.template

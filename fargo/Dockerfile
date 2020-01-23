@@ -12,7 +12,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # CONFIGURE MODULES
-COPY fargo.settings.py /etc/fargo/settings.py
+COPY fargo.settings.py /etc/fargo/settings.d/loire-atlantique.py
 RUN cp /tmp/secret /etc/fargo
 RUN chmod 755 /etc/fargo/secret
 

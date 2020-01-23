@@ -13,8 +13,8 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # CONFIGURE MODULES
-RUN mkdir /var/lib/wcs/skeletons
-COPY wcs.settings.py /etc/wcs/settings.d/custom.py
+RUN mkdir -p /var/lib/wcs/skeletons
+COPY wcs.settings.py /etc/wcs/settings.d/loire-atlantique.py
 
 # NGINX CONF FOR PUBLIC
 COPY nginx.template /etc/nginx/conf.d/wcs.template

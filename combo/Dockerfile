@@ -12,7 +12,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # COMBO CONFIG
-COPY combo.settings.py /etc/combo/settings.d/custom.py
+COPY combo.settings.py /etc/combo/settings.d/loire-atlantique.py
 RUN cp /tmp/secret /etc/combo && chmod 755 /etc/combo/secret
 
 # NGINX CONFIG
