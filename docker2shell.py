@@ -4,6 +4,7 @@ import os
 import re
 import shutil
 import glob
+import subprocess
 
 # This script converts from the docker version to a shell install version
 # Useful for installation without docker
@@ -61,22 +62,23 @@ else:
     [os.remove(f) for f in glob.glob(bare_path+"/*")]
 
 replace_dict = {
-    "FROM" : "# FROM",
-    "MAINTAINER" : "# MAINTAINER",
-    "VOLUME" : "# VOLUME",
-    "EXPOSE" : "# EXPOSE",
-    "ENTRYPOINT" : "# ENTRYPOINT",
-    "CMD" : "# CMD",
-    "RUN " : "",
-    "COPY" : "cp",
-    "ENV\s(?P<name>[A-Z_]*)\s*(?P<value>[a-z]*)" : "export \g<name>=\g<value>",
-    "/root" : "/usr/bin"
+    "^FROM.*" : "set -eu",
+    "^MAINTAINER" : "# MAINTAINER",
+    "^VOLUME" : "# VOLUME",
+    "^EXPOSE" : "# EXPOSE",
+    "^ENTRYPOINT" : "# ENTRYPOINT",
+    "^CMD" : "# CMD",
+    "^RUN (?P<cmd>.*)" : "echo '\g<cmd>'\n\g<cmd>",
+    "^COPY (?P<files>.*)" : "echo 'cp \g<files>'\ncp \g<files>",
+    "^ENV\s(?P<name>[A-Z_]*)\s*(?P<value>[a-z]*)" : "export \g<name>=\g<value>",
+    "/root" : "/usr/bin",
+    "rm \-rf /var/lib/apt/lists/\*" : "echo 'dependencies downloaded'"
     }
 
 do_not_copy = ["Dockerfile", "LICENSE", "README.md", \
     ".git", "nginx.template", "start.sh", "stop.sh"]
 
-installgru = ""
+installgru = "set -eu\n"
 startgru = ""
 stopgru = ""
 configuregru = ""
@@ -107,6 +109,7 @@ for app in apps:
                 configuregru += "\n".join([ a + "\n" for a in envextractor.findall(newContent)])
             with open(os.path.join(bare_path, startappscript), "w+") as f:
                 f.write(newContent)
+            startgru += "echo " + startappscript + " running ... \n"
             startgru += "./" + startappscript + "\n"
         
         # Convert docker stop script
@@ -134,7 +137,9 @@ for app in apps:
         print("{} docker image converted".format(app))
 
 # Copy start-all and stop-all in /usr/local/bin
-installgru += "\ncp start-all.sh stop-all.sh /usr/local/bin/ && chmod +x /usr/local/bin/start-all.sh /usr/local/bin/stop-all.sh\n"
+installgru += "\ncp start-all.sh stop-all.sh /usr/local/bin/"
+installgru += "\nchmod +x /usr/local/bin/start-all.sh /usr/local/bin/stop-all.sh\n"
+installgru += "\necho 'Installation completed'"
 
 with open(os.path.join(bare_path, "install.sh"), "w") as f:
     f.write(installgru)
@@ -145,5 +150,9 @@ with open(os.path.join(bare_path, "start-all.sh"), "w") as f:
 with open(os.path.join(bare_path, "stop-all.sh"), "w") as f:
     f.write(stopgru)
 
+configuregru += "\necho config ... done"
+
 with open(os.path.join(bare_path, "configure.sh"), "w") as f:
     f.write(configuregru)
+
+subprocess.call("chmod +x " + os.path.join(bare_path, "*.sh"), shell=True)
