@@ -52,29 +52,29 @@ function generatecertificate() {
 	fi
 }
 
-generateconf citoyens combo http
-generateconf agents combo http
-generateconf documents fargo http
-generateconf auth authentic http
-generateconf hobo hobo http
-generateconf demarches wcs http
-generateconf passerelle passerelle http
+generateconf ${COMBO_SUBDOMAIN} combo http
+generateconf ${COMBO_ADMIN_SUBDOMAIN} combo http
+generateconf ${FARGO_SUBDOMAIN} fargo http
+generateconf ${AUTHENTIC_SUBDOMAIN} authentic http
+generateconf ${HOBO_SUBDOMAIN} hobo http
+generateconf ${WCS_SUBDOMAIN} wcs http
+generateconf ${PASSERELLE_SUBDOMAIN} passerelle http
 
-generatecertificate citoyens
-generatecertificate agents
-generatecertificate documents
-generatecertificate auth
-generatecertificate hobo
-generatecertificate demarches
-generatecertificate passerelle
+generatecertificate ${COMBO_SUBDOMAIN}
+generatecertificate ${COMBO_ADMIN_SUBDOMAIN}
+generatecertificate ${FARGO_SUBDOMAIN}
+generatecertificate ${AUTHENTIC_SUBDOMAIN}
+generatecertificate ${HOBO_SUBDOMAIN}
+generatecertificate ${WCS_SUBDOMAIN}
+generatecertificate ${PASSERELLE_SUBDOMAIN}
 
-generateconf citoyens combo https
-generateconf agents combo https
-generateconf documents fargo https
-generateconf auth authentic https
-generateconf hobo hobo https
-generateconf demarches wcs https
-generateconf passerelle passerelle https
+generateconf ${COMBO_SUBDOMAIN} combo https
+generateconf ${COMBO_ADMIN_SUBDOMAIN} combo https
+generateconf ${FARGO_SUBDOMAIN} fargo https
+generateconf ${AUTHENTIC_SUBDOMAIN} authentic https
+generateconf ${HOBO_SUBDOMAIN} hobo https
+generateconf ${WCS_SUBDOMAIN} wcs https
+generateconf ${PASSERELLE_SUBDOMAIN} passerelle https
 
 # Start NGINX (Log on screen)
 nginx -g 'daemon off;'
