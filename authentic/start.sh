@@ -22,6 +22,5 @@ service supervisor start
 # Start Authentic
 service authentic2-multitenant update
 service authentic2-multitenant restart
-service authentic2-multitenant status
 
 exec "$@"
