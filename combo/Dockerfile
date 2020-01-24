@@ -4,7 +4,7 @@ MAINTAINER Julien BAYLE <julien.bayle@loire-atlantique.fr>
 
 # INSTALL COMBO
 # python3-django and python3-cryptography backports needed for combo
-RUN apt-get update
+RUN apt-get update \
     && apt-get -t stretch-backports install -y --no-install-recommends python3-django python3-cryptography \
     && apt-get install -y --no-install-recommends postgresql- \
     && apt-get install -y --no-install-recommends combo \
