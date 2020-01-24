@@ -118,6 +118,7 @@ for app in apps:
             stopappscript = "stop-"+app+".sh"
             replace_dict.update({"stop.sh" : stopappscript})
             shutil.copyfile(entrypoint_path, os.path.join(bare_path, stopappscript))
+            stopgru += "echo " + stopappscript + " running ... \n"
             stopgru += "./" + stopappscript + "\n" 
 
         # Convert dockerfile
