@@ -5,16 +5,14 @@ MAINTAINER Julien BAYLE <julien.bayle@loire-atlantique.fr>
 # COMMON TOOLS AND APT SOURCES
 RUN apt-get update \
     && apt-get install -y vim gettext wget nginx-full quilt gnupg git zip \
-    && echo "deb http://httpredir.debian.org/debian stretch main" >> /etc/apt/sources.list \
-    && echo "deb http://ftp.fr.debian.org/debian stretch-updates main" >> /etc/apt/sources.list \
-    && echo "deb http://ftp.fr.debian.org/debian stretch-backports main" >> /etc/apt/sources.list \
-    && echo "deb http://deb.entrouvert.org/ stretch main" > /etc/apt/sources.list.d/entrouvert-tmp.list \
-    && wget -q -O- https://deb.entrouvert.org/entrouvert.gpg | apt-key add - \
-    && apt-get update \
-    && apt-get install -y entrouvert-repository \
-    && rm /etc/apt/sources.list.d/entrouvert-tmp.list \
-    && apt-get update \
-    && apt-get install -y publik-base-theme publik-common
+    && rm -rf /var/lib/apt/lists/*
+
+# APT SOURCES
+RUN echo "deb http://httpredir.debian.org/debian stretch main" > /etc/apt/sources.list.d/publik.list \
+    && echo "deb http://ftp.fr.debian.org/debian stretch-updates main" >> /etc/apt/sources.list.d/publik.list \
+    && echo "deb http://ftp.fr.debian.org/debian stretch-backports main" >> /etc/apt/sources.list.d/publik.list \
+    && echo "deb http://deb.entrouvert.org/ stretch main" >> /etc/apt/sources.list.d/publik.list \
+    && wget -q -O- https://deb.entrouvert.org/entrouvert.gpg | apt-key add -
 
 # TIMEZONE
 RUN echo "Europe/Paris" > /etc/timezone \
