@@ -71,7 +71,7 @@ replace_dict = {
     "^RUN (?P<cmd>.*)" : "echo '\g<cmd>'\n\g<cmd>",
     "^COPY (?P<files>.*)" : "echo 'cp \g<files>'\ncp \g<files>",
     "^ENV\s(?P<name>[A-Z_]*)\s*(?P<value>[a-z]*)" : "export \g<name>=\g<value>",
-    "/root" : "/usr/bin",
+    "/root" : "/usr/local/bin",
     "rm \-rf /var/lib/apt/lists/\*" : "echo 'dependencies downloaded'"
     }
 
