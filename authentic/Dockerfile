@@ -7,11 +7,7 @@ MAINTAINER Julien BAYLE <julien.bayle@loire-atlantique.fr>
 # + python-attr backport needed for authentic2-multitenant
 RUN apt-get update \
     && apt-get -t stretch-backports install -y python-attr \
-    && apt-get install -y \ 
-	    authentic2-multitenant \
-        postgresql- \
-	    publik-base-theme \
-        memcached \
+    && apt-get install -y authentic2-multitenant postgresql- publik-base-theme memcached \
     && rm -rf /var/lib/apt/lists/*
 
 # Authentic 2 - France connect module (auto installation failing)
