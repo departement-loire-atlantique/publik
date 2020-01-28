@@ -13,7 +13,7 @@ RUN apt-get update \
 # Authentic 2 - France connect module (auto installation failing)
 # Cause : apt-get dependencies error for python-authentic2
 RUN apt-get update \
-    && sudo apt-get download python-authentic2-auth-fc \
+    && apt-get download python-authentic2-auth-fc \
     && mv python-authentic2-auth-fc* fc.deb \
     && dpkg -i --ignore-depends=python-authentic2 fc.deb \
     && rm fc.deb \
