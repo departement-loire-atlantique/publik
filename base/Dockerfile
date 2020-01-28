@@ -8,10 +8,10 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # APT SOURCES
-RUN echo "deb http://httpredir.debian.org/debian stretch main" >> /etc/apt/sources.list \
-    && echo "deb http://ftp.fr.debian.org/debian stretch-updates main" >> /etc/apt/sources.list \
-    && echo "deb http://ftp.fr.debian.org/debian stretch-backports main" >> /etc/apt/sources.list \
-    && echo "deb http://deb.entrouvert.org/ stretch main" >> /etc/apt/sources.list \
+RUN echo "deb http://httpredir.debian.org/debian stretch main" > /etc/apt/sources.list.d/publik.list \
+    && echo "deb http://ftp.fr.debian.org/debian stretch-updates main" >> /etc/apt/sources.list.d/publik.list \
+    && echo "deb http://ftp.fr.debian.org/debian stretch-backports main" >> /etc/apt/sources.list.d/publik.list \
+    && echo "deb http://deb.entrouvert.org/ stretch main" >> /etc/apt/sources.list.d/publik.list \
     && wget -q -O- https://deb.entrouvert.org/entrouvert.gpg | apt-key add -
 
 # TIMEZONE
