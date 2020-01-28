@@ -16,6 +16,7 @@ RUN apt-get update \
     && apt-get download python-authentic2-auth-fc \
     && mv python-authentic2-auth-fc* fc.deb \
     && dpkg -i --ignore-depends=python-authentic2 fc.deb \
+    && apt -y --fix-broken install \
     && rm fc.deb \
     && rm -rf /var/lib/apt/lists/*
 
