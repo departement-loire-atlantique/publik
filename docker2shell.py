@@ -81,7 +81,11 @@ do_not_copy = ["Dockerfile", "LICENSE", "README.md", \
 installgru = "set -eu\n"
 startgru = ""
 stopgru = ""
-configuregru = ""
+configuregru = "set -eu\n"
+configuregru += ": \"${ENV:?Environment variable must be set}\"\n"
+configuregru += ": \"${EMAIL:?Environment variable must be set}\"\n"
+configuregru += ": \"${DOMAIN:?Environment variable must be set}\"\n"
+
 envextractor = re.compile("(envsubst.*)")
 
 for app in apps:
