@@ -43,14 +43,18 @@ function testHttpContains {
 }
 
 # Before cook, wait for all services to be ready
-
-retry 300 testHttpCode demarches${ENV}.${DOMAIN} combo 404
-retry 300 testHttpCode admin-demarches${ENV}.${DOMAIN} combo_agent 404
-retry 300 testHttpCode passerelle${ENV}.${DOMAIN} passerelle 404
-retry 300 testHttpCode demarche${ENV}.${DOMAIN} demarches-wcs 404
-retry 300 testHttpCode compte${ENV}.${DOMAIN} authentic 404
-retry 300 testHttpCode documents${ENV}.${DOMAIN} fargo 404
-retry 300 testHttpCode hobo${ENV}.${DOMAIN} hobo 404
+if [ ! -f /tmp/success ]
+then
+    retry 300 testHttpCode demarches${ENV}.${DOMAIN} combo 404
+    retry 300 testHttpCode admin-demarches${ENV}.${DOMAIN} combo_agent 404
+    retry 300 testHttpCode passerelle${ENV}.${DOMAIN} passerelle 404
+    retry 300 testHttpCode demarche${ENV}.${DOMAIN} demarches-wcs 404
+    retry 300 testHttpCode compte${ENV}.${DOMAIN} authentic 404
+    retry 300 testHttpCode documents${ENV}.${DOMAIN} fargo 404
+    retry 300 testHttpCode hobo${ENV}.${DOMAIN} hobo 404
+else 
+    echo "Skipping the 404 check: it seems that the script has already been successfully executed at least once"
+fi
 
 # ZIP template for WCS
 zip /tmp/publik.zip /tmp/config.json /tmp/site-options.cfg
