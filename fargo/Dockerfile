@@ -24,6 +24,7 @@ RUN usermod fargo -s /bin/bash
 
 COPY start.sh stop.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/start.sh /usr/local/bin/stop.sh
+RUN chown fargo:fargo /var/lib/fargo
 ENTRYPOINT ["start.sh"]
 
 EXPOSE 8080 

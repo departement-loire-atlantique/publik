@@ -23,6 +23,7 @@ RUN usermod wcs -s /bin/bash
 
 COPY start.sh stop.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/start.sh /usr/local/bin/stop.sh
+RUN chown wcs:wcs /var/lib/wcs
 ENTRYPOINT ["start.sh"]
 
 EXPOSE 8080 

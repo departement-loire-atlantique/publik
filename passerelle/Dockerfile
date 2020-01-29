@@ -19,6 +19,7 @@ RUN usermod passerelle -s /bin/bash
 
 COPY start.sh stop.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/start.sh /usr/local/bin/stop.sh
+RUN chown passerelle:passerelle /var/lib/passerelle
 ENTRYPOINT ["start.sh"]
 
 EXPOSE 8080 

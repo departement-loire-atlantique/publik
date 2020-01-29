@@ -25,6 +25,7 @@ RUN usermod hobo -s /bin/bash
 
 COPY start.sh stop.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/start.sh /usr/local/bin/stop.sh
+RUN chown hobo:fargo /var/lib/hobo
 ENTRYPOINT ["start.sh"]
 
 EXPOSE 8080 
