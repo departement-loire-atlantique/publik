@@ -2,22 +2,13 @@ FROM julienbayle/publik:latest-base
 
 MAINTAINER Julien BAYLE <julien.bayle@loire-atlantique.fr>
 
-# Authentic 2
+# Authentic 2 (Authentic 2 FC included)
 # + MEMCACHED
 # + python-attr backport needed for authentic2-multitenant
+
 RUN apt-get update \
     && apt-get -t stretch-backports install -y python-attr \
     && apt-get install -y authentic2-multitenant postgresql- publik-base-theme memcached \
-    && rm -rf /var/lib/apt/lists/*
-
-# Authentic 2 - France connect module (auto installation failing)
-# Cause : apt-get dependencies error for python-authentic2
-RUN apt-get update \
-    && apt-get download python-authentic2-auth-fc \
-    && mv python-authentic2-auth-fc* fc.deb \
-    && dpkg -i --ignore-depends=python-authentic2 fc.deb \
-    && apt -y --fix-broken install \
-    && rm fc.deb \
     && rm -rf /var/lib/apt/lists/*
 
 # CONFIGURE MODULES
