@@ -75,30 +75,24 @@ ssh publik@IP_MACHINE
 cd publik
 ```
 
-Procéder à la configuration des propriétés de votre instance :
- * DOMAIN : domaine DNS de l'environnement
- * ENV : suffixe appliqué aux noms des modules publik pour votre environnement (optionnel, peut être laissé vide). 
- En pratique, ces suffixes permettent d'installer plusieurs versions de la GRU sous le même domaine.
- Exemple d'URL pour le portail des démarches : https://demarcheENV.DOMAIN  
- * EMAIL : courriel compte administrateur principal
-
-Les propriétés sont initialisées dans un fichier d'environnement nommé `config.env`.
+Pour procéder à la configuration des propriétés de votre instance , créer un fichier `data/config.env` à partir du modèle `config.env.template`.
 
 > Attention : une chaîne entourée d'apostrophes ou de guillemets les conservera. Par exemple, `"a@b.c"` et `'a@b.c'` sont des adresses invalides ; il faut écrire `a@b.c`.
 
-Il est possible de configurer les ports des services dans le fichier `.env` et les
-mots de passe dans `secret.env`.
+Puis, créer un fichier  `data/secret.env` à partir du modèle `secret.env.template`) afin de configurer les mots de passe d'accès.
+Enfin, si vous le souhaitez, créer un fichier `.env` à partir du modèle `.env.template`) afin de configurer les ports des services.
+
 
 Une fois les propriétés définies, il faut maintenant récupérer les conteneurs docker localement :
 ```
-gru-build
 gru-pull
+gru-build
 ```
+
+*gru-pull* télécharge localement depuis dockerhub les conteneurs pré-construits.
 
 *gru-build* réalise une construction des conteneurs docker pour postgresql et le proxy (nginx) à partir des 
 définitions présentes dans le dossier "postgresql" et "proxy"
-
-*gru-pull* télécharge localement depuis dockerhub les conteneurs pré-construits.
 
 Puis lancer l'environnement docker :
 ```
