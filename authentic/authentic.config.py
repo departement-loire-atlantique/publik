@@ -64,34 +64,4 @@ CACHES = {
 # Role provisionning via local RabbitMQ
 HOBO_ROLE_EXPORT = True
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': True,
-    'formatters': {
-        'simple': {
-            'format': '[%(asctime)s] %(name)s %(levelname)s %(message)s',
-            'datefmt': '%d/%b/%Y %H:%M:%S'
-        },
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'simple'
-        },
-        'file': {
-            'class': 'logging.FileHandler',
-            'filename': '/var/log/authentic2-multitenant/django.log',
-            'formatter': 'simple'
-        },
-    },
-    'loggers': {
-	'':{
-            'handlers': ['console', 'file'],
-            'level': LOG_LEVEL,
-            'disabled': False
-        },
-    },
-}
-
-
-
+LOGGING = LOGGING_FROM_PYENV
