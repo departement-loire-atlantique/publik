@@ -4,11 +4,9 @@
 set -eu
 
 # Wait for dependencies
-/root/wait-for-it.sh -t 60 db:5432
-/root/wait-for-it.sh -t 60 rabbitmq:5672
-
-# Adapt configuration from ENV variable
-envsubst '${ENV} ${DOMAIN}' < /etc/nginx/conf.d/authentic.template > /etc/nginx/conf.d/authentic.conf
+/root/wait-for-it.sh -t 60 db:${DB_PORT}
+/root/wait-for-it.sh -t 60 rabbitmq:${RABBITMQ_PORT}
+/root/subst-env.sh "authentic"
 
 # Start NGINX
 service nginx start
@@ -23,5 +21,3 @@ service supervisor start
 service authentic2-multitenant update
 service authentic2-multitenant restart
 service authentic2-multitenant status
-
-exec "$@"

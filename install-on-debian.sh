@@ -3,7 +3,7 @@
 # Stop installation if something goes wrong (errpr code different from zero)
 set -e
 
-if [ ! -f sync-os.sh ]; then
+if [ ! -f install-on-debian.sh ]; then
         echo "Please run this script in the root of the publik installation folder"
 	exit 1
 fi
@@ -51,6 +51,10 @@ echo "Create publik user"
 
 if getent passwd publik > /dev/null 2>&1; then
     echo "User publik already exists"
+    mkdir -p /home/publik
+    chown publik:publik /home/publik -R
+    usermod publik -d /home/publik
+    usermod publik -s /bin/bash
 else
     useradd publik -m
     usermod publik -s /bin/bash
@@ -82,7 +86,6 @@ else
 	echo "source /home/publik/publik/publik.bash" >> /home/publik/.bashrc
 	echo "OK"	
 fi
-
 
 echo "Generate HTTPS base certificates"
 #######################################

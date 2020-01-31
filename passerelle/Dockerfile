@@ -9,7 +9,7 @@ RUN apt-get update \
 
 # CONFIGURE MODULES
 RUN mkdir -p /etc/passerelle/settings.d/ 
-COPY passerelle.settings.py /etc/passerelle/settings.d/loire-atlantique.py
+COPY passerelle.settings.py /etc/passerelle/settings.d/custom.py
 
 # NGINX CONF FOR PUBLIC
 COPY nginx.template /etc/nginx/conf.d/passerelle.template
@@ -18,7 +18,7 @@ COPY nginx.template /etc/nginx/conf.d/passerelle.template
 RUN usermod passerelle -s /bin/bash
 
 COPY start.sh stop.sh /usr/local/bin/
-ENTRYPOINT ["start.sh"]
+RUN chmod +x /usr/local/bin/start.sh /usr/local/bin/stop.sh
+ENTRYPOINT ["entrypoint.sh"]
 
 EXPOSE 8080 
-CMD ["/bin/bash"]

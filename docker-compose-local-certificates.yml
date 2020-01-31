@@ -29,10 +29,9 @@ services:
      - mailcatcher:hobo
      - mailcatcher:pgadmin
      - mailcatcher:webmail
-    environment:
-     - ENV
-     - DOMAIN
-     - EMAIL
+    env_file:
+      - .env
+      - config.env
 
   mailcatcher:
     container_name: mailcatcher

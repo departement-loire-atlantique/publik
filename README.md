@@ -51,7 +51,7 @@ sudo apt-get update
 sudo apt-get install -y git
 git clone https://github.com/departement-loire-atlantique/publik
 cd publik
-sudo ./sync-os.sh
+sudo ./install-on-debian.sh
 cd ..
 sudo mv publik /home/publik/
 sudo chown publik:publik /home/publik/publik -R
@@ -76,20 +76,12 @@ ssh publik@IP_MACHINE
 cd publik
 ```
 
-Procéder à la configuration des propriétés de votre instance :
- * DOMAIN : domaine DNS de l'environnement
- * ENV : suffixe appliqué aux noms des modules publik pour votre environnement (optionnel, peut être laissé vide mais doit être déclaré). 
- En pratique, ces suffixes permettent d'installer plusieurs versions de la GRU sous le même domaine.
- Exemple d'URL pour le portail des démarches : https://demarcheENV.DOMAIN  
- * EMAIL : courriel compte administrateur principal
+Pour procéder à la configuration des propriétés de votre instance , créer un fichier `data/config.env` à partir du modèle `config.env.template`.
 
-Les propriétés sont initialisées dans un fichier d'environnement nommé ".env" 
-(Pour information : Le fichier .env est utilisé par docker-compose pour charger les variables d'environnement)
-```
-echo "DOMAIN=testgru.mondomaine.fr" >> .env
-echo "ENV=test" >> .env
-echo "EMAIL=xxx@loire-atlantique.fr" >> .env
-```
+> Attention : une chaîne entourée d'apostrophes ou de guillemets les conservera. Par exemple, `"a@b.c"` et `'a@b.c'` sont des adresses invalides ; il faut écrire `a@b.c`.
+
+Puis, créer un fichier  `data/secret.env` à partir du modèle `secret.env.template`) afin de configurer les mots de passe d'accès.
+Enfin, si vous le souhaitez, créer un fichier `.env` à partir du modèle `.env.template`) afin de configurer les ports des services.
 
 Une fois les propriétés définies, il faut maintenant récupérer les conteneurs docker localement :
 ```
@@ -97,10 +89,10 @@ gru-pull
 gru-build
 ```
 
+*gru-pull* télécharge localement depuis dockerhub les conteneurs pré-construits.
+
 *gru-build* réalise une construction des conteneurs docker pour postgresql et le proxy (nginx) à partir des 
 définitions présentes dans le dossier "postgresql" et "proxy"
-
-*gru-pull* télécharge localement depuis dockerhub les conteneurs pré-construits.
 
 Puis lancer l'environnement docker :
 ```
@@ -204,6 +196,8 @@ Copier depuis ce serveur le dossier publik/data et le fichier .env en local au m
 rsync -rLv publik@IP_MACHINE:/home/publik/publik/data .
 rsync -v publik@IP_MACHINE:/home/publik/publik/.env .
 ```
+
+> Il est important d'utiliser `rsync` parce que `data/letsencrypt/live` contient des liens symboliques, qui ne seraient pas copiés par `scp` par exemple.
 
 #### Solution 2 - Lancement d'un serveur temporaire pour générer les certificats
 

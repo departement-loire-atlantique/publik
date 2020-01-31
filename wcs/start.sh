@@ -4,11 +4,9 @@
 set -eu
 
 # Wait for dependencies
-/root/wait-for-it.sh -t 60 db:5432
-/root/wait-for-it.sh -t 60 rabbitmq:5672
-
-# Adapt configuration from ENV variables
-envsubst '${ENV} ${DOMAIN}' < /etc/nginx/conf.d/wcs.template > /etc/nginx/conf.d/wcs.conf
+/root/wait-for-it.sh -t 60 db:${DB_PORT}
+/root/wait-for-it.sh -t 60 rabbitmq:${RABBITMQ_PORT}
+/root/subst-env.sh "wcs"
 
 # Start NGINX
 service nginx start
@@ -18,5 +16,3 @@ service wcs start
 
 # Start HOBO Agent
 service supervisor start
-
-exec "$@"

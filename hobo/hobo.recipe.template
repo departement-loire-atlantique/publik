@@ -1,12 +1,12 @@
 {
    "variables":{
-      "hobo":"hobo${ENV}.${DOMAIN}",
-      "authentic":"compte${ENV}.${DOMAIN}",
-      "combo":"demarches${ENV}.${DOMAIN}",
-      "combo_agent":"admin-demarches${ENV}.${DOMAIN}",
-      "passerelle":"passerelle${ENV}.${DOMAIN}",
-      "wcs":"demarche${ENV}.${DOMAIN}",
-      "fargo":"documents${ENV}.${DOMAIN}"
+      "hobo":"${HOBO_SUBDOMAIN}${ENV}.${DOMAIN}",
+      "authentic":"${AUTHENTIC_SUBDOMAIN}${ENV}.${DOMAIN}",
+      "combo":"${COMBO_SUBDOMAIN}${ENV}.${DOMAIN}",
+      "combo_agent":"${COMBO_ADMIN_SUBDOMAIN}${ENV}.${DOMAIN}",
+      "passerelle":"${PASSERELLE_SUBDOMAIN}${ENV}.${DOMAIN}",
+      "wcs":"${WCS_SUBDOMAIN}${ENV}.${DOMAIN}",
+      "fargo":"${FARGO_SUBDOMAIN}${ENV}.${DOMAIN}"
    },
    "steps":[
       {
@@ -17,7 +17,7 @@
       {
          "create-superuser":{
             "email":"${EMAIL}",
-            "password":"pleasechange"
+            "password":"${SUPERUSER_PASS}"
          }
       },
       {

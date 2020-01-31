@@ -10,7 +10,7 @@ server {
         location ~ /\. { deny all; }
 
         location / {
-            proxy_pass         http://pgadmin:5050;
+            proxy_pass         http://pgadmin:${PGADMIN_PORT};
         }
 }
 
@@ -24,7 +24,7 @@ server {
         location ~ /\. { deny all; }
 
         location / {
-            proxy_pass         http://rabbitmq:15672;
+            proxy_pass         http://rabbitmq:${RABBITMQ_MANAGEMENT_PORT};
         }
 } 
 
@@ -38,6 +38,6 @@ server {
         location ~ /\. { deny all; }
 
         location / {
-            proxy_pass         http://webmail:1080;
+            proxy_pass         http://webmail:${MAILCATCHER_HTTP_PORT};
         }
 }

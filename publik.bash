@@ -3,6 +3,8 @@
 # GRU UP : Start all GRU Publik containers
 alias gru-up='docker-compose up --no-build --abort-on-container-exit'
 
+alias gru-up-images='docker-compose -f docker-compose.yml -f docker-compose.images.yml up --no-build --abort-on-container-exit'
+
 # GRU DOWN : Delete all GRU containers 
 alias gru-down='docker-compose down'
 

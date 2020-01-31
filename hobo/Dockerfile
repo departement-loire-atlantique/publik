@@ -15,7 +15,8 @@ RUN apt-get update \
 COPY site-options.cfg /tmp/
 COPY *.template /tmp/
 RUN mkdir -p /etc/hobo/settings.d/
-COPY hobo.settings.py /etc/hobo/settings.d/loire-atlantique.py
+
+COPY hobo.settings.py /etc/hobo/settings.d/custom.py
 
 # NGINX CONF FOR PUBLIC
 COPY nginx.template /etc/nginx/conf.d/hobo.template
@@ -24,7 +25,7 @@ COPY nginx.template /etc/nginx/conf.d/hobo.template
 RUN usermod hobo -s /bin/bash
 
 COPY start.sh stop.sh /usr/local/bin/
-ENTRYPOINT ["start.sh"]
+RUN chmod +x /usr/local/bin/start.sh /usr/local/bin/stop.sh
+ENTRYPOINT ["entrypoint.sh"]
 
 EXPOSE 8080 
-CMD ["/bin/bash"]

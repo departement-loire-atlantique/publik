@@ -10,14 +10,14 @@
     },
     "misc": {
         "charset": "utf-8",
-        "homepage-redirect-url": "https://demarches${ENV}.${DOMAIN}"
+        "homepage-redirect-url": "https://${COMBO_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT}"
     },
     "postgresql": {
         "createdb-connection-params": {
             "database": "postgres",
             "host": "db",
             "user": "wcs",
-	    "password": "wcspass"
+            "password": "${DB_WCS_PASS}"
         },
         "database-template-name": "wcs_%s",
         "host": "db",

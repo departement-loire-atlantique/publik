@@ -3,18 +3,18 @@
 # by Julien BAYLE
 #######################################
 
-version: "2"
+version: "2.1"
 
 services:
   proxy:
     container_name: proxy
     build:
-      context: proxy/.
+      context: ./proxy
     image: julienbayle/publik:latest-proxy
     tty: true
     ports:
-     - 80:80
-     - 443:443
+     - "${HTTP_PORT:-80}:80"
+     - "${HTTPS_PORT:-443}:443"
     volumes:
      - ./data/ssl:/etc/nginx/ssl
      - ./data/letsencrypt:/etc/letsencrypt
@@ -29,12 +29,12 @@ services:
      - hobo:hobo
      - pgadmin:pgadmin
      - mailcatcher:webmail
-    environment:
-     - ENV
-     - DOMAIN
-     - EMAIL
-  
-  # Hack : Used to compile base image on "docker-compose build" call
+    env_file:
+      - .env
+      - data/config.env
+      - data/secret.env
+
+# Hack : Used to compile base image on "docker-compose build" call
   # Use a /bin/bash to avoid container from exiting on gru-up
   base:
     container_name: base
@@ -43,7 +43,11 @@ services:
     image: julienbayle/publik:latest-base
     command: /bin/bash
     tty: true
-
+    env_file:
+      - .env
+      - config.env
+      - secret.env  
+      
   combo:
     container_name: combo
     build:
@@ -56,14 +60,14 @@ services:
     links:
       - db:db
       - rabbitmq:rabbitmq
-      - mailcatcher:smtp
+      - mailcatcher:${SMTP_HOST:-smtp}
     depends_on: 
       - db
       - rabbitmq
-    environment:
-     - ENV
-     - DOMAIN
-     - EMAIL
+    env_file:
+      - .env
+      - data/config.env
+      - data/secret.env
 
   fargo:
     container_name: fargo
@@ -77,14 +81,14 @@ services:
     links:
       - db:db
       - rabbitmq:rabbitmq
-      - mailcatcher:smtp
+      - mailcatcher:${SMTP_HOST:-smtp}
     depends_on: 
       - db
       - rabbitmq
-    environment:
-     - ENV
-     - DOMAIN
-     - EMAIL
+    env_file:
+      - .env
+      - data/config.env
+      - data/secret.env
 
   authentic:
     container_name: authentic
@@ -98,14 +102,14 @@ services:
     links:
       - db:db
       - rabbitmq:rabbitmq
-      - mailcatcher:smtp
+      - mailcatcher:${SMTP_HOST:-smtp}
     depends_on: 
       - db
       - rabbitmq
-    environment:
-     - ENV
-     - DOMAIN
-     - EMAIL
+    env_file:
+      - .env
+      - data/config.env
+      - data/secret.env
 
   wcs:
     container_name: wcs
@@ -119,14 +123,14 @@ services:
     links:
       - db:db
       - rabbitmq:rabbitmq
-      - mailcatcher:smtp
+      - mailcatcher:${SMTP_HOST:-smtp}
     depends_on: 
       - db
       - rabbitmq
-    environment:
-     - ENV
-     - DOMAIN
-     - EMAIL
+    env_file:
+      - .env
+      - data/config.env
+      - data/secret.env
 
   passerelle:
     container_name: passerelle
@@ -140,14 +144,14 @@ services:
     links:
       - db:db
       - rabbitmq:rabbitmq
-      - mailcatcher:smtp
+      - mailcatcher:${SMTP_HOST:-smtp}
     depends_on: 
       - db
       - rabbitmq
-    environment:
-     - ENV
-     - DOMAIN
-     - EMAIL
+    env_file:
+      - .env
+      - data/config.env
+      - data/secret.env
 
   hobo:
     container_name: hobo
@@ -161,22 +165,24 @@ services:
     links:
       - db:db
       - rabbitmq:rabbitmq
-      - mailcatcher:smtp
+      - mailcatcher:${SMTP_HOST:-smtp}
     depends_on: 
       - db
       - rabbitmq
-    environment:
-     - ENV
-     - DOMAIN
-     - EMAIL
+    env_file:
+      - .env
+      - data/config.env
+      - data/secret.env
 
   db:
     container_name: db
     build:
-      context: postgresql/.
+      context: ./postgresql
     image: julienbayle/publik:latest-pgsql
-    environment:
-      POSTGRES_PASSWORD: test
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    env_file:
+      - data/secret.env
     volumes:
       - dbdata:/var/lib/postgresql/data
       - ./postgresql/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d
@@ -186,19 +192,26 @@ services:
     image: chorss/docker-pgadmin4
     links:
       - db:db
+    ports:
+      - "${PGADMIN_PORT:-5050}:5050"
 
   rabbitmq:
     container_name: rabbitmq
     image: rabbitmq:3-management
     mem_limit: 256m
     hostname: rabbitmq
-    environment:
-      - RABBITMQ_DEFAULT_USER=hobo
-      - RABBITMQ_DEFAULT_PASS=hobopass
+    ports:
+      - "${RABBITMQ_PORT:-5672}:5672"
+    env_file:
+      - data/secret.env
+      - data/config.env
 
   mailcatcher:
     container_name: mailcatcher
     image: ascendhit/mailcatcher
+    ports:
+      - "${SMTP_PORT:-1025}:1025"
+      - "${MAILCATCHER_HTTP_PORT:-1080}:1080"
      
 volumes:
   dbdata:

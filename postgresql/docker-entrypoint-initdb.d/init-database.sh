@@ -1,28 +1,28 @@
 #!/bin/bash
 set -e
 
-# Create all databases except WCS one which it is created when first started
+# Create all databases except WCS one which is created when first started
 psql -v ON_ERROR_STOP=1 <<-EOSQL
     CREATE USER hobo;
     CREATE DATABASE hobo TEMPLATE=template0 ENCODING 'UTF8' LC_COLLATE='fr_FR.UTF_8' LC_CTYPE='fr_FR.UTF-8';
     GRANT ALL PRIVILEGES ON DATABASE hobo TO hobo;
-    ALTER USER hobo WITH PASSWORD 'hobopass';
+    ALTER USER hobo WITH PASSWORD '${DB_HOBO_PASS}';
     CREATE USER passerelle;
     CREATE DATABASE passerelle TEMPLATE=template0 LC_COLLATE='fr_FR.UTF_8' LC_CTYPE='fr_FR.UTF-8';
     GRANT ALL PRIVILEGES ON DATABASE passerelle TO passerelle;
-    ALTER USER passerelle WITH PASSWORD 'passerellepass';
+    ALTER USER passerelle WITH PASSWORD '${DB_PASSERELLE_PASS}';
     CREATE USER combo;
     CREATE DATABASE combo TEMPLATE=template0 LC_COLLATE='fr_FR.UTF_8' LC_CTYPE='fr_FR.UTF-8';
     GRANT ALL PRIVILEGES ON DATABASE combo TO combo;
-    ALTER USER combo WITH PASSWORD 'combopass';
+    ALTER USER combo WITH PASSWORD '${DB_COMBO_PASS}';
     CREATE USER fargo;
     CREATE DATABASE fargo TEMPLATE=template0 LC_COLLATE='fr_FR.UTF_8' LC_CTYPE='fr_FR.UTF-8';
     GRANT ALL PRIVILEGES ON DATABASE fargo TO fargo;
-    ALTER USER fargo WITH PASSWORD 'fargopass';
+    ALTER USER fargo WITH PASSWORD '${DB_FARGO_PASS}';
     CREATE USER wcs CREATEDB;
-    ALTER USER wcs WITH PASSWORD 'wcspass';
+    ALTER USER wcs WITH PASSWORD '${DB_WCS_PASS}';
     CREATE USER authentic;
     CREATE DATABASE authentic TEMPLATE=template0 LC_COLLATE='fr_FR.UTF_8' LC_CTYPE='fr_FR.UTF-8';
     GRANT ALL PRIVILEGES ON DATABASE authentic TO authentic;
-    ALTER USER authentic WITH PASSWORD 'authenticpass';
+    ALTER USER authentic WITH PASSWORD '${DB_AUTHENTIC_PASS}';
 EOSQL
