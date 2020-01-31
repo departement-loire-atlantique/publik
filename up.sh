@@ -1,9 +1,10 @@
 #!/bin/bash
 
-for file in config.env .env secret.env
+for file in config.env secret.env
 do
-  if [ ! -f $file ]; then
-    cp "$file.template" $file
+  if [ ! -f data/$file ]; then
+    echo "ERROR, please create data/$file using the template $file.template"
+    exit 1
   fi
 done
 
