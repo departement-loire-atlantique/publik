@@ -76,6 +76,17 @@ echo "Add some convenients tools"
 
 apt-get install -y build-essential gettext vim git
 
+echo "Add publik.bash to bash env of publik user..."
+####################################################
+env=`cat /home/publik/.bashrc | grep publik.bash | wc -l`
+if [ $env -gt 0 ]; then
+	echo "Already present"	
+else
+	echo "" >> /home/publik/.bashrc
+	echo "source /home/publik/publik/publik.bash" >> /home/publik/.bashrc
+	echo "OK"	
+fi
+
 echo "Generate HTTPS base certificates"
 #######################################
 
