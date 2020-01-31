@@ -69,7 +69,7 @@ replace_dict = {
     "CMD" : "# CMD",
     "RUN " : "",
     "COPY" : "cp",
-    "ENV\s(?P<name>[A-Z]*)\s*(?P<value>[a-z]*)" : "export \g<name>=\g<value>",
+    "ENV\s(?P<name>[A-Z_]*)\s*(?P<value>[a-z]*)" : "export \g<name>=\g<value>",
     "/root" : "/usr/bin"
     }
 

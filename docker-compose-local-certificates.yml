@@ -10,7 +10,7 @@ services:
   proxy:
     container_name: proxy
     build:
-      context: proxy/.
+      context: ./proxy
     tty: true
     ports:
      - 80:80

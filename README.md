@@ -23,7 +23,8 @@ Exemple :
 
 A la fin de l'installation, l'ensemble des modules de Publik seront accessibles depuis ces domaines.
 
-Des certificats Let's encrypt (Fournisseur de certificats HTTPS gratuits) seront automatiquement générés durant le processus d'installation. C'est pourquoi il est important que le serveur soit accessible depuis internet et que les enregistrement DNS ait été préalablement configurées avant de commencer.
+Des certificats Let's encrypt (Fournisseur de certificats HTTPS gratuits) seront automatiquement générés durant le processus d'installation.
+C'est pourquoi il est important que le serveur soit accessible depuis internet et que les enregistrement DNS ait été préalablement configurées avant de commencer.
 
 Vous pouvez vérifier votre configuration DNS en réalisant un ping sur une adresse.
 
@@ -81,7 +82,6 @@ Pour procéder à la configuration des propriétés de votre instance , créer u
 
 Puis, créer un fichier  `data/secret.env` à partir du modèle `secret.env.template`) afin de configurer les mots de passe d'accès.
 Enfin, si vous le souhaitez, créer un fichier `.env` à partir du modèle `.env.template`) afin de configurer les ports des services.
-
 
 Une fois les propriétés définies, il faut maintenant récupérer les conteneurs docker localement :
 ```
