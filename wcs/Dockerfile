@@ -9,6 +9,7 @@ RUN apt-get update \
        libreoffice \
        wcs-au-quotidien \
        publik-base-theme \
+       python3-dns \
     && rm -rf /var/lib/apt/lists/*
 
 # CONFIGURE MODULES
