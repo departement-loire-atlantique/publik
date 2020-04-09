@@ -38,7 +38,7 @@ def file_replace(replace_dict, source, dest=None, title=None):
 
     for line in fin:
         out = line
-        for pattern,replace in replace_dict.iteritems():
+        for pattern,replace in replace_dict.items():
             out = re.sub(pattern, replace, out)
         fout.write(out)
     try:
