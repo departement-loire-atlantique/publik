@@ -12,6 +12,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # COMBO CONFIG
+RUN mkdir -p /etc/combo/settings.d/
 COPY combo.settings.py /etc/combo/settings.d/loire-atlantique.py
 RUN cp /tmp/secret /etc/combo && chmod 755 /etc/combo/secret
 

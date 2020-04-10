@@ -12,6 +12,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # CONFIGURE MODULES
+RUN mkdir -p /etc/authentic2-multitenant/settings.d/
 COPY authentic.settings.py /etc/authentic2-multitenant/settings.d/loire-atlantique.py
 RUN cp /tmp/secret /etc/authentic2-multitenant && chmod 755 /etc/authentic2-multitenant/secret
 
