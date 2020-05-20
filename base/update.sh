@@ -27,7 +27,6 @@ PUBLIK_PATCHES_GIT="https://github.com/departement-loire-atlantique/publik"
 PUBLIK_PATCHES_DIR="/root/publik-patches"
 PUBLIK_APT_PREFERENCES_GIT="https://raw.githubusercontent.com/departement-loire-atlantique/publik-docker-base/master/"
 PUBLIK_APT_PREFERENCES_FILE="publik-prod-apt-preferences"
-VERSION_ORANGE_SMS="v0.2"
 
 # List of django apps (Publik modules)
 APPS=( "passerelle-orangesms" )
@@ -152,6 +151,15 @@ function error_report {
 	echo "ERROR - Process failed at line $1. Details in $LOG_FILE"
 }
 
+function get_version {
+	git clone --quiet $GIT_URL$1 
+	cd $1
+	result=`git describe`
+	cd ..
+	rm -rf $1
+	echo $result
+}
+
 trap 'error_report $LINENO' ERR
 
 # -----------------------------------------
@@ -271,8 +279,7 @@ if [ "$DO_APPS" == "1" ]; then
 	# Install or update apps
 	for APP in "${APPS[@]}"
 	do
-        	#VERSION=$(git ls-remote --tags $GIT_URL$APP | cut -d/ -f3- | sort -V | head -n1)
-			VERSION=$VERSION_ORANGE_SMS
+			VERSION=`get_version $APP`
         	log "INSTALL OR UPDATE APP : $APP ($VERSION)"
         	pip install "git+$GIT_URL$APP@$VERSION#egg=$APP" --upgrade >> $LOG_FILE
 	done
