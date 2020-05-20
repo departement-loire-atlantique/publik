@@ -6,8 +6,8 @@ set -eu
 # Stop NGINX
 service nginx stop
 
-# Stop COMBO
-service combo stop
+# Stop HOBO
+service hobo stop
 
 # Stop HOBO Agent
 service supervisor stop
