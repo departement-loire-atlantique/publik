@@ -42,6 +42,7 @@ gru-update() {
 	docker-compose exec hobo /root/update.sh $1
 	docker-compose exec passerelle /root/update.sh $1
 	docker-compose exec wcs /root/update.sh $1
+	docker-compose exec chrono /root/update.sh $1
 }
 
 # PUSH ALL PUBLIK IMAGES
@@ -57,6 +58,7 @@ gru-push-all() {
 	docker push julienbayle/publik:$1-pgsql
 	docker push julienbayle/publik:$1-proxy
 	docker push julienbayle/publik:$1-wcs
+	docker push julienbayle/publik:$1-chrono
 }
 
 # TAG ALL PUBLIK IMAGES
@@ -70,6 +72,7 @@ gru-tag-all() {
 	docker tag julienbayle/publik:$1-pgsql julienbayle/publik:$2-pgsql
 	docker tag julienbayle/publik:$1-proxy julienbayle/publik:$2-proxy
 	docker tag julienbayle/publik:$1-wcs julienbayle/publik:$2-wcs
+	docker tag julienbayle/publik:$1-chrono julienbayle/publik:$2-chrono
 }
 
 # GRU STATE : Print GRU components state
@@ -82,28 +85,29 @@ function testHttpCode {
 	fi
 }
 loadenv() {
-	export $(grep -v '^#' .env | xargs)
+	export $(grep -v '^#' data/config.env | xargs)
 }
 gru-state() {
         loadenv
 	# Hobo agent
 	t=`docker exec rabbitmq rabbitmqctl list_connections | grep running | wc -l`
-        if [ $t -eq 12 ]
+        if [ $t -eq 14 ]
         then
                 echo -e "\e[42mOK\tHobo agent OK for all services\e[0m"
         else
-                echo -e "\e[41mERROR\tAll hobo agents are not ready ($t/12)\e[0m"
+                echo -e "\e[41mERROR\tAll hobo agents are not ready ($t/14)\e[0m"
         fi
 
 	
  	# Test service HTTP status code 200
-	testHttpCode https://demarches${ENV}.${DOMAIN} combo 200
-	testHttpCode https://admin-demarches${ENV}.${DOMAIN} combo_agent 200
-	testHttpCode https://passerelle${ENV}.${DOMAIN} passerelle 200
-	testHttpCode https://demarche${ENV}.${DOMAIN} demarches-wcs 200
-	testHttpCode https://compte${ENV}.${DOMAIN} authentic 200
-	testHttpCode https://documents${ENV}.${DOMAIN} fargo 200
-	testHttpCode https://hobo${ENV}.${DOMAIN} hobo 200
+	testHttpCode https://${COMBO_SUBDOMAIN}${ENV}.${DOMAIN} combo 200
+	testHttpCode https://${COMBO_ADMIN_SUBDOMAIN}${ENV}.${DOMAIN} combo_agent 200
+	testHttpCode https://${PASSERELLE_SUBDOMAIN}${ENV}.${DOMAIN} passerelle 200
+	testHttpCode https://${WCS_SUBDOMAIN}${ENV}.${DOMAIN} demarches-wcs 200
+	testHttpCode https://${AUTHENTIC_SUBDOMAIN}${ENV}.${DOMAIN} authentic 200
+	testHttpCode https://${FARGO_SUBDOMAIN}${ENV}.${DOMAIN} fargo 200
+	testHttpCode https://${HOBO_SUBDOMAIN}${ENV}.${DOMAIN} hobo 200
+	testHttpCode https://${CHRONO_SUBDOMAIN}${ENV}.${DOMAIN} chrono 200
 	testHttpCode http://pgadmin${ENV}.${DOMAIN}/browser/ pgadmin 200
 	testHttpCode http://rabbitmq${ENV}.${DOMAIN} rabbitmanager 200
 	testHttpCode http://webmail${ENV}.${DOMAIN} rabbitmanager 200

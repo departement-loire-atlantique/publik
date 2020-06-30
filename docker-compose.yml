@@ -30,7 +30,7 @@ services:
      - pgadmin:pgadmin
      - mailcatcher:webmail
     env_file:
-      - .env
+      - data/.env
       - data/config.env
       - data/secret.env
 
@@ -44,9 +44,9 @@ services:
     command: /bin/bash
     tty: true
     env_file:
-      - .env
-      - config.env
-      - secret.env  
+      - data/.env
+      - data/config.env
+      - data/secret.env  
       
   combo:
     container_name: combo
@@ -65,7 +65,7 @@ services:
       - db
       - rabbitmq
     env_file:
-      - .env
+      - data/.env
       - data/config.env
       - data/secret.env
 
@@ -86,7 +86,7 @@ services:
       - db
       - rabbitmq
     env_file:
-      - .env
+      - data/.env
       - data/config.env
       - data/secret.env
 
@@ -107,7 +107,7 @@ services:
       - db
       - rabbitmq
     env_file:
-      - .env
+      - data/.env
       - data/config.env
       - data/secret.env
 
@@ -128,7 +128,7 @@ services:
       - db
       - rabbitmq
     env_file:
-      - .env
+      - data/.env
       - data/config.env
       - data/secret.env
 
@@ -149,7 +149,7 @@ services:
       - db
       - rabbitmq
     env_file:
-      - .env
+      - data/.env
       - data/config.env
       - data/secret.env
 
@@ -170,7 +170,28 @@ services:
       - db
       - rabbitmq
     env_file:
-      - .env
+      - data/.env
+      - data/config.env
+      - data/secret.env
+
+  chrono:
+    container_name: chrono
+    build:
+      context: ./chrono
+    image: julienbayle/publik:latest-chrono
+    tty: true
+    volumes:
+      - chronodata:/var/lib/chrono/tenants
+      - ./data/hosts:/etc/hosts
+    links:
+      - db:db
+      - rabbitmq:rabbitmq
+      - mailcatcher:${SMTP_HOST:-smtp}
+    depends_on: 
+      - db
+      - rabbitmq
+    env_file:
+      - data/.env
       - data/config.env
       - data/secret.env
 
@@ -221,3 +242,4 @@ volumes:
   combodata:
   fargodata:
   passerelledata:
+  chronodata:

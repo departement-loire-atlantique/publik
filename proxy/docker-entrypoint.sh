@@ -59,6 +59,7 @@ generateconf ${AUTHENTIC_SUBDOMAIN} authentic http
 generateconf ${HOBO_SUBDOMAIN} hobo http
 generateconf ${WCS_SUBDOMAIN} wcs http
 generateconf ${PASSERELLE_SUBDOMAIN} passerelle http
+generateconf ${CHRONO_SUBDOMAIN} chrono http
 
 generatecertificate ${COMBO_SUBDOMAIN}
 generatecertificate ${COMBO_ADMIN_SUBDOMAIN}
@@ -67,6 +68,7 @@ generatecertificate ${AUTHENTIC_SUBDOMAIN}
 generatecertificate ${HOBO_SUBDOMAIN}
 generatecertificate ${WCS_SUBDOMAIN}
 generatecertificate ${PASSERELLE_SUBDOMAIN}
+generatecertificate ${CHRONO_SUBDOMAIN}
 
 generateconf ${COMBO_SUBDOMAIN} combo https
 generateconf ${COMBO_ADMIN_SUBDOMAIN} combo https
@@ -75,6 +77,7 @@ generateconf ${AUTHENTIC_SUBDOMAIN} authentic https
 generateconf ${HOBO_SUBDOMAIN} hobo https
 generateconf ${WCS_SUBDOMAIN} wcs https
 generateconf ${PASSERELLE_SUBDOMAIN} passerelle https
+generateconf ${CHRONO_SUBDOMAIN} chrono https
 
 # Start NGINX (Log on screen)
 nginx -g 'daemon off;'

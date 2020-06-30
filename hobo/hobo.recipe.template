@@ -6,7 +6,8 @@
       "combo_agent":"${COMBO_ADMIN_SUBDOMAIN}${ENV}.${DOMAIN}",
       "passerelle":"${PASSERELLE_SUBDOMAIN}${ENV}.${DOMAIN}",
       "wcs":"${WCS_SUBDOMAIN}${ENV}.${DOMAIN}",
-      "fargo":"${FARGO_SUBDOMAIN}${ENV}.${DOMAIN}"
+      "fargo":"${FARGO_SUBDOMAIN}${ENV}.${DOMAIN}",
+      "chrono":"${CHRONO_SUBDOMAIN}${ENV}.${DOMAIN}"
    },
    "steps":[
       {
@@ -68,6 +69,12 @@
       {
          "set-theme":{
             "theme":"publik"
+         }
+      },
+      {
+         "create-chrono":{
+            "url":"https://${chrono}/",
+            "title":"Passerelle"
          }
       }
    ]

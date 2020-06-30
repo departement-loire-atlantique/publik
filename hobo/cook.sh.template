@@ -45,13 +45,14 @@ function testHttpContains {
 # Before cook, wait for all services to be ready
 if [ ! -f /tmp/success ]
 then
-    retry 300 testHttpCode demarches${ENV}.${DOMAIN} combo 404
-    retry 300 testHttpCode admin-demarches${ENV}.${DOMAIN} combo_agent 404
-    retry 300 testHttpCode passerelle${ENV}.${DOMAIN} passerelle 404
-    retry 300 testHttpCode demarche${ENV}.${DOMAIN} demarches-wcs 404
-    retry 300 testHttpCode compte${ENV}.${DOMAIN} authentic 404
-    retry 300 testHttpCode documents${ENV}.${DOMAIN} fargo 404
-    retry 300 testHttpCode hobo${ENV}.${DOMAIN} hobo 404
+    retry 300 testHttpCode ${COMBO_SUBDOMAIN}${ENV}.${DOMAIN} combo 404
+    retry 300 testHttpCode ${COMBO_ADMIN_SUBDOMAIN}${ENV}.${DOMAIN} combo_agent 404
+    retry 300 testHttpCode ${PASSERELLE_SUBDOMAIN}${ENV}.${DOMAIN} passerelle 404
+    retry 300 testHttpCode ${WCS_SUBDOMAIN}${ENV}.${DOMAIN} demarches-wcs 404
+    retry 300 testHttpCode ${AUTHENTIC_SUBDOMAIN}${ENV}.${DOMAIN} authentic 404
+    retry 300 testHttpCode ${FARGO_SUBDOMAIN}${ENV}.${DOMAIN} fargo 404
+    retry 300 testHttpCode ${HOBO_SUBDOMAIN}${ENV}.${DOMAIN} hobo 404
+    retry 300 testHttpCode ${CHRONO_SUBDOMAIN}${ENV}.${DOMAIN} chrono 404
 else 
     echo "Skipping the 404 check: it seems that the script has already been successfully executed at least once"
 fi
@@ -69,12 +70,13 @@ runuser -l hobo -c 'cd /tmp && hobo-manage cook /tmp/recipe.json -v 2'
 # After cook, test all services
 set -e
 testHttpContains ${COMBO_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} combo $COMBO_OK
-testHttpCode ${COMBO_ADMIN_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} combo_agent 200
+testHttpContains ${COMBO_ADMIN_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} combo_agent 200
 testHttpContains ${PASSERELLE_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} passerelle $AUTHENTIC_OK
 testHttpContains ${WCS_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} wcs $AUTHENTIC_OK
 testHttpContains ${AUTHENTIC_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} authentic $COMBO_OK
 testHttpContains ${FARGO_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} fargo $AUTHENTIC_OK
 testHttpContains ${HOBO_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} hobo $AUTHENTIC_OK
+testHttpContains ${CHRONO_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} chrono $AUTHENTIC_OK
 
 echo "Configuration OK (Hobo cook)"
 touch /tmp/success

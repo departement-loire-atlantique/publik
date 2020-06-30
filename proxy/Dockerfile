@@ -4,7 +4,7 @@ MAINTAINER Julien BAYLE <julien.bayle@loire-atlantique.fr>
 
 # HTTPS AUTO Let's encrypt certificates
 RUN apt-get update \
-	&& apt-get install -y certbot \
+	&& apt-get install -y certbot vim \
 	&& rm -rf /var/lib/apt/lists/*
 
 ADD *.template /etc/nginx/conf.d/ 

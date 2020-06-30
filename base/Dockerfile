@@ -16,6 +16,7 @@ RUN echo "deb http://httpredir.debian.org/debian stretch main" > /etc/apt/source
 
 # TIMEZONE
 RUN echo "Europe/Paris" > /etc/timezone \
+    && apt-get update \
     && apt-get install -y locales \
     && dpkg-reconfigure -f noninteractive tzdata \
     && sed -i -e 's/# fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen \
@@ -35,7 +36,7 @@ RUN apt-get update \
 RUN mkdir -p /etc/hobo-agent/settings.d 
 COPY hobo-agent.settings.template /etc/hobo-agent/settings.d/broker.template
 RUN apt-get update \
-    && apt-get -t stretch-backports install -y python-django \
+    && apt-get -t stretch-backports install -y python-django python3-hobo\
     && apt-get install -y --no-install-recommends supervisor hobo-agent
 
 # COPY GLOBAL PROPERTY FILES (COMMON TO ALL PUBLIK DOCKER COMPONENTS) 

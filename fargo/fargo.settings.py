@@ -7,8 +7,8 @@ from pyenv import *
 
 # Databases
 DATABASES['default']['ENGINE'] = 'tenant_schemas.postgresql_backend'
-DATABASES['default']['NAME'] = 'fargo'
-DATABASES['default']['USER'] = 'fargo'
+DATABASES['default']['NAME'] = DB_FARGO_NAME
+DATABASES['default']['USER'] = DB_FARGO_USER
 DATABASES['default']['PASSWORD'] = DB_FARGO_PASS
 DATABASES['default']['HOST'] = 'db'
 DATABASES['default']['PORT'] = DB_PORT
