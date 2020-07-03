@@ -32,7 +32,7 @@ gru-connect() {
 }
 
 # GRU COOK : Start cook mecanism to initiate instance
-alias gru-init='docker exec hobo /tmp/cook.sh'
+alias gru-init='docker exec -t hobo /tmp/cook.sh'
 
 # GRU UPDATE : Update packages, patches and themes
 gru-update() {
