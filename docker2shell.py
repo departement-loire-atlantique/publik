@@ -56,10 +56,15 @@ apps = ["base", "hobo", "authentic", "combo", "fargo", "passerelle", "wcs"]
 
 project_path = os.getcwd()
 bare_path = os.path.join(project_path, "shellinstall")
-if not os.path.exists(bare_path):
-    os.makedirs(bare_path)
-else:
-    [os.remove(f) for f in glob.glob(bare_path+"/*")]
+if os.path.exists(bare_path):
+    shutil.rmtree(bare_path)
+os.makedirs(bare_path)
+
+# copying config datas
+shutil.copytree(os.path.join(project_path, "data"), os.path.join(bare_path, "configure_data"))
+shutil.copy(os.path.join(project_path, "sys.env.template"), os.path.join(bare_path, "configure_data"))
+shutil.copy(os.path.join(project_path, "config.env.template"), os.path.join(bare_path, "configure_data"))
+shutil.copy(os.path.join(project_path, "secret.env.template"), os.path.join(bare_path, "configure_data"))
 
 replace_dict = {
     "^FROM.*" : "set -eu",
@@ -81,10 +86,15 @@ do_not_copy = ["Dockerfile", "LICENSE", "README.md", \
 installgru = "set -eu\n"
 startgru = ""
 stopgru = ""
+
 configuregru = "set -eu\n"
-configuregru += ": \"${ENV:?Environment variable must be set}\"\n"
-configuregru += ": \"${EMAIL:?Environment variable must be set}\"\n"
-configuregru += ": \"${DOMAIN:?Environment variable must be set}\"\n"
+# configure command for charging envvar
+configuregru += 'export $(grep -v "^#" ./configure_data/sys.env | xargs)\n'
+configuregru += 'export $(grep -v "^#" ./configure_data/config.env | xargs)\n'
+configuregru += 'export $(grep -v "^#" ./configure_data/secret.env | xargs)\n'
+# configure command to test envvar
+configuregru += "./check-env.sh\n"
+configuregru += "\necho config ... done"
 
 envextractor = re.compile("(envsubst.*)")
 
@@ -102,26 +112,20 @@ for app in apps:
             shutil.copyfile(nginx_path, os.path.join(bare_path, nginx_new_name))
         
         # Convert docker entrypoint into startup script
-        entrypoint_path = os.path.join(app_path, "start.sh")
-        if os.path.isfile(entrypoint_path):
+        start_path = os.path.join(app_path, "start.sh")
+        if os.path.isfile(start_path):
             startappscript = "start-"+app+".sh"
             replace_dict.update({"start.sh" : startappscript})
-            # delete the 'exec' command in the script
-            with open(entrypoint_path) as f:
-                newContent = f.read().replace('exec "$@"', '')
-                newContent = envextractor.sub('# moved to configure.sh \\1', newContent)
-                configuregru += "\n".join([ a + "\n" for a in envextractor.findall(newContent)])
-            with open(os.path.join(bare_path, startappscript), "w+") as f:
-                f.write(newContent)
+            shutil.copyfile(start_path, os.path.join(bare_path, startappscript))
             startgru += "echo " + startappscript + " running ... \n"
             startgru += "./" + startappscript + "\n"
         
         # Convert docker stop script
-        entrypoint_path = os.path.join(app_path, "stop.sh")
-        if os.path.isfile(entrypoint_path):
+        stop_path = os.path.join(app_path, "stop.sh")
+        if os.path.isfile(stop_path):
             stopappscript = "stop-"+app+".sh"
             replace_dict.update({"stop.sh" : stopappscript})
-            shutil.copyfile(entrypoint_path, os.path.join(bare_path, stopappscript))
+            shutil.copyfile(stop_path, os.path.join(bare_path, stopappscript))
             stopgru += "echo " + stopappscript + " running ... \n"
             stopgru += "./" + stopappscript + "\n" 
 
@@ -154,8 +158,6 @@ with open(os.path.join(bare_path, "start-all.sh"), "w") as f:
 
 with open(os.path.join(bare_path, "stop-all.sh"), "w") as f:
     f.write(stopgru)
-
-configuregru += "\necho config ... done"
 
 with open(os.path.join(bare_path, "configure.sh"), "w") as f:
     f.write(configuregru)

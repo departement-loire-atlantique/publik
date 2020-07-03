@@ -30,7 +30,7 @@ services:
      - pgadmin:pgadmin
      - mailcatcher:webmail
     env_file:
-      - data/.env
+      - data/sys.env
       - data/config.env
       - data/secret.env
 
@@ -44,7 +44,7 @@ services:
     command: /bin/bash
     tty: true
     env_file:
-      - data/.env
+      - data/sys.env
       - data/config.env
       - data/secret.env  
       
@@ -65,7 +65,7 @@ services:
       - db
       - rabbitmq
     env_file:
-      - data/.env
+      - data/sys.env
       - data/config.env
       - data/secret.env
 
@@ -86,7 +86,7 @@ services:
       - db
       - rabbitmq
     env_file:
-      - data/.env
+      - data/sys.env
       - data/config.env
       - data/secret.env
 
@@ -107,7 +107,7 @@ services:
       - db
       - rabbitmq
     env_file:
-      - data/.env
+      - data/sys.env
       - data/config.env
       - data/secret.env
 
@@ -128,7 +128,7 @@ services:
       - db
       - rabbitmq
     env_file:
-      - data/.env
+      - data/sys.env
       - data/config.env
       - data/secret.env
 
@@ -149,7 +149,7 @@ services:
       - db
       - rabbitmq
     env_file:
-      - data/.env
+      - data/sys.env
       - data/config.env
       - data/secret.env
 
@@ -170,7 +170,7 @@ services:
       - db
       - rabbitmq
     env_file:
-      - data/.env
+      - data/sys.env
       - data/config.env
       - data/secret.env
 
@@ -191,7 +191,7 @@ services:
       - db
       - rabbitmq
     env_file:
-      - data/.env
+      - data/sys.env
       - data/config.env
       - data/secret.env
 

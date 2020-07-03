@@ -50,7 +50,7 @@
       {
          "create-wcs":{
             "url":"https://${wcs}/",
-            "title":"Démarches",
+            "title":"Demarches",
             "template_name": "publik.zip"
 	}
       },
