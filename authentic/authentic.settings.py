@@ -7,8 +7,8 @@ from pyenv import *
 
 # Databases
 DATABASES['default']['ENGINE'] = 'tenant_schemas.postgresql_backend'
-DATABASES['default']['NAME'] = 'authentic'
-DATABASES['default']['USER'] = 'authentic'
+DATABASES['default']['NAME'] = DB_AUTHENTIC_NAME
+DATABASES['default']['USER'] = DB_AUTHENTIC_USER
 DATABASES['default']['PASSWORD'] = DB_AUTHENTIC_PASS
 DATABASES['default']['HOST'] = 'db'
 DATABASES['default']['PORT'] = DB_PORT

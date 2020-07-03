@@ -1,0 +1,43 @@
+client_max_body_size 50M;
+
+server {
+        listen 80;
+        listen [::]:80;
+
+        server_name pgadmin${ENV}.${DOMAIN};
+
+        # On interdit les dotfiles
+        location ~ /\. { deny all; }
+
+        location / {
+            proxy_pass         http://pgadmin:${PGADMIN_PORT};
+        }
+}
+
+server {
+        listen 80;
+        listen [::]:80;
+
+        server_name rabbitmq${ENV}.${DOMAIN};
+
+        # On interdit les dotfiles
+        location ~ /\. { deny all; }
+
+        location / {
+            proxy_pass         http://rabbitmq:${RABBITMQ_MANAGEMENT_PORT};
+        }
+} 
+
+server {
+        listen 80;
+        listen [::]:80;
+
+        server_name webmail${ENV}.${DOMAIN};
+
+        # On interdit les dotfiles
+        location ~ /\. { deny all; }
+
+        location / {
+            proxy_pass         http://webmail:${MAILCATCHER_HTTP_PORT};
+        }
+}

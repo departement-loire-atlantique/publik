@@ -1,0 +1,242 @@
+#######################################
+# Docker stack for Publik
+# by Julien BAYLE
+#######################################
+
+version: "2.1"
+
+services:
+  proxy:
+    container_name: proxy-http
+    build:
+      context: ./proxy-http
+    image: julienbayle/publik:latest-proxy-http
+    tty: true
+    ports:
+     - "${HTTP_PORT:-8080}:80"
+    volumes:
+     - ./data/hosts:/etc/hosts
+    links:
+     - fargo:fargo
+     - combo:combo
+     - rabbitmq:rabbitmq
+     - authentic:authentic
+     - wcs:wcs
+     - passerelle:passerelle
+     - hobo:hobo
+     - pgadmin:pgadmin
+     - mailcatcher:webmail
+    env_file:
+      - data/sys.env
+      - data/config.env
+      - data/secret.env
+
+# Hack : Used to compile base image on "docker-compose build" call
+  # Use a /bin/bash to avoid container from exiting on gru-up
+  base:
+    container_name: base
+    build:
+      context: ./base
+    image: julienbayle/publik:latest-base
+    command: /bin/bash
+    tty: true
+    env_file:
+      - data/sys.env
+      - data/config.env
+      - data/secret.env  
+      
+  combo:
+    container_name: combo
+    build:
+      context: ./combo
+    image: julienbayle/publik:latest-combo
+    tty: true
+    volumes:
+      - combodata:/var/lib/combo/tenants
+      - ./data/hosts:/etc/hosts
+    links:
+      - db:db
+      - rabbitmq:rabbitmq
+      - mailcatcher:${SMTP_HOST:-smtp}
+    depends_on: 
+      - db
+      - rabbitmq
+    env_file:
+      - data/sys.env
+      - data/config.env
+      - data/secret.env
+
+  fargo:
+    container_name: fargo
+    build:
+      context: ./fargo
+    image: julienbayle/publik:latest-fargo
+    tty: true
+    volumes:
+      - fargodata:/var/lib/fargo/tenants
+      - ./data/hosts:/etc/hosts
+    links:
+      - db:db
+      - rabbitmq:rabbitmq
+      - mailcatcher:${SMTP_HOST:-smtp}
+    depends_on: 
+      - db
+      - rabbitmq
+    env_file:
+      - data/sys.env
+      - data/config.env
+      - data/secret.env
+
+  authentic:
+    container_name: authentic
+    build:
+      context: ./authentic
+    image: julienbayle/publik:latest-authentic
+    tty: true
+    volumes:
+      - ./data/hosts:/etc/hosts
+      - authentic2data:/var/lib/authentic2-multitenant/tenants
+    links:
+      - db:db
+      - rabbitmq:rabbitmq
+      - mailcatcher:${SMTP_HOST:-smtp}
+    depends_on: 
+      - db
+      - rabbitmq
+    env_file:
+      - data/sys.env
+      - data/config.env
+      - data/secret.env
+
+  wcs:
+    container_name: wcs
+    build:
+      context: ./wcs
+    image: julienbayle/publik:latest-wcs
+    tty: true
+    volumes:
+      - wcsdata:/var/lib/wcs
+      - ./data/hosts:/etc/hosts
+    links:
+      - db:db
+      - rabbitmq:rabbitmq
+      - mailcatcher:${SMTP_HOST:-smtp}
+    depends_on: 
+      - db
+      - rabbitmq
+    env_file:
+      - data/sys.env
+      - data/config.env
+      - data/secret.env
+
+  passerelle:
+    container_name: passerelle
+    build:
+      context: ./passerelle
+    image: julienbayle/publik:latest-passerelle
+    tty: true
+    volumes:
+      - passerelledata:/var/lib/passerelle/tenants
+      - ./data/hosts:/etc/hosts
+    links:
+      - db:db
+      - rabbitmq:rabbitmq
+      - mailcatcher:${SMTP_HOST:-smtp}
+    depends_on: 
+      - db
+      - rabbitmq
+    env_file:
+      - data/sys.env
+      - data/config.env
+      - data/secret.env
+
+  hobo:
+    container_name: hobo
+    build:
+      context: ./hobo
+    image: julienbayle/publik:latest-hobo
+    tty: true
+    volumes:
+      - hobodata:/var/lib/hobo/tenants
+      - ./data/hosts:/etc/hosts
+    links:
+      - db:db
+      - rabbitmq:rabbitmq
+      - mailcatcher:${SMTP_HOST:-smtp}
+    depends_on: 
+      - db
+      - rabbitmq
+    env_file:
+      - data/sys.env
+      - data/config.env
+      - data/secret.env
+
+  chrono:
+    container_name: chrono
+    build:
+      context: ./chrono
+    image: julienbayle/publik:latest-chrono
+    tty: true
+    volumes:
+      - chronodata:/var/lib/chrono/tenants
+      - ./data/hosts:/etc/hosts
+    links:
+      - db:db
+      - rabbitmq:rabbitmq
+      - mailcatcher:${SMTP_HOST:-smtp}
+    depends_on: 
+      - db
+      - rabbitmq
+    env_file:
+      - data/sys.env
+      - data/config.env
+      - data/secret.env
+
+  db:
+    container_name: db
+    build:
+      context: ./postgresql
+    image: julienbayle/publik:latest-pgsql
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    env_file:
+      - data/secret.env
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+      - ./postgresql/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d
+
+  pgadmin:
+    container_name: pgadmin
+    image: chorss/docker-pgadmin4
+    links:
+      - db:db
+    ports:
+      - "${PGADMIN_PORT:-5050}:5050"
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    mem_limit: 256m
+    hostname: rabbitmq
+    ports:
+      - "${RABBITMQ_PORT:-5672}:5672"
+    env_file:
+      - data/secret.env
+      - data/config.env
+
+  mailcatcher:
+    container_name: mailcatcher
+    image: ascendhit/mailcatcher
+    ports:
+      - "${SMTP_PORT:-1025}:1025"
+      - "${MAILCATCHER_HTTP_PORT:-1080}:1080"
+     
+volumes:
+  dbdata:
+  hobodata:
+  wcsdata:
+  authentic2data:
+  combodata:
+  fargodata:
+  passerelledata:
+  chronodata:
