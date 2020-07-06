@@ -3,7 +3,6 @@ FROM julienbayle/publik:latest-base
 MAINTAINER Julien BAYLE <julien.bayle@loire-atlantique.fr>
 
 # INSTALL CHRONO
-# python3-django and python3-cryptography backports needed for chrono
 RUN apt-get update \
     && apt-get install -y --no-install-recommends postgresql- \
     && apt-get install -y --no-install-recommends chrono \
