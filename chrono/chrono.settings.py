@@ -7,8 +7,8 @@ from pyenv import *
 
 # Databases
 DATABASES['default']['ENGINE'] = 'tenant_schemas.postgresql_backend'
-DATABASES['default']['NAME'] = 'DB_CHRONO_NAME'
-DATABASES['default']['USER'] = 'DB_CHRONO_USER'
+DATABASES['default']['NAME'] = DB_CHRONO_NAME
+DATABASES['default']['USER'] = DB_CHRONO_USER
 DATABASES['default']['PASSWORD'] = DB_CHRONO_PASS
 DATABASES['default']['HOST'] = 'db'
 DATABASES['default']['PORT'] = DB_PORT

@@ -18,7 +18,7 @@ Caractéristiques minimales de la machine :
 Configurer un sous domaine de type wildcard vers le serveur nouvellement créé.
 Exemple : 
  * Type : A
- * Nom : *ENV.DOMAIN 
+ * Nom : *${ENV}.${DOMAIN} 
  * Serveur : IP_MACHINE
 
 A la fin de l'installation, l'ensemble des modules de Publik seront accessibles depuis ces domaines.
@@ -60,17 +60,17 @@ sudo chown publik:publik /home/publik/publik -R
 > Note aux utilisateurs derrière un PROXY : Penser à installer les certificats dans le magasin de l'OS 
 (/usr/local/share/ca-certificates) et déclarer le proxy dans la configuration docker
 (https://docs.docker.com/v1.13/engine/admin/systemd/#http-proxy).
-Il est également possible d'utiliser "--insecure" pour sync-os afin de faire des appels curls sans 
-vérification des certificats soit la commande complète "sudo ./sync-os.sh --insecure"
+Il est également possible d'utiliser "--insecure" pour install-on-debian afin de faire des appels curls sans 
+vérification des certificats soit la commande complète "sudo ./install-on-debian.sh --insecure"
 
 4 - Installation de Publik sur un serveur accessible depuis Internet (IP publique)
 ----------------------------------------------------------------------------------
 
-> Attention : Afin que les modifications introduites par le script sync-os.sh soient bien prises en compte pour 
+> Attention : Afin que les modifications introduites par le script install-on-debian.sh soient bien prises en compte pour 
 l'utilisateur publik, il est indispensable de bien se déconnecter et se reconnecter avant de continuer (mise à jour
  du bashrc et ajout d'un groupe à l'utilisateur publik pour avoir accès à docker).
 
-Se connecter au serveur avec l'utilisateur "publik" et ouvrir le dossier publik créer par le script d'installation (sync-os.sh)
+Se connecter au serveur avec l'utilisateur "publik" et ouvrir le dossier publik créer par le script d'installation (install-on-debian.sh)
 ```
 ssh publik@IP_MACHINE
 cd publik
@@ -80,8 +80,7 @@ Pour procéder à la configuration des propriétés de votre instance , créer u
 
 > Attention : une chaîne entourée d'apostrophes ou de guillemets les conservera. Par exemple, `"a@b.c"` et `'a@b.c'` sont des adresses invalides ; il faut écrire `a@b.c`.
 
-Puis, créer un fichier  `data/secret.env` à partir du modèle `secret.env.template`) afin de configurer les mots de passe d'accès.
-Enfin, si vous le souhaitez, créer un fichier `.env` à partir du modèle `.env.template`) afin de configurer les ports des services.
+Puis, créer un fichier  `data/secret.env` à partir du modèle `secret.env.template`) afin de configurer les mots de passe d'accès et enfin créer un fichier `sys.env` à partir du modèle `sys.env.template`) afin de configurer les ports des services.
 
 Une fois les propriétés définies, il faut maintenant récupérer les conteneurs docker localement :
 ```
@@ -133,18 +132,19 @@ Les démarrages ultérieurs sont plus rapides, de l'ordre de 1 à 2 minutes. Il 
 
 Une fois l'installation terminée, les services de Publik sont disponibles aux URLs suivantes (Mot de passe administration par défaut 'pleasechange') :
 
-| Service                       | URL                               |
-| ----------------------------- | --------------------------------- |
-| Combo (usagers)               | https://demarchesENV.DOMAIN       |
-| Combo (agents).               | https://admin-demarchesENV.DOMAIN |
-| Fargo (documents)             | https://documentsENV.DOMAIN       |      
-| Authentic (identité et RBAC)  | https://compteENV.DOMAIN          |
-| WCS (formulaires et WF)       | https://demarcheENV.DOMAIN        |
-| Passerelle (middleware)       | https://passerelleENV.DOMAIN      |
-| Hobo (deploiement).           | https://hoboENV.DOMAIN            |
-| PgAdmin 4 (db web interface)  | http://pgadminENV.DOMAIN          |
-| RabbitMQ (web interface)      | http://rabbitmqENV.DOMAIN         |
-| Mail catcher (smtp trapper)   | http://webmailENV.DOMAIN          |
+| Service                       | URL                                              |
+| ----------------------------- | ------------------------------------------------ |
+| Combo (usagers)               | https://${COMBO_SUBDOMAIN}${ENV}.${DOMAIN}       |
+| Combo (agents).               | https://${COMBO_ADMIN_SUBDOMAIN}${ENV}.${DOMAIN} |
+| Fargo (documents)             | https://${FARGO_SUBDOMAIN}${ENV}.${DOMAIN}       |      
+| Authentic (identité et RBAC)  | https://${AUTHENTIC_SUBDOMAIN}${ENV}.${DOMAIN}   |
+| WCS (formulaires et WF)       | https://${WCS_SUBDOMAIN}${ENV}.${DOMAIN}         |
+| Passerelle (middleware)       | https://${PASSERELLE_SUBDOMAIN}${ENV}.${DOMAIN}  |
+| Hobo (deploiement).           | https://${HOBO_SUBDOMAIN}${ENV}.${DOMAIN}        |
+| Chrono (deploiement).         | https://${CHRONO_SUBDOMAIN}${ENV}.${DOMAIN}      |
+| PgAdmin 4 (db web interface)  | http://pgadmin${}${ENV}.${DOMAIN}                |
+| RabbitMQ (web interface)      | http://rabbitmq${}${ENV}.${DOMAIN}               |
+| Mail catcher (smtp trapper)   | http://webmail${}${ENV}.${DOMAIN}                |
 
 Les certificats étant longs à générer, il sont stockés dans le dossier data qui n'est pas supprimé lors d'un appel à *gru-reset*. Au delà, le service let's encrypt limite ne nombre de génération de certificat par semaine (https://letsencrypt.org/docs/rate-limits/) ce qui pousse également à les conserver.
 
@@ -190,11 +190,10 @@ Se connecter en root sur le serveur, puis :
 sudo chown publik:publik /home/publik/publik/data -R
 ```
 
-Copier depuis ce serveur le dossier publik/data et le fichier .env en local au même emplacement sur votre machine.
+Copier depuis ce serveur le dossier publik/data en local au même emplacement sur votre machine.
 
 ```
 rsync -rLv publik@IP_MACHINE:/home/publik/publik/data .
-rsync -v publik@IP_MACHINE:/home/publik/publik/.env .
 ```
 
 > Il est important d'utiliser `rsync` parce que `data/letsencrypt/live` contient des liens symboliques, qui ne seraient pas copiés par `scp` par exemple.
@@ -211,27 +210,27 @@ Exemple :
 docker-compose -f docker-compose-local-certificates.yml up
 ```
  * Une fois les certificats générés, arrêter le conteneur avec CRTL-C
- * Copier depuis ce serveur le dossier publik/data et le fichier .env en local au même emplacement sur votre machine.
+ * Copier depuis ce serveur le dossier publik/data en local au même emplacement sur votre machine.
 
 ### Finaliser l'installation en local
 
 Nous faisons dans ce chapitre l'hypothèse que vous avez récupéré les certificats (dossier data) 
-depuis une instance configurée sur *ENV.DOMAIN et que l'IP de votre poste est IP_MACHINE.
+depuis une instance configurée sur *${ENV}.${DOMAIN} et que l'IP de votre poste est IP_MACHINE.
 
 > Attention, si vous utiliser une VM, il faut alors mettre l'IP de la VM et non celle du poste
 
 Ajouter les entrées suivantes au fichier /etc/hosts de votre poste local (C:\windows\System32\drivers\etc\hosts sur Windows):
 ```
-IP_MACHINE       admin-demarchesENV.DOMAIN
-IP_MACHINE       demarchesENV.DOMAIN
-IP_MACHINE       compteENV.DOMAIN
-IP_MACHINE       hoboENV.DOMAIN
-IP_MACHINE       passerelleENV.DOMAIN
-IP_MACHINE       demarcheENV.DOMAIN
-IP_MACHINE       documentsENV.DOMAIN
-IP_MACHINE       pgadminENV.DOMAIN
-IP_MACHINE       rabbitmqENV.DOMAIN
-IP_MACHINE       webmailENV.DOMAIN
+IP_MACHINE       ${COMBO_ADMIN_SUBDOMAIN}${ENV}.${DOMAIN}
+IP_MACHINE       ${COMBO_SUBDOMAIN}${ENV}.${DOMAIN}
+IP_MACHINE       ${AUTHENTIC_SUBDOMAIN}${ENV}.${DOMAIN}
+IP_MACHINE       ${HOBO_SUBDOMAIN}${ENV}.${DOMAIN}
+IP_MACHINE       ${PASSERELLE_SUBDOMAIN}${ENV}.${DOMAIN}
+IP_MACHINE       ${WCS_SUBDOMAIN}${ENV}.${DOMAIN}
+IP_MACHINE       ${FARGO_SUBDOMAIN}${ENV}.${DOMAIN}
+IP_MACHINE       pgadmin${ENV}.${DOMAIN}
+IP_MACHINE       rabbitmq${ENV}.${DOMAIN}
+IP_MACHINE       webmail${ENV}.${DOMAIN}
 ```
 
 Puis copier le fichier */etc/hosts* dans le dossier *data*.

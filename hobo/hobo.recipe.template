@@ -50,7 +50,7 @@
       {
          "create-wcs":{
             "url":"https://${wcs}/",
-            "title":"Demarches",
+            "title":"Demarche",
             "template_name": "publik.zip"
 	}
       },
@@ -58,6 +58,12 @@
          "create-fargo":{
             "url":"https://${fargo}/",
             "title":"Porte-documents"
+         }
+      },
+      {
+         "create-chrono":{
+            "url":"https://${chrono}/",
+            "title":"Agendas"
          }
       },
       {
@@ -69,12 +75,6 @@
       {
          "set-theme":{
             "theme":"publik"
-         }
-      },
-      {
-         "create-chrono":{
-            "url":"https://${chrono}/",
-            "title":"Passerelle"
          }
       }
    ]

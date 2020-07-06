@@ -13,7 +13,7 @@ services:
     image: julienbayle/publik:latest-proxy-http
     tty: true
     ports:
-     - "${HTTP_PORT:-8080}:80"
+     - "8080:80"
     volumes:
      - ./data/hosts:/etc/hosts
     links:
@@ -57,7 +57,7 @@ services:
     links:
       - db:db
       - rabbitmq:rabbitmq
-      - mailcatcher:${SMTP_HOST:-smtp}
+      - mailcatcher:smtp
     depends_on: 
       - db
       - rabbitmq
@@ -78,7 +78,7 @@ services:
     links:
       - db:db
       - rabbitmq:rabbitmq
-      - mailcatcher:${SMTP_HOST:-smtp}
+      - mailcatcher:smt
     depends_on: 
       - db
       - rabbitmq
@@ -99,7 +99,7 @@ services:
     links:
       - db:db
       - rabbitmq:rabbitmq
-      - mailcatcher:${SMTP_HOST:-smtp}
+      - mailcatcher:smt
     depends_on: 
       - db
       - rabbitmq
@@ -120,7 +120,7 @@ services:
     links:
       - db:db
       - rabbitmq:rabbitmq
-      - mailcatcher:${SMTP_HOST:-smtp}
+      - mailcatcher:smt
     depends_on: 
       - db
       - rabbitmq
@@ -141,7 +141,7 @@ services:
     links:
       - db:db
       - rabbitmq:rabbitmq
-      - mailcatcher:${SMTP_HOST:-smtp}
+      - mailcatcher:smt
     depends_on: 
       - db
       - rabbitmq
@@ -162,7 +162,7 @@ services:
     links:
       - db:db
       - rabbitmq:rabbitmq
-      - mailcatcher:${SMTP_HOST:-smtp}
+      - mailcatcher:smt
     depends_on: 
       - db
       - rabbitmq
@@ -183,7 +183,7 @@ services:
     links:
       - db:db
       - rabbitmq:rabbitmq
-      - mailcatcher:${SMTP_HOST:-smtp}
+      - mailcatcher:smt
     depends_on: 
       - db
       - rabbitmq
@@ -198,7 +198,7 @@ services:
       context: ./postgresql
     image: julienbayle/publik:latest-pgsql
     ports:
-      - "${DB_PORT:-5432}:5432"
+      - "5432:5432"
     env_file:
       - data/secret.env
     volumes:
@@ -211,7 +211,9 @@ services:
     links:
       - db:db
     ports:
-      - "${PGADMIN_PORT:-5050}:5050"
+      - "5050:5050"
+    env_file:
+      - data/sys.env
 
   rabbitmq:
     container_name: rabbitmq
@@ -219,7 +221,7 @@ services:
     mem_limit: 256m
     hostname: rabbitmq
     ports:
-      - "${RABBITMQ_PORT:-5672}:5672"
+      - "5672:5672"
     env_file:
       - data/secret.env
       - data/config.env
@@ -228,8 +230,8 @@ services:
     container_name: mailcatcher
     image: ascendhit/mailcatcher
     ports:
-      - "${SMTP_PORT:-1025}:1025"
-      - "${MAILCATCHER_HTTP_PORT:-1080}:1080"
+      - "1025:1025"
+      - "1080:1080"
      
 volumes:
   dbdata:
