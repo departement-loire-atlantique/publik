@@ -29,7 +29,8 @@ PUBLIK_APT_PREFERENCES_GIT="https://raw.githubusercontent.com/departement-loire-
 PUBLIK_APT_PREFERENCES_FILE="publik-prod-apt-preferences"
 
 # List of django apps (Publik modules)
-APPS=( "passerelle-orangesms" )
+# APPS=( "nom-module" )
+APPS=()
 GIT_URL="https://github.com/departement-loire-atlantique/"
 
 LOG_DIR=/var/log/publik_updates
