@@ -16,11 +16,11 @@
         "createdb-connection-params": {
             "database": "postgres",
             "host": "db",
-            "user": "wcs",
+            "user": "${DB_WCS_USER}",
             "password": "${DB_WCS_PASS}"
         },
         "database-template-name": "wcs_%s",
         "host": "db",
-        "user": "wcs"
+        "user": "${DB_WCS_USER}"
     }
 }

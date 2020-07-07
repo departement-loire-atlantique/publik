@@ -192,6 +192,27 @@ services:
       - data/config.env
       - data/secret.env
 
+  bijoe:
+    container_name: bijoe
+    build:
+      context: ./bijoe
+    image: julienbayle/publik:latest-bijoe
+    tty: true
+    volumes:
+      - bijoedata:/var/lib/bijoe/tenants
+      - ./data/hosts:/etc/hosts
+    links:
+      - db:db
+      - rabbitmq:rabbitmq
+      - mailcatcher:smtp
+    depends_on: 
+      - db
+      - rabbitmq
+    env_file:
+      - data/sys.env
+      - data/config.env
+      - data/secret.env
+    
   db:
     container_name: db
     build:
@@ -221,6 +242,7 @@ services:
     mem_limit: 256m
     hostname: rabbitmq
     ports:
+      - "15672:15672"
       - "5672:5672"
     env_file:
       - data/secret.env
@@ -242,3 +264,4 @@ volumes:
   fargodata:
   passerelledata:
   chronodata:
+  bijoedata:

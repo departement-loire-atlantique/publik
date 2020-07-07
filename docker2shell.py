@@ -20,7 +20,7 @@ import subprocess
 #   - Update NGINX ports in *.template
 #   - Update SMTP config (config.py and wcs.settings.py)
 #   - Turn debug off if needed in config files (*.py)
-#   - Execute install.sh
+#   - Execute install-xxx.sh
 #   - Start app with start-xxx.sh
 
 def file_replace(replace_dict, source, dest=None, title=None):
@@ -52,7 +52,7 @@ def file_replace(replace_dict, source, dest=None, title=None):
     if not dest:
         shutil.move(name, source) 
     
-apps = ["base", "hobo", "authentic", "combo", "fargo", "passerelle", "wcs"]
+apps = ["base", "hobo", "authentic", "combo", "fargo", "passerelle", "wcs", "chrono", "bijoe"]
 
 project_path = os.getcwd()
 bare_path = os.path.join(project_path, "shellinstall")
@@ -150,7 +150,7 @@ installgru += "\ncp start-all.sh stop-all.sh /usr/local/bin/"
 installgru += "\nchmod +x /usr/local/bin/start-all.sh /usr/local/bin/stop-all.sh\n"
 installgru += "\necho 'Installation completed'"
 
-with open(os.path.join(bare_path, "install.sh"), "w") as f:
+with open(os.path.join(bare_path, "install-all.sh"), "w") as f:
     f.write(installgru)
 
 with open(os.path.join(bare_path, "start-all.sh"), "w") as f:

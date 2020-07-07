@@ -26,6 +26,7 @@ generateconf ${HOBO_SUBDOMAIN} hobo http
 generateconf ${WCS_SUBDOMAIN} wcs http
 generateconf ${PASSERELLE_SUBDOMAIN} passerelle http
 generateconf ${CHRONO_SUBDOMAIN} chrono http
+generateconf ${BIJOE_SUBDOMAIN} bijoe http
 
 # Start NGINX (Log on screen)
 nginx -g 'daemon off;'

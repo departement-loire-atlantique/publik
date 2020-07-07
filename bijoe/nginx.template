@@ -1,0 +1,29 @@
+server {
+    listen 8080;
+    server_name ${BIJOE_SUBDOMAIN}${ENV}.${DOMAIN};
+    access_log /var/log/nginx/access.log combined;
+    error_log /var/log/nginx/error.log;
+
+    location ~ ^/static/(.+)$ {
+        root /;
+        try_files /var/lib/bijoe/tenants/$host/static/$1
+                  /var/lib/bijoe/tenants/$host/theme/static/$1
+                  /var/lib/bijoe/collectstatic/$1
+                  =404;
+        add_header Access-Control-Allow-Origin *;
+    }
+
+    location ~ ^/media/(.+)$ {
+        alias /var/lib/bijoe/tenants/$host/media/$1;
+    }
+
+    location / {
+        proxy_pass         http://unix:/run/bijoe/bijoe.sock;
+        proxy_set_header   Host $http_host;
+        proxy_set_header   X-Forwarded-SSL on;
+        proxy_set_header   X-Forwarded-Protocol ssl;
+        proxy_set_header   X-Forwarded-Proto https;
+        proxy_set_header   X-Real-IP       $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}

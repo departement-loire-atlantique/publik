@@ -53,6 +53,7 @@ then
     retry 300 testHttpCode ${FARGO_SUBDOMAIN}${ENV}.${DOMAIN} fargo 404
     retry 300 testHttpCode ${HOBO_SUBDOMAIN}${ENV}.${DOMAIN} hobo 404
     retry 300 testHttpCode ${CHRONO_SUBDOMAIN}${ENV}.${DOMAIN} chrono 404
+    retry 300 testHttpCode ${BIJOE_SUBDOMAIN}${ENV}.${DOMAIN} bijoe 404
 else 
     echo "Skipping the 404 check: it seems that the script has already been successfully executed at least once"
 fi
@@ -77,6 +78,7 @@ testHttpContains ${AUTHENTIC_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} authentic 
 testHttpContains ${FARGO_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} fargo $AUTHENTIC_OK
 testHttpContains ${HOBO_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} hobo $AUTHENTIC_OK
 testHttpContains ${CHRONO_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} chrono $AUTHENTIC_OK
+testHttpContains ${BIJOE_SUBDOMAIN}${ENV}.${DOMAIN}:${HTTPS_PORT} bijoe $AUTHENTIC_OK
 
 echo "Configuration OK (Hobo cook)"
 touch /tmp/success

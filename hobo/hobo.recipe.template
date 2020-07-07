@@ -7,7 +7,8 @@
       "passerelle":"${PASSERELLE_SUBDOMAIN}${ENV}.${DOMAIN}",
       "wcs":"${WCS_SUBDOMAIN}${ENV}.${DOMAIN}",
       "fargo":"${FARGO_SUBDOMAIN}${ENV}.${DOMAIN}",
-      "chrono":"${CHRONO_SUBDOMAIN}${ENV}.${DOMAIN}"
+      "chrono":"${CHRONO_SUBDOMAIN}${ENV}.${DOMAIN}",
+      "bijoe":"${BIJOE_SUBDOMAIN}${ENV}.${DOMAIN}"
    },
    "steps":[
       {
@@ -52,7 +53,7 @@
             "url":"https://${wcs}/",
             "title":"Demarche",
             "template_name": "publik.zip"
-	}
+	      }
       },
       {
          "create-fargo":{
@@ -64,6 +65,12 @@
          "create-chrono":{
             "url":"https://${chrono}/",
             "title":"Agendas"
+         }
+      },
+      {
+         "create-bijoe":{
+            "url":"https://${bijoe}/",
+            "title":"Statistiques"
          }
       },
       {
