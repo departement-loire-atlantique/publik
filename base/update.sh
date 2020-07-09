@@ -116,7 +116,7 @@ fi
 # PUBLIK INSTALLATION DETECTION
 # ------------------------------------------
 
-PUBLIK_REPOSITORY=`cat /etc/apt/sources.list | grep "deb.entrouvert.org" | wc -l`
+PUBLIK_REPOSITORY=`apt-cache policy | grep "deb.entrouvert.org" | wc -l`
 if [ $PUBLIK_REPOSITORY == "0" ]; then
 	if [ ! -f "/etc/apt/sources.list.d/entrouvert.list" ]; then
 	        echo "ERROR - No any publik repository found in APT sources"
