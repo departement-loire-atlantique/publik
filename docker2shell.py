@@ -87,14 +87,10 @@ installgru = "set -eu\n"
 startgru = ""
 stopgru = ""
 
-configuregru = "set -eu\n"
 # configure command for charging envvar
 configuregru += 'export $(grep -v "^#" ./configure_data/sys.env | xargs)\n'
 configuregru += 'export $(grep -v "^#" ./configure_data/config.env | xargs)\n'
 configuregru += 'export $(grep -v "^#" ./configure_data/secret.env | xargs)\n'
-# configure command to test envvar
-configuregru += "./check-env.sh\n"
-configuregru += "\necho config ... done"
 
 envextractor = re.compile("(envsubst.*)")
 
