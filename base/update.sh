@@ -42,7 +42,8 @@ NOW=`date '+%Y-%m-%d_%H-%M-%S'`
 
 PARAMS=""
 DO_LOG=""
-DO_THEME=""
+DO_THEME_1=""
+DO_THEME_2=""
 DO_PATCH=""
 DO_APT=""
 DO_PREF=""
@@ -51,9 +52,14 @@ DO_APPS=""
 
 while (( "$#" )); do
   case "$1" in
-    -t|--update-theme)
+    -t1|--update-theme-1)
       DO_LOG="1"
-      DO_THEME="1"
+      DO_THEME_1="1"
+      shift
+      ;;
+	-t2|--update-theme-2)
+      DO_LOG="1"
+      DO_THEME_2="1"
       shift
       ;;
     -d|--update-apps)
