@@ -313,9 +313,9 @@ if [ "$DO_THEME_1" == "1" -o "$DO_THEME_2" == "1" ]; then
 
 	cd /tmp
 
-	PUBLIK_THEMES_GIT = $PUBLIK_THEMES_GIT_1
+	PUBLIK_THEMES_GIT=$PUBLIK_THEMES_GIT_1
 	if [ "$DO_THEME_2" == "1" ]; then
-		PUBLIK_THEMES_GIT = $PUBLIK_THEMES_GIT_2
+		PUBLIK_THEMES_GIT=$PUBLIK_THEMES_GIT_2
 	fi
 	git clone $PUBLIK_THEMES_GIT --recurse-submodules --depth=1 >> $LOG_FILE
 	cd publik-themes/publik-base-theme
