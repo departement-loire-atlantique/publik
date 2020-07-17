@@ -105,7 +105,7 @@ while (( "$#" )); do
   esac
 done
 
-if [ -z "$DO_THEME$DO_APT$DO_PATCH$DO_PREF$DO_APPS" ]; then
+if [ -z "$DO_THEME_1$DO_THEME_2$DO_APT$DO_PATCH$DO_PREF$DO_APPS" ]; then
 	echo "ERROR - Nothing to do. Please use --update-theme, --update-apps, --generate-apt-preferences, --update-packages, --patch or --all"
 	exit 1
 fi
