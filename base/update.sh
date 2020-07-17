@@ -21,7 +21,8 @@ set -eu
 # ------------------------------------------
 
 PUBLIK_PACKAGES="\s(authentic2-multitenant|combo|fargo|passerelle|hobo|wcs)\s"
-PUBLIK_THEMES_GIT="https://github.com/departement-loire-atlantique/publik-themes"
+PUBLIK_THEMES_GIT_1="https://github.com/departement-loire-atlantique/publik-themes"
+PUBLIK_THEMES_GIT_2="https://github.com/departement-loire-atlantique/publik-themes-interne"
 PUBLIK_PYTHON_MODULES="/usr/lib/python2.7/dist-packages"
 PUBLIK_PATCHES_GIT="https://github.com/departement-loire-atlantique/publik"
 PUBLIK_PATCHES_DIR="/root/publik-patches"
@@ -52,12 +53,12 @@ DO_APPS=""
 
 while (( "$#" )); do
   case "$1" in
-    -t1|--update-theme-1)
+    -t1|--update-theme-externe)
       DO_LOG="1"
       DO_THEME_1="1"
       shift
       ;;
-	-t2|--update-theme-2)
+	-t2|--update-theme-interne)
       DO_LOG="1"
       DO_THEME_2="1"
       shift
@@ -83,7 +84,7 @@ while (( "$#" )); do
       ;;
     -a|--all)
       DO_LOG="1"
-      DO_THEME="1"
+      DO_THEME_1="1"
       DO_APT="1"
       DO_PATCH="1"
       DO_APPS="1"
@@ -106,6 +107,11 @@ done
 
 if [ -z "$DO_THEME$DO_APT$DO_PATCH$DO_PREF$DO_APPS" ]; then
 	echo "ERROR - Nothing to do. Please use --update-theme, --update-apps, --generate-apt-preferences, --update-packages, --patch or --all"
+	exit 1
+fi
+
+if [ "$DO_THEME_1" == "1" -a "$DO_THEME_2" == "1" ]; then
+	echo "ERROR - please choose only one theme"
 	exit 1
 fi
 
@@ -297,7 +303,7 @@ fi
 # THEME
 # -------------------------------------
 
-if [ "$DO_THEME" == "1" ]; then
+if [ "$DO_THEME_1" == "1" -o "$DO_THEME_2" == "1" ]; then
 
 	log "UPDATING THEME..."
 
@@ -306,6 +312,11 @@ if [ "$DO_THEME" == "1" ]; then
 	fi
 
 	cd /tmp
+
+	PUBLIK_THEMES_GIT = $PUBLIK_THEMES_GIT_1
+	if [ "$DO_THEME_2" == "1" ]; then
+		PUBLIK_THEMES_GIT = $PUBLIK_THEMES_GIT_2
+	fi
 	git clone $PUBLIK_THEMES_GIT --recurse-submodules --depth=1 >> $LOG_FILE
 	cd publik-themes/publik-base-theme
 	git checkout master >> $LOG_FILE
