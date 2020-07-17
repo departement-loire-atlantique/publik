@@ -58,7 +58,7 @@ while (( "$#" )); do
       DO_THEME_1="1"
       shift
       ;;
-	-t2|--update-theme-interne)
+    -t2|--update-theme-interne)
       DO_LOG="1"
       DO_THEME_2="1"
       shift
