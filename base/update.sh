@@ -20,7 +20,7 @@ set -eu
 # CONFIGURATION
 # ------------------------------------------
 
-PUBLIK_PACKAGES="\s(authentic2-multitenant|combo|fargo|passerelle|hobo|wcs)\s"
+PUBLIK_PACKAGES="\s(authentic2-multitenant|combo|fargo|passerelle|hobo|wcs|bijoe|chrono)\s"
 PUBLIK_THEMES_GIT_1="https://github.com/departement-loire-atlantique/publik-themes"
 PUBLIK_THEMES_GIT_2="https://github.com/departement-loire-atlantique/publik-themes-interne"
 PUBLIK_PYTHON_MODULES="/usr/lib/python2.7/dist-packages"
@@ -195,13 +195,13 @@ if [ "$DO_APT" == "1" ]; then
 	fi
 
 	log "APT-GET UPDATE"
-	apt-get update >> $LOG_FILE 
+	apt update >> $LOG_FILE 
 
 	log "GET CURRENT PACKAGES VERSION" 
 	dpkg -l | egrep -E $PUBLIK_PACKAGES >> $LOG_FILE
 
 	log "GET NEW PACKAGES VERSION"
-	apt-get --dry-run upgrade >> $LOG_FILE
+	apt --dry-run upgrade >> $LOG_FILE
 
 	NEEDUPDATE=`cat $LOG_FILE | egrep -E "Inst$PUBLIK_PACKAGES" | wc -l`
 	if [ $NEEDUPDATE -gt 0 ]; then
@@ -212,7 +212,7 @@ if [ "$DO_APT" == "1" ]; then
 		quilt pop -a || true >> $LOG_FILE
 	
 		log "UPGRADING..."
-		apt-get -y upgrade >> $LOG_FILE
+		apt -y upgrade >> $LOG_FILE
 		
 		log "UPGRADE DONE"
 		DO_RESTART_GRU="1"
