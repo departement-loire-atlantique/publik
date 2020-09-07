@@ -88,7 +88,7 @@ startgru = ""
 stopgru = ""
 
 # configure command for charging envvar
-configuregru += 'export $(grep -v "^#" ./configure_data/sys.env | xargs)\n'
+configuregru = 'export $(grep -v "^#" ./configure_data/sys.env | xargs)\n'
 configuregru += 'export $(grep -v "^#" ./configure_data/config.env | xargs)\n'
 configuregru += 'export $(grep -v "^#" ./configure_data/secret.env | xargs)\n'
 
