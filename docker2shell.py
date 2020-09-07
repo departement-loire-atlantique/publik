@@ -155,7 +155,7 @@ with open(os.path.join(bare_path, "start-all.sh"), "w") as f:
 with open(os.path.join(bare_path, "stop-all.sh"), "w") as f:
     f.write(stopgru)
 
-with open(os.path.join(bare_path, "configure.sh"), "w") as f:
+with open(os.path.join(bare_path, "configure.env"), "w") as f:
     f.write(configuregru)
 
 subprocess.call("chmod +x " + os.path.join(bare_path, "*.sh"), shell=True)
