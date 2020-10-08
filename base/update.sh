@@ -303,6 +303,12 @@ fi
 # THEME
 # -------------------------------------
 
+SASSC_INSTALLED=`dpkg -l | grep sassc | wc -l`
+if [ $SASSC_INSTALLED == 0 ]; then
+	log "INSTALLING SASSC"
+	apt install sassc >> $LOG_FILE
+fi
+
 if [ "$DO_THEME_1" == "1" -o "$DO_THEME_2" == "1" ]; then
 
 	log "UPDATING THEME..."
