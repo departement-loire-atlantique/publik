@@ -115,7 +115,7 @@ gru-state() {
 
 # DOCKER CLEAN : Remove exited container and images without tag
 docker-clean() {
-        existedContainers=`docker ps -a | grep Exited | wc -l`;
+        exitedContainers=`docker ps -a | grep Exited | wc -l`;
         if [ $exitedContainers -gt 0 ]; then 
                 docker ps -a | grep Exited | cut -d ' ' -f 1 | xargs docker rm;
         fi
