@@ -10,6 +10,7 @@ RUN apt-get update \
        wcs-au-quotidien \
        publik-base-theme \
        python3-dns \
+       python3-docutils \
     && rm -rf /var/lib/apt/lists/*
 
 # CONFIGURE MODULES
