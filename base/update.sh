@@ -201,7 +201,7 @@ if [ "$DO_APT" == "1" ]; then
 	dpkg -l | egrep -E $PUBLIK_PACKAGES >> $LOG_FILE
 
 	log "GET NEW PACKAGES VERSION"
-	apt --dry-run upgrade >> $LOG_FILE
+	apt --dry-run full-upgrade >> $LOG_FILE
 
 	NEEDUPDATE=`cat $LOG_FILE | egrep -E "Inst$PUBLIK_PACKAGES" | wc -l`
 	if [ $NEEDUPDATE -gt 0 ]; then
@@ -212,9 +212,9 @@ if [ "$DO_APT" == "1" ]; then
 		quilt pop -a || true >> $LOG_FILE
 	
 		log "UPGRADING..."
-		apt -y upgrade >> $LOG_FILE
+		apt -y full-upgrade >> $LOG_FILE
 		
-		log "UPGRADE DONE"
+		log "FULL UPGRADE DONE"
 		DO_RESTART_GRU="1"
 		DO_PATCH="1"
 	else
