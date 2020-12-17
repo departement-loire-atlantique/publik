@@ -1,0 +1,12 @@
+Index: dist-packages/authentic2/compat/drf.py
+===================================================================
+--- dist-packages.orig/authentic2/compat/drf.py
++++ dist-packages/authentic2/compat/drf.py
+@@ -21,6 +21,7 @@ except ImportError:
+     from rest_framework.decorators import list_route, detail_route
+ 
+     def action(**kwargs):
++        kwargs.pop('name', None)
+         if kwargs.pop('detail'):
+             return detail_route(**kwargs)
+         else:
