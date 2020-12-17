@@ -23,7 +23,8 @@ set -eu
 PUBLIK_PACKAGES="\s(authentic2-multitenant|combo|fargo|passerelle|hobo|wcs|bijoe|chrono)\s"
 PUBLIK_THEMES_GIT_1="https://github.com/departement-loire-atlantique/publik-themes"
 PUBLIK_THEMES_GIT_2="https://github.com/departement-loire-atlantique/publik-themes-interne"
-PUBLIK_PYTHON_MODULES="/usr/lib/python2.7/dist-packages"
+PUBLIK_PYTHON_2_MODULES="/usr/lib/python2.7/dist-packages"
+PUBLIK_PYTHON_3_MODULES="/usr/lib/python3/dist-packages"
 PUBLIK_PATCHES_GIT="https://github.com/departement-loire-atlantique/publik"
 PUBLIK_PATCHES_DIR="/root/publik-patches"
 PUBLIK_APT_PREFERENCES_GIT="https://raw.githubusercontent.com/departement-loire-atlantique/publik-docker-base/master/"
@@ -208,7 +209,11 @@ if [ "$DO_APT" == "1" ]; then
 	
 		# Beware : All publik services must be up during the update process
 		log "UN-PATCH BEFORE UPDATE"
-		cd $PUBLIK_PYTHON_MODULES
+
+		cd $PUBLIK_PYTHON_2_MODULES
+		quilt pop -a || true >> $LOG_FILE
+
+		cd $PUBLIK_PYTHON_3_MODULES
 		quilt pop -a || true >> $LOG_FILE
 	
 		log "UPGRADING..."
@@ -248,13 +253,36 @@ if [ "$DO_PATCH" == "1" ]; then
 
 	log "LINK WITH PYTHON PACKAGE MODULE"
 
-	if [ ! -d "$PUBLIK_PYTHON_MODULES/patches" ]; then
-		ln -s $PUBLIK_PATCHES_DIR/patches $PUBLIK_PYTHON_MODULES/patches
+	if [ ! -d "$PUBLIK_PYTHON_2_MODULES/patches" ]; then
+		ln -s $PUBLIK_PATCHES_DIR/patches $PUBLIK_PYTHON_2_MODULES/patches
 	fi
 
-	log "APPLYING PATCHES..."
+	if [ ! -d "$PUBLIK_PYTHON_3_MODULES/patches" ]; then
+		ln -s $PUBLIK_PATCHES_DIR/patches $PUBLIK_PYTHON_3_MODULES/patches
+	fi
 
-	cd $PUBLIK_PYTHON_MODULES
+	log "APPLYING PATCHES FOR PYTHON 2 MODULES..."
+
+	cd $PUBLIK_PYTHON_2_MODULES
+	patch=`quilt next` || true
+	while [ -n "$patch" ]; do
+		# Only apply patch if module is installed
+		patch_app=`echo "$patch" | awk -F'[+]' '{print $1}' | cut -c9- `
+		if [ -d $patch_app ]; then
+			log " - Apply patch $patch into python module $patch_app"
+			quilt push >> $LOG_FILE
+			find $patch_app -type f -name "*.pyc" -exec rm {} \;
+			python2.7 -m compileall $patch_app >> $LOG_FILE
+		else
+			log " - Unable to apply patch $patch, module $patch_app not found. Skipping."
+			quilt delete $patch >> $LOG_FILE
+		fi
+		patch=`quilt next` || true
+	done
+
+	log "APPLYING PATCHES FOR PYTHON 3 MODULES..."
+
+	cd $PUBLIK_PYTHON_3_MODULES
 	patch=`quilt next` || true
 	while [ -n "$patch" ]; do
 		# Only apply patch if module is installed
