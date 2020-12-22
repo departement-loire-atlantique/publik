@@ -291,7 +291,7 @@ if [ "$DO_PATCH" == "1" ]; then
 			log " - Apply patch $patch into python module $patch_app"
 			quilt push >> $LOG_FILE
 			find $patch_app -type f -name "*.pyc" -exec rm {} \;
-			python2.7 -m compileall $patch_app >> $LOG_FILE
+			python3 -m compileall $patch_app >> $LOG_FILE
 		else
 			log " - Unable to apply patch $patch, module $patch_app not found. Skipping."
 			quilt delete $patch >> $LOG_FILE
