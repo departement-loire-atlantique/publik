@@ -353,7 +353,7 @@ if [ "$DO_THEME_1" == "1" -o "$DO_THEME_2" == "1" ]; then
 	fi
 	git clone $PUBLIK_THEMES_GIT publik-themes --recurse-submodules --depth=1 >> $LOG_FILE
 	cd publik-themes/publik-base-theme
-	git checkout master >> $LOG_FILE
+	git checkout main >> $LOG_FILE
 	git pull >> $LOG_FILE
 	cd ..
 	make install >> $LOG_FILE
