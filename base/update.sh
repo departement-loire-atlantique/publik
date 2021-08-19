@@ -356,6 +356,7 @@ if [ "$DO_THEME_1" == "1" -o "$DO_THEME_2" == "1" ]; then
 	git checkout main >> $LOG_FILE
 	git pull >> $LOG_FILE
 	cd ..
+	make clean >> $LOG_FILE
 	make install >> $LOG_FILE
 
 	log "THEME HAS BEEN UPDATED SUCCESSFULLY"
