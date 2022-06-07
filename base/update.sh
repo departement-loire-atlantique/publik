@@ -21,8 +21,7 @@ set -eu
 # ------------------------------------------
 
 PUBLIK_PACKAGES="\s(authentic2-multitenant|combo|fargo|passerelle|hobo|wcs|bijoe|chrono)\s"
-PUBLIK_THEMES_GIT_1="https://github.com/departement-loire-atlantique/publik-themes"
-PUBLIK_THEMES_GIT_2="https://github.com/departement-loire-atlantique/publik-themes-interne"
+PUBLIK_THEMES_GIT="https://github.com/departement-loire-atlantique/publik-themes"
 PUBLIK_PYTHON_2_MODULES="/usr/lib/python2.7/dist-packages"
 PUBLIK_PYTHON_3_MODULES="/usr/lib/python3/dist-packages"
 PUBLIK_PATCHES_GIT="https://github.com/departement-loire-atlantique/publik"
@@ -347,17 +346,18 @@ if [ "$DO_THEME_1" == "1" -o "$DO_THEME_2" == "1" ]; then
 
 	cd /tmp
 
-	PUBLIK_THEMES_GIT=$PUBLIK_THEMES_GIT_1
-	if [ "$DO_THEME_2" == "1" ]; then
-		PUBLIK_THEMES_GIT=$PUBLIK_THEMES_GIT_2
-	fi
 	git clone $PUBLIK_THEMES_GIT publik-themes --recurse-submodules --depth=1 >> $LOG_FILE
 	cd publik-themes/publik-base-theme
 	git checkout main >> $LOG_FILE
 	git pull >> $LOG_FILE
 	cd ..
 	make clean >> $LOG_FILE
-	make install >> $LOG_FILE
+	if [ "$DO_THEME_1" == "1" ]; then
+		make install >> $LOG_FILE
+	fi
+	if [ "$DO_THEME_2" == "1" ]; then
+		make install_interne >> $LOG_FILE
+	fi
 
 	log "THEME HAS BEEN UPDATED SUCCESSFULLY"
 	DO_RESTART_GRU="1"
