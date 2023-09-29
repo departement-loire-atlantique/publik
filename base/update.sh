@@ -84,7 +84,7 @@ while (( "$#" )); do
       ;;
     -a|--all)
       DO_LOG="1"
-      DO_THEME_1="1"
+      DO_THEME_1=""
       DO_APT="1"
       DO_PATCH="1"
       DO_APPS="1"
@@ -330,38 +330,38 @@ fi
 # THEME
 # -------------------------------------
 
-SASSC_INSTALLED=`dpkg -l | grep sassc | wc -l`
-if [ $SASSC_INSTALLED == 0 ]; then
-	log "INSTALLING SASSC"
-	apt install -y sassc >> $LOG_FILE
-fi
+#SASSC_INSTALLED=`dpkg -l | grep sassc | wc -l`
+#if [ $SASSC_INSTALLED == 0 ]; then
+	#log "INSTALLING SASSC"
+	#apt install -y sassc >> $LOG_FILE
+#fi
 
-if [ "$DO_THEME_1" == "1" -o "$DO_THEME_2" == "1" ]; then
+#if [ "$DO_THEME_1" == "1" -o "$DO_THEME_2" == "1" ]; then
 
-	log "UPDATING THEME..."
+	#log "UPDATING THEME..."
 
-	if [ -d /tmp/publik-themes ]; then
-		rm /tmp/publik-themes -Rf
-	fi
+	#if [ -d /tmp/publik-themes ]; then
+		#rm /tmp/publik-themes -Rf
+	#fi
 
-	cd /tmp
+	#cd /tmp
 
-	git clone $PUBLIK_THEMES_GIT publik-themes --recurse-submodules --depth=1 >> $LOG_FILE
-	cd publik-themes/publik-base-theme
-	git checkout main >> $LOG_FILE
-	git pull >> $LOG_FILE
-	cd ..
-	make clean >> $LOG_FILE
-	if [ "$DO_THEME_1" == "1" ]; then
-		make install >> $LOG_FILE
-	fi
-	if [ "$DO_THEME_2" == "1" ]; then
-		make install_interne >> $LOG_FILE
-	fi
+	#git clone $PUBLIK_THEMES_GIT publik-themes --recurse-submodules --depth=1 >> $LOG_FILE
+	#cd publik-themes/publik-base-theme
+	#git checkout main >> $LOG_FILE
+	#git pull >> $LOG_FILE
+	#cd ..
+	#make clean >> $LOG_FILE
+	#if [ "$DO_THEME_1" == "1" ]; then
+		#make install >> $LOG_FILE
+	#fi
+	#if [ "$DO_THEME_2" == "1" ]; then
+		#make install_interne >> $LOG_FILE
+	#fi
 
-	log "THEME HAS BEEN UPDATED SUCCESSFULLY"
-	DO_RESTART_GRU="1"
-fi
+	#log "THEME HAS BEEN UPDATED SUCCESSFULLY"
+	#DO_RESTART_GRU="1"
+#fi
 			
 # -------------------------------------
 # APT PREFERENCES
